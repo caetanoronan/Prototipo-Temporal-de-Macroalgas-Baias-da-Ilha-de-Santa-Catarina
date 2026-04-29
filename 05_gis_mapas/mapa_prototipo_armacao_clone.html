@@ -46,9 +46,7 @@
         }
 
         .theme-toggle {
-            position: absolute;
-            top: 0;
-            right: 0;
+            position: relative;
             border: 1px solid var(--line);
             background: rgba(255, 255, 255, 0.94);
             color: #102a43;
@@ -62,6 +60,7 @@
             width: auto;
             margin-top: 0;
             white-space: nowrap;
+            align-self: flex-start;
         }
 
         body.dark-mode .theme-toggle {
@@ -150,16 +149,17 @@
         .map-credit {
             position: absolute;
             z-index: 1000;
-            left: 12px;
-            right: auto;
+            left: 50%;
             bottom: 12px;
+            transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.93);
             border: 1px solid var(--line);
             border-radius: 9px;
             padding: 8px 10px;
-            width: min(640px, calc(100% - 244px - 24px));
+            width: min(520px, calc(100% - 392px));
             font-size: 0.72rem;
             line-height: 1.35;
+            text-align: center;
             color: var(--text);
             box-shadow: 0 4px 12px rgba(16, 42, 67, 0.12);
         }
@@ -202,8 +202,13 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: start;
         }
 
+        .panel-copy { min-width: 0; }
         .panel-head h2 { margin: 0 0 6px; font-size: 1.1rem; }
         .panel-head p { margin: 0; font-size: 0.82rem; opacity: 0.92; }
 
@@ -361,8 +366,8 @@
             }
 
             .theme-toggle {
-                top: 0;
-                right: 0;
+                font-size: 0.78rem;
+                padding: 7px 9px;
             }
 
             .compass {
@@ -376,9 +381,7 @@
             }
 
             .map-credit {
-                left: 12px;
-                right: auto;
-                width: calc(100% - 24px);
+                width: min(520px, calc(100% - 24px));
                 bottom: 128px;
             }
         }
@@ -392,7 +395,6 @@
                 <h1>Mapa Operacional - Prototipo Macroalgas Temporal</h1>
                 <p>Seis estacoes insulares das Baias Norte e Sul para simulacao de campo</p>
             </div>
-            <button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
         </div>
         <div class="compass" aria-label="Rosa dos ventos">
             <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
@@ -420,8 +422,11 @@
 
     <aside>
         <div class="panel-head">
-            <h2>Camadas do Prototipo</h2>
-            <p>Ative/desative os procedimentos de campo por estacao.</p>
+            <div class="panel-copy">
+                <h2>Camadas do Prototipo</h2>
+                <p>Ative/desative os procedimentos de campo por estacao.</p>
+            </div>
+            <button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
         </div>
 
         <div class="stats">

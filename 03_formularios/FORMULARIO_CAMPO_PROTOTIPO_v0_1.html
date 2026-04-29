@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario de Campo - Prototipo Armacao</title>
+    <style>
+        :root {
+            --bg: #f3f7fb;
+            --panel: #ffffff;
+            --line: #d8e2ec;
+            --text: #102a43;
+            --muted: #627d98;
+            --accent: #0f6a8b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at 10% 10%, #d8eef8, transparent 35%),
+                        radial-gradient(circle at 90% 10%, #e6f7f1, transparent 35%),
+                        var(--bg);
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 22px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f6a8b, #2c7da0);
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        h1 { margin: 0 0 6px; font-size: 1.5rem; }
+        p { margin: 0; }
+
+        form {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 8px 20px rgba(15, 106, 139, 0.08);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 0.88rem;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        textarea { min-height: 90px; resize: vertical; }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary { background: #0f6a8b; color: #fff; }
+        .secondary { background: #d9edf6; color: #0f4f68; }
+
+        .preview {
+            margin-top: 14px;
+            background: #f8fbfd;
+            border: 1px dashed #9cc4d6;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.92rem;
+        }
+
+        code { color: #0f6a8b; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <h1>Formulario de Campo - Prototipo Armacao</h1>
+            <p>Preencha um registro por camada amostrada em cada ponto.</p>
+        </header>
+
+        <form id="fieldForm">
+            <div class="grid">
+                <div>
+                    <label for="date">Data</label>
+                    <input id="date" name="date" type="date" required />
+                </div>
+                <div>
+                    <label for="time">Hora</label>
+                    <input id="time" name="time" type="time" required />
+                </div>
+                <div>
+                    <label for="name">Nome do ponto</label>
+                    <input id="name" name="name" type="text" required placeholder="Ex.: Ponto 1" />
+                </div>
+                <div>
+                    <label for="layer">Camada metodologica</label>
+                    <select id="layer" name="layer" required>
+                        <option value="">Selecione</option>
+                        <option value="quadrat_photo">quadrat_photo</option>
+                        <option value="water_sample_lab">water_sample_lab</option>
+                        <option value="water_probe">water_probe</option>
+                        <option value="secchi">secchi</option>
+                        <option value="drone">drone</option>
+                        <option value="algae_collect_taxonomy">algae_collect_taxonomy</option>
+                        <option value="algae_photo_in_situ">algae_photo_in_situ</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="lat">Latitude</label>
+                    <input id="lat" name="lat" type="number" step="0.000001" required />
+                </div>
+                <div>
+                    <label for="lon">Longitude</label>
+                    <input id="lon" name="lon" type="number" step="0.000001" required />
+                </div>
+                <div>
+                    <label for="team">Responsavel</label>
+                    <input id="team" name="team" type="text" required placeholder="Iniciais" />
+                </div>
+                <div>
+                    <label for="photo">Arquivo (foto/video/amostra)</label>
+                    <input id="photo" name="photo" type="text" placeholder="Ex.: 20260421_P1_secchi_RAC_001.jpg" />
+                </div>
+            </div>
+
+            <div>
+                <label for="notes">Observacoes</label>
+                <textarea id="notes" name="notes" placeholder="Condicoes, anomalias, observacoes ambientais..."></textarea>
+            </div>
+
+            <div class="actions">
+                <button class="primary" type="submit">Gerar linha CSV</button>
+                <button class="secondary" type="reset">Limpar</button>
+            </div>
+
+            <div class="preview" id="preview">A linha CSV gerada aparecera aqui.</div>
+        </form>
+    </main>
+
+    <script>
+        const form = document.getElementById("fieldForm");
+        const preview = document.getElementById("preview");
+
+        function esc(value) {
+            const str = String(value ?? "").replace(/"/g, '""');
+            return '"' + str + '"';
+        }
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const data = new FormData(form);
+
+            const values = [
+                data.get("date"),
+                data.get("time"),
+                data.get("name"),
+                data.get("lat"),
+                data.get("lon"),
+                data.get("layer"),
+                data.get("team"),
+                data.get("photo"),
+                data.get("notes")
+            ].map(esc);
+
+            const line = values.join(",");
+            preview.innerHTML = "<strong>CSV:</strong><br><code>" + line + "</code>";
+        });
+    </script>
+</body>
+</html>

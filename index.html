@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prototipo Temporal de Macroalgas - Baias da Ilha de Santa Catarina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #f3f0e8;
+            --paper: #fffdf8;
+            --ink: #16222f;
+            --muted: #4e5c68;
+            --line: #d4ccc0;
+            --accent: #005f73;
+            --accent-2: #9b2226;
+            --card-shadow: rgba(22, 34, 47, 0.12);
+        }
+
+        body.dark-mode {
+            --bg: #101820;
+            --paper: #1c2933;
+            --ink: #f1f5f9;
+            --muted: #c8d3df;
+            --line: #53616d;
+            --accent: #5eead4;
+            --accent-2: #fca5a5;
+            --card-shadow: rgba(0, 0, 0, 0.34);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Space Grotesk", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(1000px 460px at 15% -12%, #e3f0ef 0%, transparent 60%),
+                radial-gradient(850px 440px at 100% -18%, #f5e5d8 0%, transparent 56%),
+                var(--bg);
+        }
+
+        body.dark-mode {
+            background:
+                radial-gradient(1000px 460px at 15% -12%, rgba(94, 234, 212, 0.14) 0%, transparent 60%),
+                radial-gradient(850px 440px at 100% -18%, rgba(252, 165, 165, 0.10) 0%, transparent 56%),
+                var(--bg);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 20;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 999px;
+            padding: 9px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(22, 34, 47, 0.16);
+        }
+
+        .wrap {
+            width: min(1220px, 94vw);
+            margin: 0 auto;
+            padding: 28px 0 48px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0a3d62, #005f73 58%, #0a9396);
+            color: #fff;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 12px 26px var(--card-shadow);
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(1.55rem, 2.4vw, 2.25rem);
+            line-height: 1.15;
+            letter-spacing: 0.02em;
+        }
+
+        .hero p {
+            margin: 12px 0 0;
+            max-width: 920px;
+            font-size: 1rem;
+            line-height: 1.52;
+            opacity: 0.96;
+        }
+
+        .meta {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            border: 1px solid rgba(255, 255, 255, 0.38);
+            background: rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 0.8rem;
+        }
+
+        .section {
+            margin-top: 20px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 18px rgba(22, 34, 47, 0.07);
+        }
+
+        .section h2 {
+            margin: 0 0 10px;
+            font-size: 1.18rem;
+            color: var(--accent);
+        }
+
+        .section p,
+        .section li {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.52;
+            font-size: 0.95rem;
+        }
+
+        .section ul {
+            margin: 10px 0 0;
+            padding-left: 18px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .method-link {
+            margin-top: 10px;
+            display: inline-block;
+            text-decoration: none;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-weight: 700;
+            font-size: 0.86rem;
+        }
+
+        .method-link:hover { background: #014f60; }
+
+        .products {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .product-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(22, 34, 47, 0.07);
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+        }
+
+        .product-head {
+            padding: 14px 14px 10px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .product-head h3 {
+            margin: 0;
+            color: var(--ink);
+            font-size: 1rem;
+        }
+
+        .product-head p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.45;
+        }
+
+        .product-actions {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #ece7dd;
+            color: #21313f;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #273746;
+            color: #e9f2f5;
+        }
+
+        .product-frame {
+            width: 100%;
+            min-height: 560px;
+            border: 0;
+            display: block;
+            background: #d8d8d8;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .resource {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
+            background: #fbf8f0;
+        }
+
+        body.dark-mode .resource {
+            background: #24313d;
+        }
+
+        .resource strong {
+            display: block;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .resource a {
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .foot {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .foot strong { color: var(--accent-2); }
+
+        @media (max-width: 1180px) {
+            .products { grid-template-columns: 1fr; }
+            .product-frame { min-height: 520px; }
+        }
+
+        @media (max-width: 780px) {
+            .resource-grid { grid-template-columns: 1fr; }
+            .product-frame { min-height: 460px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar modo escuro">Modo escuro</button>
+    <main class="wrap">
+        <header class="hero">
+            <h1>Prototipo Temporal de Macroalgas - Baias da Ilha de Santa Catarina</h1>
+            <p>
+                Portal local para validar o fluxo de campo em seis estacoes insulares: Ponta das Canas,
+                Sambaqui, Ponta do Coral, Saco dos Limoes, Ribeirao da Ilha e Caieira da Barra do Sul.
+                O conjunto integra mapa operacional, metodologia de campo, ficha de impressao e dashboard
+                com resultados extraidos de Bouzon (2005) e Bouzon et al. (2006).
+            </p>
+            <div class="meta">
+                <span class="chip">Projeto de Mestrado - PPGOceano/UFSC</span>
+                <span class="chip">Autor: Ronan Armando Caetano</span>
+                <span class="chip">Ano-base: 2026</span>
+                <span class="chip">Macroalgas / fitobentos / Baia Norte e Baia Sul</span>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>Produtos Criados Nesta Etapa</h2>
+            <p>
+                Esta pagina centraliza os produtos locais montados para o prototipo: o mapa com seis pontos
+                e camadas metodologicas, a pagina em abas com introducao e ficha de campo, e o dashboard
+                clonado com os resultados dos seis locais.
+            </p>
+            <a class="method-link" href="01_planejamento/metodologia_prototipo_macroalgas.html" target="_blank" rel="noopener noreferrer">
+                Abrir metodologia e ficha de campo
+            </a>
+        </section>
+
+        <section class="section">
+            <h2>O Que Pretendemos Testar Em Campo</h2>
+            <ul>
+                <li>Padronizacao do esforco amostral com 9 quadrados de 25 x 25 cm por estacao.</li>
+                <li>Leitura rapida dos seis pontos no mapa operacional durante mare baixa de sizigia.</li>
+                <li>Registro de temperatura, salinidade, transparencia, substrato e impactos visiveis.</li>
+                <li>Coleta complementar para apoio taxonomico e comparacao com os resultados historicos.</li>
+                <li>Uso do dashboard para contextualizar riqueza, nutrientes e especies dominantes antes do campo.</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Como Ler Esta Pagina</h2>
+            <p>
+                Use os cards abaixo como uma bancada de validacao. Cada produto pode ser aberto em tela cheia
+                pelos botoes e tambem aparece embutido para revisao rapida do layout.
+            </p>
+        </section>
+
+        <section class="products" aria-label="Produtos do prototipo">
+            <article class="product-card">
+                <div class="product-head">
+                    <h3>Mapa Operacional</h3>
+                    <p>Seis estacoes, camadas de procedimento e rodape com autoria e referencias.</p>
+                </div>
+                <div class="product-actions">
+                    <a class="btn btn-primary" href="05_gis_mapas/mapa_prototipo_armacao_clone.html" target="_blank" rel="noopener noreferrer">Abrir mapa</a>
+                    <a class="btn btn-secondary" href="../insula,+4.+Bouzon+p.69-84_918--kb.pdf" target="_blank" rel="noopener noreferrer">Referencia 2006</a>
+                    <a class="btn btn-secondary" href="../COMPOSIÇÃO E ESTRUTURA ESPACIAL DA COMUNIDADE MACROFITOBENTICA DAS BAIAS DA ILHA DE SANTA CATARINA.pdf" target="_blank" rel="noopener noreferrer">Dissertacao 2005</a>
+                </div>
+                <iframe class="product-frame" src="05_gis_mapas/mapa_prototipo_armacao_clone.html" title="Mapa operacional do prototipo"></iframe>
+            </article>
+
+            <article class="product-card">
+                <div class="product-head">
+                    <h3>Metodologia e Ficha</h3>
+                    <p>Pagina em abas com introducao, metodologia, pre-campo, materiais e ficha imprimivel.</p>
+                </div>
+                <div class="product-actions">
+                    <a class="btn btn-primary" href="01_planejamento/metodologia_prototipo_macroalgas.html" target="_blank" rel="noopener noreferrer">Abrir metodologia</a>
+                    <a class="btn btn-secondary" href="01_planejamento/metodologia_prototipo_macroalgas.html#ficha" target="_blank" rel="noopener noreferrer">Abrir ficha</a>
+                </div>
+                <iframe class="product-frame" src="01_planejamento/metodologia_prototipo_macroalgas.html" title="Metodologia do prototipo"></iframe>
+            </article>
+
+            <article class="product-card">
+                <div class="product-head">
+                    <h3>Dashboard de Resultados</h3>
+                    <p>Clone do dashboard de fitobentos com riqueza, nutrientes, biomassa dominante e tabela integrada.</p>
+                </div>
+                <div class="product-actions">
+                    <a class="btn btn-primary" href="../Fitobentos-ilhas-costeiras-sc/dashboard_macroalgas_baias_clone.html" target="_blank" rel="noopener noreferrer">Abrir dashboard</a>
+                    <a class="btn btn-secondary" href="../Fitobentos-ilhas-costeiras-sc/data/macroalgas_baias_resultados.csv" target="_blank" rel="noopener noreferrer">Planilha consolidada</a>
+                    <a class="btn btn-secondary" href="../Fitobentos-ilhas-costeiras-sc/data/macroalgas_baias_biomassa_dominantes.csv" target="_blank" rel="noopener noreferrer">Biomassa dominante</a>
+                </div>
+                <iframe class="product-frame" src="../Fitobentos-ilhas-costeiras-sc/dashboard_macroalgas_baias_clone.html" title="Dashboard de resultados"></iframe>
+            </article>
+        </section>
+
+        <section class="section">
+            <h2>Arquivos de Apoio</h2>
+            <div class="resource-grid">
+                <div class="resource">
+                    <strong>Planilha consolidada</strong>
+                    <p>Resultados por estacao: riqueza, temperatura, salinidade, nutrientes e dominantes.</p>
+                    <a href="../Fitobentos-ilhas-costeiras-sc/data/macroalgas_baias_resultados.csv" target="_blank" rel="noopener noreferrer">Abrir CSV</a>
+                </div>
+                <div class="resource">
+                    <strong>Planilha de biomassa</strong>
+                    <p>Tabela longa com taxons dominantes e biomassa por estacao.</p>
+                    <a href="../Fitobentos-ilhas-costeiras-sc/data/macroalgas_baias_biomassa_dominantes.csv" target="_blank" rel="noopener noreferrer">Abrir CSV</a>
+                </div>
+                <div class="resource">
+                    <strong>Artigo floristico</strong>
+                    <p>Aspectos floristicos e fitogeograficos das macroalgas das baias.</p>
+                    <a href="../insula,+4.+Bouzon+p.69-84_918--kb.pdf" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
+                </div>
+                <div class="resource">
+                    <strong>Dissertacao completa</strong>
+                    <p>Composicao e estrutura espacial da comunidade macrofitobentica.</p>
+                    <a href="../COMPOSIÇÃO E ESTRUTURA ESPACIAL DA COMUNIDADE MACROFITOBENTICA DAS BAIAS DA ILHA DE SANTA CATARINA.pdf" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="foot">
+            <strong>Projeto de Mestrado - PPGOceano/UFSC - 2026</strong><br />
+            Autor: Ronan Armando Caetano<br />
+            Referencias centrais: Bouzon (2005) e Bouzon et al. (2006)
+        </footer>
+    </main>
+    <script>
+        const themeToggle = document.getElementById("themeToggle");
+
+        function applyTheme(mode) {
+            document.body.classList.toggle("dark-mode", mode === "dark");
+            themeToggle.textContent = mode === "dark" ? "Modo claro" : "Modo escuro";
+            try { localStorage.setItem("macroalgasPortalTheme", mode); } catch (_) {}
+        }
+
+        try {
+            applyTheme(localStorage.getItem("macroalgasPortalTheme") || "light");
+        } catch (_) {
+            applyTheme("light");
+        }
+
+        themeToggle.addEventListener("click", () => {
+            applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
+        });
+    </script>
+</body>
+</html>

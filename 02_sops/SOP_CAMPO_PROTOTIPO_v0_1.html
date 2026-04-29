@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOP Campo - Prototipo Armacao v0.1</title>
+    <style>
+        :root {
+            --bg: #f4f7f8;
+            --card: #ffffff;
+            --text: #102a43;
+            --muted: #486581;
+            --line: #d9e2ec;
+            --accent: #006c67;
+            --accent-soft: #e0f2f1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(145deg, #f4f7f8, #eef5f6 60%, #e8f0f2);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .wrap {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(16, 42, 67, 0.08);
+            margin-bottom: 18px;
+        }
+
+        h1 { margin: 0 0 6px; font-size: 1.6rem; }
+        h2 { margin: 0 0 8px; font-size: 1.1rem; color: var(--accent); }
+        p { margin: 0 0 10px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        ul { margin: 8px 0 0; padding-left: 18px; }
+        li { margin: 5px 0; }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: #084c4a;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .checklist li {
+            list-style: none;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .checklist li::before {
+            content: "[ ]";
+            position: absolute;
+            left: 0;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .footer {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+    <main class="wrap">
+        <section class="header">
+            <h1>SOP Campo - Prototipo Armacao (v0.1)</h1>
+            <p>Documento operacional minimo para padronizar coleta piloto de macrofitas marinhas.</p>
+            <span class="tag">Data: 2026-04-21</span>
+            <span class="tag">Area: Ponta das Campanhas e Ilha de Fora</span>
+            <span class="tag">Status: Em teste</span>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <h2>1) Objetivo</h2>
+                <p>Executar fluxo completo de campo -> QA/QC -> organizacao de dados com rastreabilidade.</p>
+                <ul>
+                    <li>Padronizar registros de ponto e camada metodologica.</li>
+                    <li>Garantir metadados minimos para analises e mapa.</li>
+                    <li>Validar tempo, logistica e qualidade dos dados.</li>
+                </ul>
+            </article>
+
+            <article class="card">
+                <h2>2) Equipe minima e funcoes</h2>
+                <ul>
+                    <li>Lider de campo: decisao operacional e seguranca.</li>
+                    <li>Registrador: formulario e checagem de completude.</li>
+                    <li>Operador geoespacial: coordenadas e trilha de pontos.</li>
+                    <li>Apoio tecnico: fotos, secchi, sonda e amostras.</li>
+                </ul>
+            </article>
+
+            <article class="card">
+                <h2>3) Equipamentos obrigatorios</h2>
+                <ul class="checklist">
+                    <li>GPS/celular com localizacao ativa.</li>
+                    <li>Sonda multiparametrica (se aplicavel).</li>
+                    <li>Disco de secchi.</li>
+                    <li>Frascos rotulados para amostra de agua.</li>
+                    <li>Smartphone/camera para quadrat e in situ.</li>
+                    <li>Drone (com check de vento e bateria).</li>
+                    <li>EPI e kit de primeiros socorros.</li>
+                </ul>
+            </article>
+
+            <article class="card">
+                <h2>4) Sequencia de coleta por ponto</h2>
+                <ol>
+                    <li>Confirmar nome do ponto e coordenadas.</li>
+                    <li>Registrar quadrat_photo.</li>
+                    <li>Registrar water_probe.</li>
+                    <li>Registrar secchi.</li>
+                    <li>Coletar e registrar water_sample_lab.</li>
+                    <li>Executar drone (quando condicoes permitirem).</li>
+                    <li>Registrar algae_photo_in_situ.</li>
+                    <li>Coletar algae_collect_taxonomy.</li>
+                </ol>
+            </article>
+
+            <article class="card">
+                <h2>5) Padrao de nomeacao de arquivos</h2>
+                <p>Formato sugerido:</p>
+                <p><strong>AAAAMMDD_PONTO_LAYER_RESPONSAVEL_SEQUENCIAL</strong></p>
+                <p>Exemplo: <strong>20260421_P1_quadrat_photo_RAC_001.jpg</strong></p>
+            </article>
+
+            <article class="card">
+                <h2>6) QA/QC de entrada (obrigatorio)</h2>
+                <ul class="checklist">
+                    <li>Latitude entre -90 e 90 / Longitude entre -180 e 180.</li>
+                    <li>Campo layer preenchido com valor permitido.</li>
+                    <li>Data/hora em padrao ISO.</li>
+                    <li>Ponto sem duplicidade indevida.</li>
+                    <li>Responsavel preenchido.</li>
+                    <li>Observacoes de anomalias registradas.</li>
+                </ul>
+            </article>
+        </section>
+
+        <p class="footer">Observacao: apos 1 rodada piloto, revisar este SOP para versao v0.2 com base nos logs em 06_logs_validacao.</p>
+    </main>
+</body>
+</html>

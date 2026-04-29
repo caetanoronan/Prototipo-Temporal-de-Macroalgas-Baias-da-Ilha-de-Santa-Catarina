@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodologia - Prototipo Temporal de Macroalgas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f3f0e8;
+            --panel: #fffdf8;
+            --line: #d4ccc0;
+            --text: #16222f;
+            --muted: #4e5c68;
+            --accent: #005f73;
+            --accent-2: #9b2226;
+            --shadow: rgba(22, 34, 47, 0.12);
+            --box: #fbf8f0;
+            --table-head: #e8f2f2;
+        }
+
+        body.dark-mode {
+            --bg: #101820;
+            --panel: #1c2933;
+            --line: #53616d;
+            --text: #f1f5f9;
+            --muted: #c8d3df;
+            --accent: #5eead4;
+            --accent-2: #fca5a5;
+            --shadow: rgba(0, 0, 0, 0.34);
+            --box: #24313d;
+            --table-head: #263746;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Space Grotesk", "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1000px 460px at 15% -12%, #e3f0ef 0%, transparent 60%),
+                radial-gradient(850px 440px at 100% -18%, #f5e5d8 0%, transparent 56%),
+                var(--bg);
+        }
+
+        body.dark-mode {
+            background:
+                radial-gradient(1000px 460px at 15% -12%, rgba(94, 234, 212, 0.14) 0%, transparent 60%),
+                radial-gradient(850px 440px at 100% -18%, rgba(252, 165, 165, 0.10) 0%, transparent 56%),
+                var(--bg);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 20;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 9px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(22, 34, 47, 0.16);
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 22px 16px 36px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0a3d62, #005f73 58%, #0a9396);
+            color: #fff;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 12px 26px var(--shadow);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.55rem;
+            line-height: 1.25;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: rgba(255, 255, 255, 0.92);
+            line-height: 1.55;
+            max-width: 920px;
+        }
+
+        .tabs {
+            margin-top: 14px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--text);
+            border-radius: 7px;
+            padding: 9px 12px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .tab {
+            display: none;
+            margin-top: 12px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 18px rgba(22, 34, 47, 0.07);
+        }
+
+        .tab.active { display: block; }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 1.15rem;
+            color: var(--accent);
+        }
+
+        h3 {
+            margin: 18px 0 8px;
+            font-size: 1rem;
+        }
+
+        p, li {
+            line-height: 1.55;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .box {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
+            background: var(--box);
+        }
+
+        .field-line {
+            border-bottom: 1px solid #9fb0b8;
+            display: inline-block;
+            min-width: 220px;
+            height: 1.1em;
+        }
+
+        .checkbox-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 6px 0;
+        }
+
+        .check::before {
+            content: "[ ] ";
+            font-family: Consolas, monospace;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        th, td {
+            border: 1px solid var(--line);
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th { background: var(--table-head); }
+
+        .print-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 1px solid var(--line);
+            background: var(--accent);
+            color: #fff;
+            border-radius: 7px;
+            padding: 9px 12px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn.secondary {
+            background: var(--panel);
+            color: var(--text);
+        }
+
+        .refs {
+            margin-top: 12px;
+            font-size: 0.86rem;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .refs a {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .refs a:hover { text-decoration: underline; }
+
+        @media (max-width: 820px) {
+            .grid { grid-template-columns: 1fr; }
+            .field-line { min-width: 160px; }
+        }
+
+        @media print {
+            body { background: #fff; }
+            .theme-toggle, .tabs, header .refs, .print-actions { display: none; }
+            .page { padding: 0; max-width: none; }
+            header, .tab {
+                box-shadow: none;
+                border: 0;
+                padding: 0;
+            }
+            .tab { display: none !important; }
+            body.print-ficha #ficha,
+            body.print-precampo #precampo,
+            body.print-materiais #materiais,
+            body.print-publicacao #publicacao {
+                display: block !important;
+            }
+            h1 { font-size: 1.1rem; }
+            h2 { font-size: 1rem; }
+            th, td { padding: 5px; }
+        }
+    </style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
+<main class="page">
+    <header>
+        <h1>Prototipo Temporal de Campo para Identificacao de Macroalgas</h1>
+        <p>
+            Material operacional para simular e padronizar uma saida de campo nas seis estacoes
+            insulares das Baias da Ilha de Santa Catarina, com base na metodologia de Bouzon (2005)
+            e Bouzon et al. (2006).
+        </p>
+        <div class="refs">
+            <strong>Autor:</strong> Ronan Armando Caetano.
+            <strong>Referencias:</strong>
+            <a href="../../insula,+4.+Bouzon+p.69-84_918--kb.pdf">Bouzon et al. 2006</a> |
+            <a href="../../COMPOSIÇÃO E ESTRUTURA ESPACIAL DA COMUNIDADE MACROFITOBENTICA DAS BAIAS DA ILHA DE SANTA CATARINA.pdf">Bouzon 2005</a> |
+            <a href="../index.html">Voltar ao portal</a>
+        </div>
+    </header>
+
+    <nav class="tabs" aria-label="Abas da metodologia">
+        <button class="tab-btn active" data-tab="intro" type="button">Introducao</button>
+        <button class="tab-btn" data-tab="metodo" type="button">Metodologia</button>
+        <button class="tab-btn" data-tab="ficha" type="button">Ficha de campo</button>
+        <button class="tab-btn" data-tab="precampo" type="button">Pre-campo</button>
+        <button class="tab-btn" data-tab="materiais" type="button">Materiais</button>
+        <button class="tab-btn" data-tab="sequencia" type="button">Sequencia</button>
+        <button class="tab-btn" data-tab="publicacao" type="button">GitHub Pages</button>
+    </nav>
+
+    <section class="tab active" id="intro">
+        <h2>Introducao do prototipo</h2>
+        <p>
+            O prototipo organiza uma simulacao de campo para reconhecimento, amostragem e
+            documentacao de comunidades macroalgais em costoes rochosos. A proposta segue um
+            desenho comparativo entre seis estacoes insulares distribuidas ao longo das Baias Norte
+            e Sul: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limoes, Ribeirao da Ilha e
+            Caieira da Barra do Sul.
+        </p>
+        <p>
+            A leitura ecologica central e comparar locais com diferentes graus de urbanizacao,
+            riqueza de taxons, biomassa dominante e sinais de eutrofizacao. O protocolo combina
+            coleta quantitativa por quadrados, coleta complementar para taxonomia, fotos in situ e
+            medidas fisico-quimicas simples.
+        </p>
+    </section>
+
+    <section class="tab" id="metodo">
+        <h2>Metodologia resumida</h2>
+        <div class="grid">
+            <div class="box">
+                <h3>Desenho amostral</h3>
+                <ul>
+                    <li>Coleta em mare baixa de sizigia.</li>
+                    <li>Um cabo guia de 10 m paralelo a linha de costa.</li>
+                    <li>9 quadrados por estacao.</li>
+                    <li>Quadrados de 25 x 25 cm, equivalentes a 0,0625 m2.</li>
+                    <li>Amostragem destrutiva da macroflora dentro de cada quadrado.</li>
+                </ul>
+            </div>
+            <div class="box">
+                <h3>Variaveis registradas</h3>
+                <ul>
+                    <li>Coordenadas GPS.</li>
+                    <li>Temperatura da agua.</li>
+                    <li>Salinidade.</li>
+                    <li>Transparencia visual.</li>
+                    <li>Hidrodinamismo observado.</li>
+                    <li>Substrato, declividade e impactos visiveis.</li>
+                </ul>
+            </div>
+        </div>
+        <h3>Processamento posterior</h3>
+        <p>
+            O material coletado deve ser triado, identificado e, quando houver continuidade do
+            protocolo laboratorial, seco em estufa a 60 C por 48 h para determinacao de peso seco.
+            Coletas complementares devem apoiar a identificacao taxonomica dos exemplares fora
+            dos quadrados.
+        </p>
+    </section>
+
+    <section class="tab" id="ficha">
+        <h2>Ficha de campo - macroalgas</h2>
+        <div class="print-actions">
+            <button class="btn" type="button" onclick="printSection('ficha')">Imprimir ficha</button>
+            <a class="btn secondary" href="../05_gis_mapas/mapa_prototipo_armacao_clone.html">Abrir mapa</a>
+        </div>
+
+        <h3>Identificacao geral</h3>
+        <p>Projeto: <span class="field-line"></span></p>
+        <p>Equipe: <span class="field-line"></span></p>
+        <p>Data: ____ / ____ / ______ &nbsp;&nbsp; Hora inicio: __________ &nbsp;&nbsp; Hora termino: __________</p>
+
+        <h3>Estacao</h3>
+        <div class="checkbox-row">
+            <span class="check">Ponta das Canas</span>
+            <span class="check">Sambaqui</span>
+            <span class="check">Ponta do Coral</span>
+            <span class="check">Saco dos Limoes</span>
+            <span class="check">Ribeirao da Ilha</span>
+            <span class="check">Caieira da Barra do Sul</span>
+        </div>
+        <p>Coordenadas GPS: <span class="field-line"></span></p>
+        <p>Mare: <span class="check">Sizigia</span> <span class="check">Quadratura</span> &nbsp;&nbsp; Altura aproximada da mare: <span class="field-line"></span></p>
+
+        <h3>Condicoes ambientais</h3>
+        <div class="grid">
+            <div>
+                <p>Temperatura da agua: __________ C</p>
+                <p>Salinidade: __________ &permil;</p>
+                <p>Transparencia: <span class="check">Alta</span> <span class="check">Media</span> <span class="check">Baixa</span></p>
+                <p>Hidrodinamismo: <span class="check">Fraco</span> <span class="check">Moderado</span> <span class="check">Forte</span></p>
+            </div>
+            <div>
+                <p>Substrato predominante:</p>
+                <p><span class="check">Rocha macica</span> <span class="check">Blocos</span> <span class="check">Cascalho</span> <span class="check">Areia</span> <span class="check">Misto</span></p>
+                <p>Declividade do costao: <span class="check">Suave</span> <span class="check">Moderada</span> <span class="check">Ingreme</span></p>
+                <p>Impactos visiveis: <span class="check">Esgoto</span> <span class="check">Lixo solido</span> <span class="check">Bioincrustacao excessiva</span> <span class="check">Sedimentacao</span> <span class="check">Nenhum</span></p>
+            </div>
+        </div>
+        <p>Observacoes gerais:</p>
+        <p style="min-height: 54px; border: 1px solid var(--line);"></p>
+
+        <h3>Amostragem quantitativa - 9 quadrados, 25 x 25 cm</h3>
+        <table>
+            <thead>
+            <tr><th>Quadrado</th><th>Zona (sup/med/inf)</th><th>Especies dominantes</th><th>Observacoes</th><th>Coletado</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>Q1</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q2</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q3</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q4</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q5</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q6</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q7</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q8</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            <tr><td>Q9</td><td></td><td></td><td></td><td>[ ]</td></tr>
+            </tbody>
+        </table>
+
+        <p>Codigo das amostras: <span class="field-line"></span></p>
+        <h3>Coletas complementares</h3>
+        <p>Especies coletadas fora dos quadrados:</p>
+        <p style="min-height: 54px; border: 1px solid var(--line);"></p>
+        <p>Fotos realizadas? <span class="check">Sim</span> <span class="check">Nao</span> &nbsp;&nbsp; Codigo das fotos: <span class="field-line"></span></p>
+    </section>
+
+    <section class="tab" id="precampo">
+        <h2>Plano de pre-campo</h2>
+        <div class="print-actions">
+            <button class="btn" type="button" onclick="printSection('precampo')">Imprimir pre-campo</button>
+            <a class="btn secondary" href="../index.html">Voltar ao portal</a>
+        </div>
+        <p>
+            O pre-campo e a etapa que reduz improviso. A ideia e chegar ao costao com a janela de
+            mare, a rota, a equipe, as etiquetas e o desenho amostral ja decididos. Isso protege a
+            comparabilidade entre estacoes e evita que cada ponto seja amostrado com criterios
+            diferentes.
+        </p>
+        <h3>1. Planejamento temporal</h3>
+        <ul>
+            <li><strong>Mare baixa de sizigia:</strong> priorizar a menor altura de mare disponivel, pois o metodo depende da exposicao segura do entre-mares e da franja superior do infralitoral.</li>
+            <li><strong>Janela minima:</strong> reservar pelo menos 3 h por estacao, incluindo montagem do cabo, sorteio/posicionamento dos quadrados, fotos e embalagem.</li>
+            <li><strong>Vento:</strong> checar direcao e intensidade; abaixo de 15 nos tende a facilitar fotos, permanencia no costao e coleta de agua.</li>
+            <li><strong>Ressaca:</strong> adiar se houver ondulacao perigosa ou agua cobrindo a faixa alvo.</li>
+            <li><strong>Luz:</strong> registrar cobertura de nuvens; luz difusa ajuda a reduzir reflexos em fotos in situ.</li>
+            <li><strong>Tabela de mare:</strong> levar horarios dos 2 dias anteriores e posteriores para ajustar rota se houver atraso.</li>
+        </ul>
+
+        <h3>2. Reconhecimento previo dos pontos</h3>
+        <ul>
+            <li><strong>Acesso:</strong> confirmar trilha, rua, escada, praia ou costao pelo qual a equipe entra e sai com material.</li>
+            <li><strong>Restricoes:</strong> verificar se ha propriedade privada, area militar, obra, area de cultivo ou restricao temporaria.</li>
+            <li><strong>Risco fisico:</strong> mapear pedras soltas, limo escorregadio, blocos instaveis e locais que isolam com a subida da mare.</li>
+            <li><strong>Logistica:</strong> anotar estacionamento, distancia ate o costao, ponto de encontro e rota alternativa.</li>
+            <li><strong>Comunicacao:</strong> checar sinal de celular e combinar horario de retorno com alguem fora da equipe.</li>
+        </ul>
+
+        <h3>3. Padronizacao do desenho amostral</h3>
+        <ul>
+            <li><strong>Transecto:</strong> definir previamente se o cabo de 10 m sera orientado no mesmo sentido da linha de costa em todos os pontos.</li>
+            <li><strong>Zona alvo:</strong> manter criterio constante para superior, medio e inferior do entre-mares.</li>
+            <li><strong>Infralitoral raso:</strong> definir ate onde o mergulho livre sera usado para reconhecimento complementar.</li>
+            <li><strong>Aleatorizacao:</strong> levar pares de coordenadas ja sorteados para posicionar os 9 quadrados, economizando tempo no campo.</li>
+            <li><strong>Distancia minima:</strong> evitar quadrados sobrepostos ou excessivamente proximos, preservando independencia amostral.</li>
+        </ul>
+
+        <h3>4. Rotulagem antecipada</h3>
+        <p>
+            Prepare etiquetas impermeaveis antes da saida. O formato recomendado e
+            <strong>ESTACAO-Q#-DATA</strong>, por exemplo <strong>SAM-Q3-12MAI</strong>.
+            Use uma etiqueta externa no saco e outra interna, escrita a lapis ou material resistente.
+        </p>
+        <h3>Checklist rapido para marcar antes de sair</h3>
+        <table>
+            <thead><tr><th>Item</th><th>Conferido</th><th>Observacao</th></tr></thead>
+            <tbody>
+            <tr><td>Tabua de mare e horario alvo</td><td>[ ]</td><td></td></tr>
+            <tr><td>Previsao de vento e ondulacao</td><td>[ ]</td><td></td></tr>
+            <tr><td>Rota e acesso confirmados</td><td>[ ]</td><td></td></tr>
+            <tr><td>Numeros aleatorios dos quadrados</td><td>[ ]</td><td></td></tr>
+            <tr><td>Etiquetas de amostras prontas</td><td>[ ]</td><td></td></tr>
+            <tr><td>Equipe e contatos combinados</td><td>[ ]</td><td></td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="tab" id="materiais">
+        <h2>Materiais obrigatorios</h2>
+        <div class="print-actions">
+            <button class="btn" type="button" onclick="printSection('materiais')">Imprimir materiais</button>
+            <a class="btn secondary" href="../index.html">Voltar ao portal</a>
+        </div>
+        <p>
+            Esta lista foi separada por funcao para facilitar a divisao entre membros da equipe.
+            A recomendacao e conferir tudo uma vez no laboratorio e outra vez no ponto de encontro.
+            Materiais de medicao, rotulagem e seguranca devem ficar acessiveis, nao no fundo da mochila.
+        </p>
+        <div class="grid">
+            <div class="box">
+                <h3>Equipamentos cientificos</h3>
+                <ul>
+                    <li><strong>Quadrado 25 x 25 cm:</strong> unidade padrao para biomassa e comparacao entre estacoes.</li>
+                    <li><strong>Cabo guia 10 m:</strong> eixo paralelo a linha de costa para orientar a area de sorteio.</li>
+                    <li><strong>Espatulas inox:</strong> remocao completa do material macroalgal dentro de cada quadrado.</li>
+                    <li><strong>GPS:</strong> registro da estacao e, se possivel, do inicio/fim do transecto.</li>
+                    <li><strong>Termometro:</strong> temperatura da agua no momento da amostragem.</li>
+                    <li><strong>Refratometro:</strong> salinidade local, importante para interpretar diferencas entre as Baias.</li>
+                    <li><strong>Frascos 500 ml:</strong> coleta de agua para nutrientes, previamente lavados conforme protocolo.</li>
+                    <li><strong>Caneta permanente e etiquetas:</strong> rastreabilidade das amostras ate o laboratorio.</li>
+                </ul>
+            </div>
+            <div class="box">
+                <h3>Preservacao e seguranca</h3>
+                <ul>
+                    <li><strong>Formaldeido 4%:</strong> fixacao do material, com cuidado de transporte e uso de EPI.</li>
+                    <li><strong>Agua do mar extra:</strong> preparo e diluicao quando necessario.</li>
+                    <li><strong>Sacos zip:</strong> armazenamento separado por quadrado e coleta complementar.</li>
+                    <li><strong>Caixa termica:</strong> transporte organizado das amostras e frascos de agua.</li>
+                    <li><strong>Luvas nitrilicas:</strong> protecao durante coleta, fixacao e manuseio de organismos.</li>
+                    <li><strong>Bota antiderrapante:</strong> seguranca no costao molhado.</li>
+                    <li><strong>Oculos, protetor solar e kit primeiros socorros:</strong> itens minimos de protecao da equipe.</li>
+                </ul>
+            </div>
+        </div>
+        <h3>Hidrodinamismo, se for aplicado</h3>
+        <p>
+            Blocos numerados, barbante, suporte em T, papel aluminio e balanca pre-campo para
+            registro do peso inicial.
+        </p>
+        <h3>Checklist de materiais</h3>
+        <table>
+            <thead><tr><th>Grupo</th><th>Item</th><th>Responsavel</th><th>Conferido</th></tr></thead>
+            <tbody>
+            <tr><td>Amostragem</td><td>Quadrado 25 x 25 cm</td><td></td><td>[ ]</td></tr>
+            <tr><td>Amostragem</td><td>Cabo guia 10 m</td><td></td><td>[ ]</td></tr>
+            <tr><td>Amostragem</td><td>Espatulas inox</td><td></td><td>[ ]</td></tr>
+            <tr><td>Medicao</td><td>GPS, termometro e refratometro</td><td></td><td>[ ]</td></tr>
+            <tr><td>Amostras</td><td>Frascos, sacos zip e etiquetas</td><td></td><td>[ ]</td></tr>
+            <tr><td>Preservacao</td><td>Formaldeido 4%, agua do mar extra e caixa termica</td><td></td><td>[ ]</td></tr>
+            <tr><td>Seguranca</td><td>Luvas, bota, oculos, protetor solar e primeiros socorros</td><td></td><td>[ ]</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="tab" id="sequencia">
+        <h2>Sequencia ideal por estacao</h2>
+        <ol>
+            <li>Registrar coordenadas.</li>
+            <li>Medir temperatura.</li>
+            <li>Medir salinidade.</li>
+            <li>Instalar transecto.</li>
+            <li>Posicionar quadrados.</li>
+            <li>Coletar macroalgas.</li>
+            <li>Coletar agua.</li>
+            <li>Instalar blocos de gesso, caso esta etapa seja aplicada.</li>
+            <li>Fazer fotos gerais e fotos in situ.</li>
+            <li>Conferir checklist final antes de sair da estacao.</li>
+        </ol>
+    </section>
+
+    <section class="tab" id="publicacao">
+        <h2>Checklist para novo repositorio e GitHub Pages</h2>
+        <div class="print-actions">
+            <button class="btn" type="button" onclick="printSection('publicacao')">Imprimir checklist</button>
+            <a class="btn secondary" href="../index.html">Voltar ao portal</a>
+        </div>
+        <p>
+            Este checklist organiza os passos para transformar o prototipo local em um produto publico
+            hospedado no GitHub Pages. A melhor pratica e publicar apenas arquivos necessarios ao portal,
+            revisar nomes de arquivos com acentos e confirmar se os links relativos continuam funcionando
+            depois do envio para o repositorio.
+        </p>
+
+        <h3>1. Preparar a pasta do produto</h3>
+        <table>
+            <thead><tr><th>Etapa</th><th>Acao</th><th>Status</th></tr></thead>
+            <tbody>
+            <tr><td>Nome do projeto</td><td>Definir nome curto para o repositorio, por exemplo <strong>prototipo-macroalgas-baias-sc</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Arquivos essenciais</td><td>Separar <strong>index.html</strong>, mapa, metodologia, dashboard, CSVs e referencias permitidas.</td><td>[ ]</td></tr>
+            <tr><td>Links relativos</td><td>Testar links entre paginas usando caminhos relativos, sem depender de <strong>file:///</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Nomes de arquivos</td><td>Preferir nomes sem espacos e sem acentos para PDFs e CSVs que serao publicados.</td><td>[ ]</td></tr>
+            <tr><td>Creditos</td><td>Manter autoria e referencias bibliograficas visiveis no portal e no mapa.</td><td>[ ]</td></tr>
+            </tbody>
+        </table>
+
+        <h3>2. Criar o repositorio no GitHub</h3>
+        <table>
+            <thead><tr><th>Etapa</th><th>Acao</th><th>Status</th></tr></thead>
+            <tbody>
+            <tr><td>Novo repositorio</td><td>No GitHub, clicar em <strong>New repository</strong> e criar como publico se for usar GitHub Pages publico.</td><td>[ ]</td></tr>
+            <tr><td>Descricao</td><td>Adicionar uma descricao curta: portal de campo para macroalgas das Baias da Ilha de Santa Catarina.</td><td>[ ]</td></tr>
+            <tr><td>Branch principal</td><td>Usar <strong>main</strong> como branch principal.</td><td>[ ]</td></tr>
+            <tr><td>README</td><td>Adicionar resumo, autoria, fontes e lista dos produtos publicados.</td><td>[ ]</td></tr>
+            </tbody>
+        </table>
+
+        <h3>3. Enviar os arquivos</h3>
+        <table>
+            <thead><tr><th>Etapa</th><th>Comando/acao</th><th>Status</th></tr></thead>
+            <tbody>
+            <tr><td>Inicializar Git</td><td><code>git init</code></td><td>[ ]</td></tr>
+            <tr><td>Adicionar remoto</td><td><code>git remote add origin https://github.com/USUARIO/REPOSITORIO.git</code></td><td>[ ]</td></tr>
+            <tr><td>Adicionar arquivos</td><td><code>git add .</code></td><td>[ ]</td></tr>
+            <tr><td>Commit inicial</td><td><code>git commit -m "Publica portal do prototipo de macroalgas"</code></td><td>[ ]</td></tr>
+            <tr><td>Enviar</td><td><code>git push -u origin main</code></td><td>[ ]</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. Ativar GitHub Pages</h3>
+        <table>
+            <thead><tr><th>Etapa</th><th>Acao</th><th>Status</th></tr></thead>
+            <tbody>
+            <tr><td>Settings</td><td>Abrir <strong>Settings</strong> do repositorio.</td><td>[ ]</td></tr>
+            <tr><td>Pages</td><td>Entrar em <strong>Pages</strong> no menu lateral.</td><td>[ ]</td></tr>
+            <tr><td>Source</td><td>Selecionar <strong>Deploy from a branch</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Branch</td><td>Escolher <strong>main</strong> e pasta <strong>/root</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Salvar</td><td>Aguardar a URL no formato <strong>https://usuario.github.io/repositorio/</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Validacao final</td><td>Testar mapa, dashboard, metodologia, planilhas, modo escuro e links dos PDFs.</td><td>[ ]</td></tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<script>
+const buttons = document.querySelectorAll(".tab-btn");
+const tabs = document.querySelectorAll(".tab");
+const themeToggle = document.getElementById("themeToggle");
+
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        const target = button.dataset.tab;
+        buttons.forEach((item) => item.classList.toggle("active", item === button));
+        tabs.forEach((tab) => tab.classList.toggle("active", tab.id === target));
+        history.replaceState(null, "", `#${target}`);
+    });
+});
+
+function openInitialTab() {
+    const target = (window.location.hash || "#intro").replace("#", "");
+    const button = document.querySelector(`.tab-btn[data-tab="${target}"]`);
+    if (!button) return;
+    buttons.forEach((item) => item.classList.toggle("active", item === button));
+    tabs.forEach((tab) => tab.classList.toggle("active", tab.id === target));
+}
+
+openInitialTab();
+
+function applyTheme(mode) {
+    document.body.classList.toggle("dark-mode", mode === "dark");
+    themeToggle.textContent = mode === "dark" ? "Modo claro" : "Modo escuro";
+    try { localStorage.setItem("macroalgasMethodTheme", mode); } catch (_) {}
+}
+
+try {
+    applyTheme(localStorage.getItem("macroalgasMethodTheme") || "light");
+} catch (_) {
+    applyTheme("light");
+}
+
+themeToggle.addEventListener("click", () => {
+    applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
+});
+
+function printSection(sectionId) {
+    document.body.classList.remove("print-ficha", "print-precampo", "print-materiais", "print-publicacao");
+    document.body.classList.add(`print-${sectionId}`);
+    window.print();
+}
+
+window.addEventListener("afterprint", () => {
+    document.body.classList.remove("print-ficha", "print-precampo", "print-materiais", "print-publicacao");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template de Planilha - Prototipo Armacao</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #f6f8fa;
+            color: #1f2937;
+            padding: 20px;
+        }
+
+        h1 { margin-top: 0; }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 8px;
+            font-size: 0.92rem;
+            text-align: left;
+        }
+
+        th {
+            background: #eef2ff;
+            color: #1e3a8a;
+            position: sticky;
+            top: 0;
+        }
+
+        .hint {
+            margin: 8px 0 14px;
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Template de Planilha de Campo</h1>
+    <p class="hint">Use esta estrutura para validar colunas antes da importacao para GIS e scripts Python.</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>date</th>
+                    <th>time</th>
+                    <th>name</th>
+                    <th>lat</th>
+                    <th>lon</th>
+                    <th>layer</th>
+                    <th>team</th>
+                    <th>file_ref</th>
+                    <th>notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-04-21</td>
+                    <td>09:15</td>
+                    <td>Ponto 1</td>
+                    <td>-27.750445</td>
+                    <td>-48.500327</td>
+                    <td>quadrat_photo</td>
+                    <td>RAC</td>
+                    <td>20260421_P1_quadrat_photo_RAC_001.jpg</td>
+                    <td>Mar calmo, visibilidade boa.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

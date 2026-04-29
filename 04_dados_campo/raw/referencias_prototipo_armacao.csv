@@ -1,0 +1,37 @@
+name,lat,lon,layer
+Ponta das Canas,-27.393333,-48.433333,quadrat_biomass
+Sambaqui,-27.488333,-48.540000,quadrat_biomass
+Ponta do Coral,-27.570000,-48.536667,quadrat_biomass
+Saco dos Limoes,-27.613333,-48.553333,quadrat_biomass
+Ribeirao da Ilha,-27.731667,-48.565000,quadrat_biomass
+Caieira da Barra do Sul,-27.813333,-48.561667,quadrat_biomass
+Ponta das Canas,-27.393333,-48.433333,taxonomy_collect
+Sambaqui,-27.488333,-48.540000,taxonomy_collect
+Ponta do Coral,-27.570000,-48.536667,taxonomy_collect
+Saco dos Limoes,-27.613333,-48.553333,taxonomy_collect
+Ribeirao da Ilha,-27.731667,-48.565000,taxonomy_collect
+Caieira da Barra do Sul,-27.813333,-48.561667,taxonomy_collect
+Ponta das Canas,-27.393333,-48.433333,photo_in_situ
+Sambaqui,-27.488333,-48.540000,photo_in_situ
+Ponta do Coral,-27.570000,-48.536667,photo_in_situ
+Saco dos Limoes,-27.613333,-48.553333,photo_in_situ
+Ribeirao da Ilha,-27.731667,-48.565000,photo_in_situ
+Caieira da Barra do Sul,-27.813333,-48.561667,photo_in_situ
+Ponta das Canas,-27.393333,-48.433333,water_sample_lab
+Sambaqui,-27.488333,-48.540000,water_sample_lab
+Ponta do Coral,-27.570000,-48.536667,water_sample_lab
+Saco dos Limoes,-27.613333,-48.553333,water_sample_lab
+Ribeirao da Ilha,-27.731667,-48.565000,water_sample_lab
+Caieira da Barra do Sul,-27.813333,-48.561667,water_sample_lab
+Ponta das Canas,-27.393333,-48.433333,water_probe
+Sambaqui,-27.488333,-48.540000,water_probe
+Ponta do Coral,-27.570000,-48.536667,water_probe
+Saco dos Limoes,-27.613333,-48.553333,water_probe
+Ribeirao da Ilha,-27.731667,-48.565000,water_probe
+Caieira da Barra do Sul,-27.813333,-48.561667,water_probe
+Ponta das Canas,-27.393333,-48.433333,free_dive_survey
+Sambaqui,-27.488333,-48.540000,free_dive_survey
+Ponta do Coral,-27.570000,-48.536667,free_dive_survey
+Saco dos Limoes,-27.613333,-48.553333,free_dive_survey
+Ribeirao da Ilha,-27.731667,-48.565000,free_dive_survey
+Caieira da Barra do Sul,-27.813333,-48.561667,free_dive_survey

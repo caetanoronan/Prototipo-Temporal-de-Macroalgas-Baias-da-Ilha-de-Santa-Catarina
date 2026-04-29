@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Operacao Rapida de Campo - Mapa Armacao</title>
+  <style>
+    :root {
+      --bg: #f3efe4;
+      --ink: #1e2b29;
+      --muted: #4a5c58;
+      --card: #fffdf8;
+      --line: #d7cec0;
+      --primary: #0b6e4f;
+      --primary-ink: #f4fff7;
+      --secondary: #165d7a;
+      --warn: #9a3412;
+      --shadow: rgba(30, 43, 41, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, #e8f7ef 0%, transparent 35%),
+        radial-gradient(circle at 95% 90%, #e5f2f8 0%, transparent 30%),
+        var(--bg);
+    }
+
+    .wrap {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 32px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #0b6e4f, #165d7a);
+      color: #fff;
+      border-radius: 18px;
+      padding: 18px 16px;
+      box-shadow: 0 10px 28px var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      letter-spacing: 0.2px;
+    }
+
+    .hero p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 4px 14px var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: var(--secondary);
+    }
+
+    .btns {
+      display: grid;
+      gap: 10px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 12px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: transform 0.08s ease;
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-ink);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: #eef7ff;
+    }
+
+    .btn-warn {
+      background: var(--warn);
+      color: #fff6f2;
+    }
+
+    ol, ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    li { margin: 6px 0; }
+
+    .small {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Operacao Rapida de Campo</h1>
+      <p>Abra o mapa, valide o servico e teste exportacao PNG em um toque. Funciona em celular e notebook.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Acoes de Um Toque</h2>
+        <div class="btns">
+          <a class="btn btn-primary" href="https://caetanoronan.github.io/prototipo-armacao/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html" target="_blank" rel="noopener noreferrer">Abrir Mapa Publico</a>
+          <a class="btn btn-secondary" href="https://prototipo-praia-armacao.onrender.com/health" target="_blank" rel="noopener noreferrer">Verificar Health</a>
+          <a class="btn btn-warn" href="https://prototipo-praia-armacao.onrender.com/render.png?layers=quadrat_photo&ref=&base=osm&filename=teste_campo" target="_blank" rel="noopener noreferrer">Teste PNG Direto</a>
+        </div>
+        <p class="small">Se o plano Free estiver em repouso, a primeira resposta pode levar alguns segundos.</p>
+      </article>
+
+      <article class="card">
+        <h2>Fluxo Operacional</h2>
+        <ol>
+          <li>Abrir o mapa publico.</li>
+          <li>Selecionar camadas e ponto de referencia.</li>
+          <li>Definir nome do arquivo.</li>
+          <li>Tocar em Exportar PNG.</li>
+          <li>Confirmar download do arquivo.</li>
+        </ol>
+      </article>
+
+      <article class="card">
+        <h2>Checklist de Saida</h2>
+        <ul>
+          <li>Bateria acima de 50%.</li>
+          <li>Conexao de internet ativa.</li>
+          <li>Health retornando ok true.</li>
+          <li>Um teste PNG realizado no dia.</li>
+        </ul>
+        <span class="tag">Protocolo completo em 01_planejamento/PROTOCOLO_OPERACAO_EXPORTACAO_PNG.md</span>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

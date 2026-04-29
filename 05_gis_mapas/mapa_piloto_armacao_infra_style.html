@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa Piloto - Armação</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <style>
+        :root {
+            --bg: #f3f6f4;
+            --panel: #ffffff;
+            --line: #d6dee0;
+            --text: #102a43;
+            --muted: #5b6b7a;
+            --accent: #0b7285;
+            --accent-2: #0f9ba8;
+            --shadow: rgba(16, 42, 67, 0.12);
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at top left, #ddeff0 0, transparent 28%),
+                        radial-gradient(circle at top right, #e9f3ea 0, transparent 25%),
+                        var(--bg);
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 380px minmax(0, 1fr);
+            height: 100vh;
+        }
+
+        aside {
+            background: var(--panel);
+            border-right: 1px solid var(--line);
+            overflow: auto;
+            box-shadow: 6px 0 20px var(--shadow);
+        }
+
+        .brand {
+            padding: 22px 20px 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff;
+        }
+
+        .brand h1 {
+            margin: 0 0 6px;
+            font-size: 1.2rem;
+        }
+
+        .brand p {
+            margin: 0;
+            font-size: 0.84rem;
+            opacity: 0.92;
+            line-height: 1.4;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            background: #f8fbfb;
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--accent);
+            line-height: 1.1;
+        }
+
+        .stat span {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.77rem;
+            color: var(--muted);
+        }
+
+        .section {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section h2 {
+            margin: 0 0 10px;
+            font-size: 0.96rem;
+            color: var(--accent);
+        }
+
+        .section p {
+            margin: 0;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .layer-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .layer-item input { margin: 0; }
+
+        .layer-item .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,0.25);
+            flex-shrink: 0;
+        }
+
+        .layer-item label {
+            font-size: 0.86rem;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .ref-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .ref-button {
+            width: 100%;
+            text-align: left;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent);
+            border-radius: 10px;
+            padding: 10px 12px;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .ref-button:hover,
+        .ref-button.active {
+            background: #eef8f9;
+            border-left-color: #d72638;
+            box-shadow: 0 0 0 2px rgba(215, 38, 56, 0.14);
+        }
+
+        .ref-button strong {
+            display: block;
+            font-size: 0.88rem;
+        }
+
+        .ref-button span {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .actions {
+            display: grid;
+            gap: 8px;
+            padding: 14px 16px 18px;
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            border-top: 1px solid var(--line);
+        }
+
+        button.action {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+        .secondary { background: #e8f4f5; color: var(--accent); }
+
+        .map-wrap {
+            position: relative;
+            min-width: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-title {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: min(94%, 620px);
+            background: rgba(255,255,255,0.93);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px 14px;
+            text-align: center;
+            box-shadow: 0 6px 18px var(--shadow);
+        }
+
+        .map-title h2 {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--accent);
+        }
+
+        .map-title p {
+            margin: 4px 0 0;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .north {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 1000;
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid var(--line);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 6px 18px var(--shadow);
+        }
+
+        .north svg {
+            width: 70px;
+            height: 70px;
+        }
+
+        .legend {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            z-index: 1000;
+            width: 220px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 6px 18px var(--shadow);
+        }
+
+        .legend h3 {
+            margin: 0 0 8px;
+            font-size: 0.88rem;
+            color: var(--accent);
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6px 0;
+            font-size: 0.78rem;
+        }
+
+        .swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,0.24);
+            flex-shrink: 0;
+        }
+
+        .scale-note {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.76rem;
+            color: var(--muted);
+            box-shadow: 0 6px 18px var(--shadow);
+        }
+
+        .flag-marker {
+            position: relative;
+            width: 18px;
+            height: 22px;
+        }
+
+        .flag-marker .base {
+            position: absolute;
+            left: 2px;
+            bottom: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid #0f172a;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .flag-marker .pole {
+            position: absolute;
+            left: 8px;
+            bottom: 12px;
+            width: 2px;
+            height: 10px;
+            background: #334155;
+            border-radius: 2px;
+        }
+
+        .flag-marker .flag {
+            position: absolute;
+            left: 10px;
+            bottom: 18px;
+            font-size: 10px;
+            line-height: 1;
+        }
+
+        .point-tooltip {
+            background: rgba(16, 42, 67, 0.95);
+            color: #fff;
+            border: 0;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(16, 42, 67, 0.24);
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 8px;
+        }
+
+        .point-tooltip.leaflet-tooltip-top:before {
+            border-top-color: rgba(16, 42, 67, 0.95);
+        }
+
+        @media (max-width: 980px) {
+            .app {
+                grid-template-columns: 1fr;
+                grid-template-rows: 46vh minmax(0, 1fr);
+            }
+
+            aside {
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .map-wrap {
+                min-height: 46vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <aside>
+            <div class="brand">
+                <h1>Gerador de mapa piloto</h1>
+                <p>Versão enxuta para o protótipo de campo. Os filtros controlam as camadas metodológicas e os pontos de referência ficam isolados para briefing.</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat"><strong id="totalPoints">0</strong><span>registros</span></div>
+                <div class="stat"><strong id="visiblePoints">0</strong><span>visíveis</span></div>
+                <div class="stat"><strong id="layerCount">0</strong><span>camadas</span></div>
+                <div class="stat"><strong id="refCount">0</strong><span>referências</span></div>
+            </div>
+
+            <div class="section">
+                <h2>Camadas</h2>
+                <div class="layer-list" id="layerList"></div>
+            </div>
+
+            <div class="section">
+                <h2>Pontos de referência</h2>
+                <p style="margin-bottom:10px;">Clique em um ponto para destacar somente a bandeira correspondente no mapa.</p>
+                <div class="ref-list" id="refList"></div>
+            </div>
+
+            <div class="actions">
+                <button class="action primary" type="button" onclick="resetView()">Centralizar mapa</button>
+                <button class="action secondary" type="button" onclick="window.print()">Imprimir / PDF</button>
+            </div>
+        </aside>
+
+        <section class="map-wrap">
+            <div class="map-title">
+                <h2>Mapa piloto - Armação</h2>
+                <p>Base para evolução contínua do protótipo com camadas filtráveis e referências locais individuais</p>
+            </div>
+
+            <div class="north" aria-label="Rosa dos ventos">
+                <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
+                    <circle cx="50" cy="50" r="43" fill="#fff" stroke="#7b8794" stroke-width="2" />
+                    <polygon points="50,8 57,42 50,36 43,42" fill="#d72638" />
+                    <polygon points="50,92 57,58 50,64 43,58" fill="#7b8794" />
+                    <polygon points="8,50 42,57 36,50 42,43" fill="#7b8794" />
+                    <polygon points="92,50 58,57 64,50 58,43" fill="#7b8794" />
+                    <circle cx="50" cy="50" r="4" fill="#334155" />
+                    <text x="50" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#d72638">N</text>
+                    <text x="50" y="96" text-anchor="middle" font-size="10" fill="#475569">S</text>
+                    <text x="12" y="54" text-anchor="middle" font-size="10" fill="#475569">W</text>
+                    <text x="88" y="54" text-anchor="middle" font-size="10" fill="#475569">E</text>
+                </svg>
+            </div>
+
+            <div id="map"></div>
+            <div class="legend">
+                <h3>Legenda</h3>
+                <div id="legendList"></div>
+            </div>
+            <div class="scale-note">Escala gráfica automática no canto inferior esquerdo. Para impressão, use a base OSM ou Satélite conforme o briefing.</div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        const CSV_URL = "../04_dados_campo/raw/referencias_prototipo_armacao.csv";
+        const FALLBACK_CSV = `name,lat,lon,layer
+Ponta das Campanhas,-27.749367,-48.499284,quadrat_photo
+Ponto 1,-27.750445,-48.500327,quadrat_photo
+Ponto 2,-27.749546,-48.500338,quadrat_photo
+Ponto 3,-27.748517,-48.498916,quadrat_photo
+Ponto 4,-27.747794,-48.499240,quadrat_photo
+Ilha de Fora,-27.747719,-48.498424,quadrat_photo
+Ponta das Campanhas,-27.749367,-48.499284,water_sample_lab
+Ponto 1,-27.750445,-48.500327,water_sample_lab
+Ponto 2,-27.749546,-48.500338,water_sample_lab
+Ponto 3,-27.748517,-48.498916,water_sample_lab
+Ponto 4,-27.747794,-48.499240,water_sample_lab
+Ilha de Fora,-27.747719,-48.498424,water_sample_lab
+Ponta das Campanhas,-27.749367,-48.499284,water_probe
+Ponto 1,-27.750445,-48.500327,water_probe
+Ponto 2,-27.749546,-48.500338,water_probe
+Ponto 3,-27.748517,-48.498916,water_probe
+Ponto 4,-27.747794,-48.499240,water_probe
+Ilha de Fora,-27.747719,-48.498424,water_probe
+Ponta das Campanhas,-27.749367,-48.499284,secchi
+Ponto 1,-27.750445,-48.500327,secchi
+Ponto 2,-27.749546,-48.500338,secchi
+Ponto 3,-27.748517,-48.498916,secchi
+Ponto 4,-27.747794,-48.499240,secchi
+Ilha de Fora,-27.747719,-48.498424,secchi
+Ponta das Campanhas,-27.749367,-48.499284,drone
+Ponto 1,-27.750445,-48.500327,drone
+Ponto 2,-27.749546,-48.500338,drone
+Ponto 3,-27.748517,-48.498916,drone
+Ponto 4,-27.747794,-48.499240,drone
+Ilha de Fora,-27.747719,-48.498424,drone
+Ponta das Campanhas,-27.749367,-48.499284,algae_collect_taxonomy
+Ponto 1,-27.750445,-48.500327,algae_collect_taxonomy
+Ponto 2,-27.749546,-48.500338,algae_collect_taxonomy
+Ponto 3,-27.748517,-48.498916,algae_collect_taxonomy
+Ponto 4,-27.747794,-48.499240,algae_collect_taxonomy
+Ilha de Fora,-27.747719,-48.498424,algae_collect_taxonomy
+Ponta das Campanhas,-27.749367,-48.499284,algae_photo_in_situ
+Ponto 1,-27.750445,-48.500327,algae_photo_in_situ
+Ponto 2,-27.749546,-48.500338,algae_photo_in_situ
+Ponto 3,-27.748517,-48.498916,algae_photo_in_situ
+Ponto 4,-27.747794,-48.499240,algae_photo_in_situ
+Ilha de Fora,-27.747719,-48.498424,algae_photo_in_situ`;
+
+        const LAYER_COLORS = {
+            quadrat_photo: "#0ea5e9",
+            water_sample_lab: "#2563eb",
+            water_probe: "#14b8a6",
+            secchi: "#f59e0b",
+            drone: "#ef4444",
+            algae_collect_taxonomy: "#7c3aed",
+            algae_photo_in_situ: "#22c55e"
+        };
+
+        const LAYER_LABELS = {
+            quadrat_photo: "quadrat_photo",
+            water_sample_lab: "water_sample_lab",
+            water_probe: "water_probe",
+            secchi: "secchi",
+            drone: "drone",
+            algae_collect_taxonomy: "algae_collect_taxonomy",
+            algae_photo_in_situ: "algae_photo_in_situ"
+        };
+
+        const map = L.map("map", {
+            zoomControl: true,
+            minZoom: 14,
+            maxZoom: 19,
+            maxBounds: [[-27.7539, -48.5027], [-27.7453, -48.4964]],
+            maxBoundsViscosity: 0.95
+        }).setView([-27.7493, -48.4993], 17);
+
+        const osmLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: "© OpenStreetMap contributors"
+        }).addTo(map);
+
+        const satelliteLayer = L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            { maxZoom: 19, attribution: "Tiles © Esri" }
+        );
+
+        L.control.layers({ "Mapa OSM": osmLayer, "Satélite": satelliteLayer }, null, {
+            position: "topright",
+            collapsed: false
+        }).addTo(map);
+
+        L.control.scale({ metric: true, imperial: false, position: "bottomleft" }).addTo(map);
+
+        const groups = {};
+        const referencePoints = new Map();
+        let activeReferenceMarker = null;
+        let activeReferenceName = null;
+        const mapBounds = [];
+        let data = [];
+
+        Object.keys(LAYER_COLORS).forEach((layer) => {
+            groups[layer] = L.layerGroup();
+        });
+
+        function createFlagIcon(color = "#d72638") {
+            return L.divIcon({
+                className: "",
+                html: `<div class="flag-marker"><span class="base" style="background:${color};"></span><span class="pole"></span><span class="flag">🚩</span></div>`,
+                iconSize: [18, 22],
+                iconAnchor: [9, 21],
+                popupAnchor: [0, -16],
+                tooltipAnchor: [0, -20]
+            });
+        }
+
+        function parseCsv(text) {
+            const lines = text.trim().split(/\r?\n/);
+            const rows = [];
+            for (let i = 1; i < lines.length; i += 1) {
+                const [name, lat, lon, layer] = lines[i].split(",");
+                if (!name || !lat || !lon || !layer) continue;
+                rows.push({ name: name.trim(), lat: Number(lat), lon: Number(lon), layer: layer.trim() });
+            }
+            return rows.filter((row) => Number.isFinite(row.lat) && Number.isFinite(row.lon));
+        }
+
+        function updateStats() {
+            const visible = data.filter((item) => map.hasLayer(groups[item.layer])).length;
+            document.getElementById("totalPoints").textContent = data.length;
+            document.getElementById("visiblePoints").textContent = visible;
+            document.getElementById("layerCount").textContent = Object.keys(groups).length;
+            document.getElementById("refCount").textContent = referencePoints.size;
+        }
+
+        function setActiveReference(name) {
+            activeReferenceName = name;
+            document.querySelectorAll(".ref-button").forEach((button) => {
+                button.classList.toggle("active", button.dataset.name === name);
+            });
+        }
+
+        function showReferencePoint(name) {
+            const ref = referencePoints.get(name);
+            if (!ref) return;
+
+            if (activeReferenceMarker) {
+                map.removeLayer(activeReferenceMarker);
+            }
+
+            activeReferenceMarker = L.marker([ref.lat, ref.lon], {
+                icon: createFlagIcon(),
+                keyboard: true,
+                zIndexOffset: 1200
+            }).addTo(map);
+
+            activeReferenceMarker.bindPopup(`
+                <div style="font-family:Segoe UI,Tahoma,sans-serif;line-height:1.45;">
+                    <strong>🚩 ${ref.name}</strong><br>
+                    Tipo: Ponto de referência<br>
+                    Lat: ${ref.lat.toFixed(6)}<br>
+                    Lon: ${ref.lon.toFixed(6)}
+                </div>
+            `);
+
+            activeReferenceMarker.openPopup();
+            setActiveReference(name);
+        }
+
+        function resetView() {
+            if (mapBounds.length) {
+                map.fitBounds(mapBounds, { padding: [28, 28] });
+            }
+        }
+
+        function buildLayerList() {
+            const layerList = document.getElementById("layerList");
+            layerList.innerHTML = "";
+
+            Object.entries(LAYER_COLORS).forEach(([layer, color]) => {
+                const row = document.createElement("div");
+                row.className = "layer-item";
+                row.innerHTML = `
+                    <input type="checkbox" checked data-layer="${layer}" />
+                    <span class="dot" style="background:${color}"></span>
+                    <label>${LAYER_LABELS[layer]}</label>
+                `;
+
+                const checkbox = row.querySelector("input");
+                checkbox.addEventListener("change", () => {
+                    if (checkbox.checked) {
+                        groups[layer].addTo(map);
+                    } else {
+                        map.removeLayer(groups[layer]);
+                    }
+                    updateStats();
+                });
+
+                layerList.appendChild(row);
+            });
+        }
+
+        function buildReferenceList() {
+            const refList = document.getElementById("refList");
+            refList.innerHTML = "";
+
+            Array.from(referencePoints.values()).forEach((ref) => {
+                const button = document.createElement("button");
+                button.className = "ref-button";
+                button.dataset.name = ref.name;
+                button.innerHTML = `<strong>🚩 ${ref.name}</strong><span>${ref.lat.toFixed(6)}, ${ref.lon.toFixed(6)}</span>`;
+                button.addEventListener("click", () => {
+                    map.setView([ref.lat, ref.lon], 17);
+                    showReferencePoint(ref.name);
+                });
+                refList.appendChild(button);
+            });
+        }
+
+        function buildLegend() {
+            const legendList = document.getElementById("legendList");
+            legendList.innerHTML = "";
+
+            Object.entries(LAYER_COLORS).forEach(([layer, color]) => {
+                const row = document.createElement("div");
+                row.className = "legend-row";
+                row.innerHTML = `<span class="swatch" style="background:${color}"></span><span>${layer}</span>`;
+                legendList.appendChild(row);
+            });
+        }
+
+        function addPointMarker(rec) {
+            const marker = L.circleMarker([rec.lat, rec.lon], {
+                radius: 7,
+                fillColor: LAYER_COLORS[rec.layer] || "#334155",
+                color: "#0f172a",
+                weight: 1,
+                fillOpacity: 0.86
+            });
+
+            marker.bindTooltip(`${rec.name} • ${rec.layer}`, {
+                direction: "top",
+                offset: [0, -10],
+                opacity: 0.95,
+                className: "point-tooltip"
+            });
+
+            marker.bindPopup(`
+                <div style="font-family:Segoe UI,Tahoma,sans-serif;line-height:1.45;">
+                    <strong>${rec.name}</strong><br>
+                    Camada: ${rec.layer}<br>
+                    Lat: ${rec.lat.toFixed(6)}<br>
+                    Lon: ${rec.lon.toFixed(6)}
+                </div>
+            `);
+
+            marker.addTo(groups[rec.layer]);
+            mapBounds.push([rec.lat, rec.lon]);
+
+            if (!referencePoints.has(rec.name)) {
+                referencePoints.set(rec.name, { name: rec.name, lat: rec.lat, lon: rec.lon });
+            }
+        }
+
+        function loadData() {
+            fetch(CSV_URL, { cache: "no-store" })
+                .then((response) => response.ok ? response.text() : Promise.reject(response.status))
+                .catch(() => FALLBACK_CSV)
+                .then((text) => {
+                    const rows = parseCsv(text);
+                    data = rows;
+                    rows.forEach(addPointMarker);
+                    Object.values(groups).forEach((group) => group.addTo(map));
+                    buildLayerList();
+                    buildReferenceList();
+                    buildLegend();
+                    updateStats();
+                    if (mapBounds.length) {
+                        map.fitBounds(mapBounds, { padding: [30, 30] });
+                    }
+                });
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

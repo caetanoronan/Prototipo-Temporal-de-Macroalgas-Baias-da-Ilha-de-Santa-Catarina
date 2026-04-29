@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Legal Code of Conduct - LAFIC/UFSC</title>
+  <meta name="description" content="Legal-institutional version of the Code of Ethical Conduct, Safety, and Coexistence - LAFIC/UFSC." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cb-bugn-1: #e5f5f9;
+      --cb-bugn-2: #99d8c9;
+      --cb-bugn-3: #2ca25f;
+      --bg-0: #f4fbf8;
+      --bg-1: #e5f5f1;
+      --bg-2: #d7eee7;
+      --surface: #f8fdfb;
+      --surface-soft: #eaf6f2;
+      --ink: #13342c;
+      --ink-soft: #2d5b50;
+      --line: #99d8c9;
+      --accent: #2ca25f;
+      --accent-2: #99d8c9;
+      --heading-color: #1e5b49;
+      --shadow: 0 14px 28px rgba(16, 56, 47, 0.16);
+      --hero-bg: linear-gradient(135deg, #114d40, #1b6f5a);
+      --hero-text: #f7fffc;
+      --hero-border: rgba(153, 216, 201, 0.55);
+      --hero-glow: radial-gradient(circle, rgba(44, 162, 95, 0.32), rgba(44, 162, 95, 0));
+      --logo-bg: rgba(229, 245, 249, 0.2);
+      --logo-border: rgba(229, 245, 249, 0.45);
+      --kicker: #effff9;
+      --subtitle: #f6fffc;
+      --toc-link: #18483b;
+      --meta-chip-bg: rgba(9, 52, 42, 0.44);
+      --meta-chip-border: rgba(229, 245, 249, 0.45);
+      --refs-bg: #ebf8f2;
+      --refs-text: #1d4c40;
+      --refs-link: #186b4f;
+      --signature-bg: #eefaf5;
+      --signature-border: #75b9a4;
+      --btn-primary-text: #f4fffb;
+      --btn-primary-bg: linear-gradient(135deg, #2ca25f, #1f8f76);
+      --btn-primary-shadow: 0 10px 18px rgba(15, 88, 68, 0.28);
+      --btn-secondary-text: #194036;
+      --btn-secondary-bg: #cfeee3;
+      --footer-text: #1f4f42;
+      --radius-xl: 22px;
+      --radius-lg: 14px;
+      --radius-sm: 10px;
+      --max: 1080px;
+    }
+
+    body.theme-dark {
+      --bg-0: #071712;
+      --bg-1: #0f2e2a;
+      --bg-2: #1a4e44;
+      --surface: #0f2521;
+      --surface-soft: #15332d;
+      --ink: #e5f5f9;
+      --ink-soft: #c3e8de;
+      --line: #2f5d54;
+      --accent: #2ca25f;
+      --accent-2: #99d8c9;
+      --heading-color: var(--cb-bugn-2);
+      --shadow: 0 18px 38px rgba(2, 8, 7, 0.45);
+      --hero-bg: linear-gradient(135deg, rgba(7, 23, 18, 0.94), rgba(19, 66, 58, 0.9));
+      --hero-text: var(--cb-bugn-1);
+      --hero-border: rgba(153, 216, 201, 0.32);
+      --hero-glow: radial-gradient(circle, rgba(44, 162, 95, 0.36), rgba(44, 162, 95, 0));
+      --logo-bg: rgba(229, 245, 249, 0.08);
+      --logo-border: rgba(153, 216, 201, 0.30);
+      --kicker: var(--cb-bugn-2);
+      --subtitle: var(--cb-bugn-1);
+      --toc-link: var(--ink);
+      --meta-chip-bg: rgba(153, 216, 201, 0.08);
+      --meta-chip-border: rgba(153, 216, 201, 0.28);
+      --refs-bg: #16352f;
+      --refs-text: var(--cb-bugn-1);
+      --refs-link: var(--cb-bugn-2);
+      --signature-bg: #133029;
+      --signature-border: #87a9bb;
+      --btn-primary-text: #072018;
+      --btn-primary-bg: linear-gradient(135deg, #99d8c9, #2ca25f);
+      --btn-primary-shadow: 0 10px 18px rgba(4, 26, 20, 0.45);
+      --btn-secondary-text: var(--cb-bugn-1);
+      --btn-secondary-bg: #1a3c35;
+      --footer-text: var(--cb-bugn-1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(29, 171, 150, 0.24), transparent 34%),
+        radial-gradient(circle at 88% 24%, rgba(255, 111, 60, 0.2), transparent 32%),
+        linear-gradient(132deg, var(--bg-0), var(--bg-1) 46%, var(--bg-2));
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 72px 18px 56px;
+    }
+
+    body.presentation-mode .shell {
+      max-width: none;
+      width: 100%;
+      padding: 72px 14px 20px;
+    }
+
+    body.presentation-mode .layout {
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 12px;
+      min-height: calc(100vh - 190px);
+    }
+
+    body.presentation-mode .card {
+      padding: 24px;
+    }
+
+    body.presentation-mode .card p,
+    body.presentation-mode li,
+    body.presentation-mode .toc a {
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+
+    body.presentation-mode h1 {
+      font-size: clamp(34px, 5.8vw, 58px);
+    }
+
+    body.presentation-mode .card h3 {
+      font-size: clamp(24px, 3.2vw, 34px);
+    }
+
+    body.presentation-mode .toc h2 {
+      font-size: 20px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      opacity: .96;
+    }
+
+    .presentation-toggle {
+      position: fixed;
+      top: 56px;
+      left: 12px;
+      z-index: 1000;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .presentation-toggle:hover {
+      transform: translateY(-1px);
+      opacity: .96;
+    }
+
+    .hero {
+      background: var(--hero-bg);
+      color: var(--hero-text);
+      border: 1px solid var(--hero-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 30px 26px;
+      overflow: hidden;
+      position: relative;
+      animation: fadeInUp .7s ease both;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -48px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: var(--hero-glow);
+      pointer-events: none;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .logos img {
+      display: block;
+      background: var(--logo-bg);
+      border: 1px solid var(--logo-border);
+      border-radius: 12px;
+      padding: 8px 10px;
+      height: 58px;
+      width: auto;
+      object-fit: contain;
+      backdrop-filter: blur(3px);
+    }
+
+    .logos .lopic { height: 54px; }
+    .logos .ufsc { height: 50px; }
+    .logos .capes { height: 54px; }
+
+    .kicker {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--kicker);
+    }
+
+    h1 {
+      margin: 8px 0 10px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.06;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.32);
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 78ch;
+      color: var(--subtitle);
+      line-height: 1.55;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+    }
+
+    .meta {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .meta-item {
+      background: var(--meta-chip-bg);
+      border: 1px solid var(--meta-chip-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--hero-text);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.24);
+    }
+
+    .layout {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .toc, .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .toc {
+      padding: 14px;
+      align-self: start;
+      position: sticky;
+      top: 14px;
+    }
+
+    .toc h2 {
+      margin: 2px 0 10px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(20px, 3vw, 24px);
+      line-height: 1.15;
+      color: var(--heading-color);
+    }
+
+    .toc a {
+      display: block;
+      color: var(--toc-link);
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 7px 8px;
+      transition: background-color .2s ease, transform .2s ease;
+      font-size: 14px;
+    }
+
+    .toc a:hover, .toc a:focus-visible {
+      background: var(--surface-soft);
+      transform: translateX(2px);
+      outline: none;
+    }
+
+    .content {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      padding: 20px;
+      animation: fadeInUp .6s ease both;
+    }
+
+    .card p {
+      margin: 8px 0;
+      line-height: 1.62;
+      color: var(--ink-soft);
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      color: var(--ink-soft);
+    }
+
+    li { margin: 7px 0; line-height: 1.55; }
+
+    .refs {
+      border-left: 5px solid var(--accent-2);
+      background: var(--refs-bg);
+      color: var(--refs-text);
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .refs a { color: var(--refs-link); }
+
+    .signature {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 14px;
+    }
+
+    .signature div {
+      border: 1px dashed var(--signature-border);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 110px;
+      background: var(--signature-bg);
+    }
+
+    .toolbar {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-note {
+      margin-top: 8px;
+      margin-bottom: 0;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--hero-text);
+      max-width: 90ch;
+      opacity: .95;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 14px;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+
+    .btn-primary {
+      color: var(--btn-primary-text);
+      background: var(--btn-primary-bg);
+      box-shadow: var(--btn-primary-shadow);
+    }
+
+    .btn-secondary {
+      color: var(--btn-secondary-text);
+      background: var(--btn-secondary-bg);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: .96;
+    }
+
+    footer {
+      margin-top: 14px;
+      text-align: center;
+      color: var(--footer-text);
+      font-size: 13px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: relative; top: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .meta,
+      .signature {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 24px 18px;
+      }
+
+      .card {
+        padding: 18px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle theme">Dark mode</button>
+  <button id="presentationToggle" class="presentation-toggle" type="button" aria-pressed="false" aria-label="Toggle presentation mode">Presentation mode</button>
+  <main class="shell">
+    <section class="hero" aria-labelledby="titulo-termo">
+      <div class="topbar">
+        <p class="kicker">LAFIC / UFSC • Institutional Draft</p>
+        <div class="logos" aria-label="Institutional logos">
+          <img class="lopic" src="../../Lafic.jpg" alt="Logo do LAFIC" />
+          <img class="ufsc" src="../../Brazão_UFSC.png" alt="Brasão da UFSC" />
+          <img class="capes" src="../../18072018LOGOCAPES/logo-original-fundo-claro.jpg" alt="Logo da CAPES" />
+        </div>
+      </div>
+      <h1 id="titulo-termo">Code of Ethical Conduct, Safety, and Coexistence</h1>
+      <p class="subtitle">Intended to formalize acknowledgement and commitment within the project on Distribution and Habitat Modeling of Marine Macrophytes on Coastal Islands of Santa Catarina in the Context of the Climate Crisis.</p>
+      <div class="meta" role="list" aria-label="Document metadata">
+        <div class="meta-item" role="listitem"><strong>Institution:</strong> LAFIC/UFSC</div>
+        <div class="meta-item" role="listitem"><strong>Coordination:</strong> Prof. Dr. Paulo Antunes Horta Junior</div>
+        <div class="meta-item" role="listitem"><strong>Operational Lead:</strong> Ronan Armando Caetano</div>
+        <div class="meta-item" role="listitem"><strong>Issue date:</strong> ____/____/2026</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary" onclick="window.print()">Print</button>
+        <button class="btn btn-secondary" onclick="window.open('TERMO_CONDUTA_LAFIC_UFSC_JURIDICO_PRINT_A4.html', '_blank')">Open A4</button>
+      </div>
+      <p class="toolbar-note">Guidance: when opening A4, you can generate/edit the PDF with the document data and then digitally sign it via gov.br.</p>
+    </section>
+
+    <section class="layout">
+      <nav class="toc" aria-label="Contents">
+        <h2>Contents</h2>
+        <a href="#sec-1">1. Purpose</a>
+        <a href="#sec-2">2. Scope</a>
+        <a href="#sec-3">3. Principles</a>
+        <a href="#sec-4">4. Ethical conduct</a>
+        <a href="#sec-5">5. Safety</a>
+        <a href="#sec-6">6. Data and image</a>
+        <a href="#sec-7">7. Public communication and IP</a>
+        <a href="#sec-8">8. Reporting</a>
+        <a href="#sec-9">9. Consequences</a>
+        <a href="#sec-10">10. Final provisions</a>
+        <a href="#sec-11">11. Acknowledgement</a>
+        <a href="#sec-12">12. Legal references</a>
+      </nav>
+
+      <div class="content">
+        <article class="card" id="sec-1"><h3>1. Purpose</h3><p>This Term establishes, in a binding manner, the framework for ethical conduct, safety, institutional coexistence, and information protection applicable within the project scope.</p></article>
+        <article class="card" id="sec-2"><h3>2. Scope</h3><p>All persons who participate, under any type of affiliation, in in-person or remote activities related to the project are subject to this instrument, including fieldwork, laboratory work, institutional communications, and digital media.</p></article>
+        <article class="card" id="sec-3"><h3>3. Principles</h3><ul><li>Legality, impartiality, morality, transparency, and efficiency, where applicable.</li><li>Scientific integrity, objective good faith, and technical responsibility.</li><li>Mutual respect, equity, and prohibition of discrimination.</li><li>Primacy of people’s safety and environmental protection.</li></ul></article>
+        <article class="card" id="sec-4"><h3>4. Ethical conduct and coexistence</h3><p>Any practice of harassment, discrimination, violence, coercion, intimidation, humiliation, or conduct incompatible with human dignity and the project’s academic-institutional purpose is expressly prohibited.</p></article>
+        <article class="card" id="sec-5"><h3>5. Safety and biosafety</h3><p>Activities must comply with risk prevention protocols, access control procedures, biosafety safeguards, and measures aimed at preventing organism translocation and environmental damage.</p></article>
+        <article class="card" id="sec-6"><h3>6. Data protection, image, and sensitive information</h3><p>The processing of personal data, images, records, and sensitive information shall observe defined purpose, necessity, proportionality, security, and consent, when required by law.</p></article>
+        <article class="card" id="sec-7"><h3>7. Public communication and intellectual property</h3><p>The disclosure of project results, images, and information depends on institutional alignment when involving preliminary, strategic, or potentially institutionally or environmentally risky content.</p></article>
+        <article class="card" id="sec-8"><h3>8. Reporting channel</h3><p>Situations of risk, irregularity, harassment, discrimination, or non-compliance may be formally reported to the Coordination, the Operational Lead, or UFSC’s competent institutional channels, ensuring procedural confidentiality and prohibition of retaliation against those reporting in good faith.</p></article>
+        <article class="card" id="sec-9"><h3>9. Consequences</h3><p>Failure to comply with the provisions of this Term may result in warning, restriction of participation, dismissal, and other applicable administrative measures, according to severity and institutional regulations.</p></article>
+        <article class="card" id="sec-10"><h3>10. Final provisions</h3><p>This instrument complements UFSC and LAFIC internal rules, without replacing them. Omitted cases shall be assessed by the Coordination, with support from the Operational Lead, in accordance with applicable law.</p></article>
+        <article class="card" id="sec-11">
+          <h3>11. Acknowledgement and commitment</h3>
+          <p>I declare, for due legal purposes, that I have read, understood, and accepted the provisions of this Term.</p>
+          <div class="signature">
+            <div><strong>Collaborating person</strong><br><br>Name: _______________________________________<br><br>Signature: __________________________________</div>
+            <div><strong>Coordination / Responsible party</strong><br><br>Name: _______________________________________<br><br>Signature: __________________________________</div>
+          </div>
+          <p style="margin-top: 14px;">Florianópolis, SC, _____ of __________________, 2026.</p>
+        </article>
+        <article class="card" id="sec-12">
+          <h3>12. Legal references</h3>
+          <div class="refs">
+            <ul>
+              <li>Resolução CNS nº 510/2016: <a href="https://www2.ufjf.br/ich/wp-content/uploads/sites/221/2025/02/RESOLU%C3%87%C3%83O-N%C2%BA-510.pdf" target="_blank" rel="noopener noreferrer">PDF</a>.</li>
+              <li>Code of Ethics and Good Scientific Practices (FAPESP/CNPq): <a href="https://fapesp.br/boaspraticas/" target="_blank" rel="noopener noreferrer">official reference</a>.</li>
+              <li>Law No. 9,985/2000 (SNUC): <a href="https://www.planalto.gov.br/ccivil_03/leis/l9985.htm" target="_blank" rel="noopener noreferrer">official text</a>.</li>
+              <li>ICMBio Normative Instruction No. 03/2014 (SISBIO): <a href="https://www.gov.br/icmbio/pt-br/acesso-a-informacao/institucional/legislacao/instrucoes-normativas/arquivos/in_03_2014.pdf" target="_blank" rel="noopener noreferrer">official PDF</a>.</li>
+              <li>Law No. 14,188/2021: <a href="https://www.planalto.gov.br/ccivil_03/_Ato2019-2022/2021/Lei/L14188.htm" target="_blank" rel="noopener noreferrer">official text</a>.</li>
+              <li>Law No. 13,185/2015: <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13185.htm" target="_blank" rel="noopener noreferrer">official text</a>.</li>
+              <li>Law No. 13,709/2018 (LGPD): <a href="https://www.planalto.gov.br/ccivil_03/_Ato2015-2018/2018/Lei/L13709.htm" target="_blank" rel="noopener noreferrer">official text</a>.</li>
+              <li>UFSC and LAFIC internal rules, and integrity guidelines from the Office of the Comptroller General (CGU), as applicable.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>Internal and institutional use document - LAFIC/UFSC.</footer>
+  </main>
+  <script>
+    (function () {
+      const storageKey = "lafic-tema";
+      const presentationKey = "lafic-apresentacao";
+      const body = document.body;
+      const button = document.getElementById("themeToggle");
+      const presentationButton = document.getElementById("presentationToggle");
+
+      function setTheme(theme) {
+        const isDark = theme === "dark";
+        body.classList.toggle("theme-dark", isDark);
+        button.textContent = isDark ? "Light mode" : "Dark mode";
+        button.setAttribute("aria-pressed", String(isDark));
+      }
+
+      const savedTheme = localStorage.getItem(storageKey);
+      const initialTheme = savedTheme === "dark" ? "dark" : "light";
+      setTheme(initialTheme);
+
+      function setPresentationMode(enabled) {
+        body.classList.toggle("presentation-mode", enabled);
+        presentationButton.textContent = enabled ? "Exit presentation" : "Presentation mode";
+        presentationButton.setAttribute("aria-pressed", String(enabled));
+      }
+
+      async function togglePresentationMode() {
+        const enable = !body.classList.contains("presentation-mode");
+        setPresentationMode(enable);
+        localStorage.setItem(presentationKey, enable ? "on" : "off");
+        if (enable && !document.fullscreenElement) {
+          try {
+            await document.documentElement.requestFullscreen();
+          } catch (err) {
+            // If fullscreen is blocked, keep enlarged layout only.
+          }
+        }
+        if (!enable && document.fullscreenElement) {
+          try {
+            await document.exitFullscreen();
+          } catch (err) {
+            // Ignore exit failures.
+          }
+        }
+      }
+
+      const savedPresentation = localStorage.getItem(presentationKey) === "on";
+      setPresentationMode(savedPresentation);
+
+      button.addEventListener("click", function () {
+        const nextTheme = body.classList.contains("theme-dark") ? "light" : "dark";
+        setTheme(nextTheme);
+        localStorage.setItem(storageKey, nextTheme);
+      });
+
+      presentationButton.addEventListener("click", function () {
+        togglePresentationMode();
+      });
+
+      document.addEventListener("fullscreenchange", function () {
+        if (!document.fullscreenElement && body.classList.contains("presentation-mode")) {
+          setPresentationMode(false);
+          localStorage.setItem(presentationKey, "off");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

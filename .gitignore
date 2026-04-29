@@ -1,0 +1,5 @@
+﻿render/node_modules/
+render/teste_export.png
+*.log
+.DS_Store
+Thumbs.db

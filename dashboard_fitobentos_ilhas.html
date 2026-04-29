@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Fitobentos - Ilhas Costeiras de SC</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --primary: #0066cc;
+            --success: #2a9d8f;
+            --warning: #f1a208;
+            --bg: #f5f5f5;
+            --text: #1a1a1a;
+            --text-soft: #334155;
+            --text-muted: #4b5563;
+            --card: #ffffff;
+            --border: #d0d0d0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --header-bg: rgba(255,255,255,0.95);
+            --grid: #e2e8f0;
+            --chart-label: #334155;
+            --chart-tick: #475569;
+        }
+
+        body.dark-mode {
+            --bg: #1a1a1a;
+            --text: #e9ecef;
+            --text-soft: #dbe4ee;
+            --text-muted: #c8d3df;
+            --card: #2d3748;
+            --border: #5e6a78;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --header-bg: rgba(26, 33, 44, 0.94);
+            --grid: #4b5563;
+            --chart-label: #e2e8f0;
+            --chart-tick: #cbd5e1;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 8px var(--shadow);
+            z-index: 100;
+        }
+
+        .page {
+            max-width: 1420px;
+            margin: 0 auto;
+            padding: 28px 20px 20px;
+        }
+
+        .header {
+            background: var(--header-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: var(--text-soft);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .field {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .field select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 14px;
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--card);
+            border-radius: 6px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .kpis {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .kpi {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        }
+
+        .kpi .value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--success);
+            line-height: 1.1;
+        }
+
+        .kpi .label {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .grid {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 320px;
+        }
+
+        .panel h2 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .panel p.meta {
+            margin: 0 0 8px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .panel canvas {
+            width: 100% !important;
+            height: 220px !important;
+        }
+
+        .panel p.note {
+            margin: 8px 0 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .full { grid-column: 1 / -1; }
+
+        @media (max-width: 1400px) {
+            .grid { grid-template-columns: 1fr; }
+            .full { grid-column: 1; }
+        }
+
+        .table-wrap {
+            max-height: 300px;
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th, td {
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            z-index: 1;
+        }
+
+        .footer {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 1100px) {
+            .toolbar { grid-template-columns: 1fr; }
+            .kpis { grid-template-columns: repeat(2, 1fr); }
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .kpis { grid-template-columns: 1fr; }
+            .toolbar { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle">🌙</button>
+
+<div class="page">
+    <section class="header">
+        <h1>Dashboard Integrado - Fitobentos das Ilhas Costeiras de SC</h1>
+        <p>
+            Módulo adaptado a partir do portal original, agora focado na matriz ambiental e espacial das ilhas costeiras.
+            Integra 18 amostras (raso/fundo), 5 ilhas e indicadores dos grupos morfofuncionais.
+        </p>
+        <div class="toolbar">
+            <div class="field">
+                <label for="fRegiao">Região</label>
+                <select id="fRegiao"></select>
+            </div>
+            <div class="field">
+                <label for="fIlha">Ilha</label>
+                <select id="fIlha"></select>
+            </div>
+            <div class="field">
+                <label for="fEstrato">Estrato</label>
+                <select id="fEstrato"></select>
+            </div>
+        </div>
+        <div class="actions">
+            <a class="btn" href="index.html">← Voltar ao Portal</a>
+            <a class="btn" href="mapa_fitobentos_ilhas_clone_fiel.html">Abrir Mapa Fitobentos →</a>
+            <button class="btn" id="btnReset" type="button">Resetar filtros</button>
+        </div>
+    </section>
+
+    <section class="kpis">
+        <div class="kpi"><div class="value" id="kpiN">0</div><div class="label">Amostras no filtro</div></div>
+        <div class="kpi"><div class="value" id="kpiIlhas">0</div><div class="label">Ilhas no filtro</div></div>
+        <div class="kpi"><div class="value" id="kpiTemp">0°</div><div class="label">Temp média</div></div>
+        <div class="kpi"><div class="value" id="kpiSecchi">0m</div><div class="label">Secchi médio</div></div>
+        <div class="kpi"><div class="value" id="kpiRugo">0</div><div class="label">Rugosidade média</div></div>
+        <div class="kpi"><div class="value" id="kpiTempMin">0°</div><div class="label">Temp mínima</div></div>
+        <div class="kpi"><div class="value" id="kpiTempMax">0°</div><div class="label">Temp máxima</div></div>
+        <div class="kpi"><div class="value" id="kpiSecchiMin">0m</div><div class="label">Secchi mínimo</div></div>
+    </section>
+
+    <section class="grid">
+        <article class="panel">
+            <h2>Médias Ambientais por Região</h2>
+            <p class="meta">Temperatura e transparência (Secchi) agregadas por região.</p>
+            <canvas id="chartRegiao"></canvas>
+            <p class="note">Leitura: barras comparando as médias de cada variável por região após os filtros.</p>
+        </article>
+
+        <article class="panel">
+            <h2>Rugosidade por Ilha</h2>
+            <p class="meta">Média do índice de rugosidade por ilha.</p>
+            <canvas id="chartRugo"></canvas>
+            <p class="note">Leitura: valores maiores indicam maior complexidade estrutural do substrato.</p>
+        </article>
+
+        <article class="panel">
+            <h2>Distribuição por Estrato</h2>
+            <p class="meta">Contagem de amostras por estrato (Raso/Fundo).</p>
+            <canvas id="chartEstrato"></canvas>
+            <p class="note">Leitura: distribuição das amostras entre os estratos de profundidade.</p>
+        </article>
+
+        <article class="panel">
+            <h2>Temperatura vs Secchi por Ilha</h2>
+            <p class="meta">Relação entre temperatura e profundidade de transparência.</p>
+            <canvas id="chartTempSecchi"></canvas>
+            <p class="note">Leitura: padrão de correlação entre variáveis ambientais por localidade.</p>
+        </article>
+
+        <article class="panel full">
+            <h2>Perfis Morfofuncionais (Escore médio)</h2>
+            <p class="meta">Escala ordinal: Baixa=1, Presente=2, Indicador Principal=3, Alta=4.</p>
+            <canvas id="chartMorpho"></canvas>
+            <p class="note">Leitura: compara o comportamento médio dos grupos MCI, MCR, MCT e MCA entre regiões.</p>
+        </article>
+
+        <article class="panel full">
+            <h2>Tabela Integrada por ID</h2>
+            <p class="meta">Visualização direta da integração ambiental + morfofuncional.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th><th>Região</th><th>Ilha</th><th>Ponto</th><th>Estrato</th><th>Temp</th><th>Secchi</th><th>Rugo</th><th>Turf</th><th>MCI</th><th>MCR</th><th>MCT</th><th>MCA</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbRows"></tbody>
+                </table>
+            </div>
+        </article>
+
+        <article class="panel">
+            <h2>📊 Estatísticas Descritivas</h2>
+            <p class="meta">Resumo estatístico das variáveis ambientais no filtro.</p>
+            <div id="statsBox" style="font-size: 12px; line-height: 1.8;"></div>
+        </article>
+    </section>
+
+    <section class="footer">
+        <b>Base do módulo:</b> dados locais da pasta Buzon_02 (CSV integrado + estrutura morfofuncional + matriz ambiental/espacial).<br>
+        <b>Versão:</b> adaptação do layout e fluxo do portal original para o estudo de fitobentos em ilhas costeiras de SC.
+    </section>
+</div>
+
+<script>
+let allRows = [];
+let charts = {};
+
+function parseDelimited(text, delimiter) {
+    const lines = String(text || '').trim().split(/\r?\n/).filter(Boolean);
+    if (!lines.length) return [];
+    const headers = lines[0].split(delimiter).map((h) => h.trim());
+    return lines.slice(1).map((line) => {
+        const cols = line.split(delimiter).map((x) => x.trim());
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = cols[i] || ''; });
+        return obj;
+    });
+}
+
+function normalizeName(v) {
+    return String(v || '')
+        .replace(/_/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function parseTurfRange(v) {
+    const s = String(v || '');
+    const m = s.match(/(\d+)\s*a\s*(\d+)/i);
+    if (!m) return 0;
+    return (Number(m[1]) + Number(m[2])) / 2;
+}
+
+function scoreText(v) {
+    const s = String(v || '').toLowerCase();
+    if (s.includes('alta')) return 4;
+    if (s.includes('indicador principal')) return 3;
+    if (s.includes('presente')) return 2;
+    if (s.includes('baixa')) return 1;
+    return 0;
+}
+
+function setSelectOptions(id, values, labelAll = 'Todos') {
+    const sel = document.getElementById(id);
+    sel.innerHTML = `<option value="all">${labelAll}</option>` + values.map((v) => `<option value="${v}">${v}</option>`).join('');
+}
+
+function inferRows(baseRows, morphRows) {
+    const morphById = new Map(morphRows.map((r) => [String(r.ID || '').trim(), r]));
+    return baseRows.map((r) => {
+        const id = String(r.ID || '').trim();
+        const m = morphById.get(id) || {};
+        return {
+            id,
+            regiao: normalizeName(r.Regiao),
+            ilha: normalizeName(r.Ilha),
+            ponto: normalizeName(r.Ponto),
+            estrato: normalizeName(r.Estrato),
+            lat: Number(r.Lat || 0),
+            lon: Number(r.Lon || 0),
+            temp: Number(r.Temp_C || 0),
+            secchi: Number(r.Secchi_m || 0),
+            rugo: Number(r.Rugosidade || 0),
+            turf: parseTurfRange(m['Cobertura_Turf (%)']),
+            mciTxt: String(m['Cobertura_MCI (%)'] || ''),
+            mcrTxt: String(m['Cobertura_MCR (%)'] || ''),
+            mctTxt: String(m['Cobertura_MCT (%)'] || ''),
+            mcaTxt: String(m['Cobertura_MCA (%)'] || ''),
+            mci: scoreText(m['Cobertura_MCI (%)']),
+            mcr: scoreText(m['Cobertura_MCR (%)']),
+            mct: scoreText(m['Cobertura_MCT (%)']),
+            mca: scoreText(m['Cobertura_MCA (%)'])
+        };
+    });
+}
+
+function getFilters() {
+    return {
+        regiao: document.getElementById('fRegiao').value,
+        ilha: document.getElementById('fIlha').value,
+        estrato: document.getElementById('fEstrato').value
+    };
+}
+
+function applyFilters(rows, f) {
+    return rows.filter((r) => {
+        if (f.regiao !== 'all' && r.regiao !== f.regiao) return false;
+        if (f.ilha !== 'all' && r.ilha !== f.ilha) return false;
+        if (f.estrato !== 'all' && r.estrato !== f.estrato) return false;
+        return true;
+    });
+}
+
+function avg(values) {
+    if (!values.length) return 0;
+    return values.reduce((a, b) => a + b, 0) / values.length;
+}
+
+function min(values) {
+    if (!values.length) return 0;
+    return Math.min(...values);
+}
+
+function max(values) {
+    if (!values.length) return 0;
+    return Math.max(...values);
+}
+
+function stdDev(values) {
+    if (values.length < 2) return 0;
+    const mean = avg(values);
+    const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
+    return Math.sqrt(variance);
+}
+
+function destroyChart(id) {
+    if (!charts[id]) return;
+    charts[id].destroy();
+    charts[id] = null;
+}
+
+function commonChartOptions() {
+    const css = getComputedStyle(document.body);
+    const tick = css.getPropertyValue('--chart-tick').trim();
+    const label = css.getPropertyValue('--chart-label').trim();
+    const grid = css.getPropertyValue('--grid').trim();
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: label, boxWidth: 14 }
+            }
+        },
+        scales: {
+            x: { ticks: { color: tick }, grid: { color: grid } },
+            y: { beginAtZero: true, ticks: { color: tick }, grid: { color: grid } }
+        }
+    };
+}
+
+function renderKpis(rows) {
+    const ilhas = new Set(rows.map((r) => r.ilha));
+    const temps = rows.map((r) => r.temp).filter(v => v > 0);
+    const secchis = rows.map((r) => r.secchi).filter(v => v > 0);
+    const rugos = rows.map((r) => r.rugo).filter(v => v > 0);
+    
+    document.getElementById('kpiN').textContent = rows.length;
+    document.getElementById('kpiIlhas').textContent = ilhas.size;
+    document.getElementById('kpiTemp').textContent = avg(temps).toFixed(1) + '°';
+    document.getElementById('kpiSecchi').textContent = avg(secchis).toFixed(1) + 'm';
+    document.getElementById('kpiRugo').textContent = avg(rugos).toFixed(1);
+    document.getElementById('kpiTempMin').textContent = (temps.length ? min(temps) : 0).toFixed(1) + '°';
+    document.getElementById('kpiTempMax').textContent = (temps.length ? max(temps) : 0).toFixed(1) + '°';
+    document.getElementById('kpiSecchiMin').textContent = (secchis.length ? min(secchis) : 0).toFixed(1) + 'm';
+}
+
+function renderRegiaoChart(rows) {
+    const byReg = {};
+    rows.forEach((r) => {
+        if (!byReg[r.regiao]) byReg[r.regiao] = [];
+        byReg[r.regiao].push(r);
+    });
+    const labels = Object.keys(byReg);
+    const temp = labels.map((k) => avg(byReg[k].map((x) => x.temp)).toFixed(2));
+    const secchi = labels.map((k) => avg(byReg[k].map((x) => x.secchi)).toFixed(2));
+
+    destroyChart('regiao');
+    charts.regiao = new Chart(document.getElementById('chartRegiao'), {
+        type: 'bar',
+        data: {
+            labels: labels.length ? labels : ['Sem dados'],
+            datasets: [
+                { label: 'Temp (°C)', data: labels.length ? temp : [0], backgroundColor: '#2563eb' },
+                { label: 'Secchi (m)', data: labels.length ? secchi : [0], backgroundColor: '#16a34a' }
+            ]
+        },
+        options: commonChartOptions()
+    });
+}
+
+function renderRugoChart(rows) {
+    const byIlha = {};
+    rows.forEach((r) => {
+        if (!byIlha[r.ilha]) byIlha[r.ilha] = [];
+        byIlha[r.ilha].push(r);
+    });
+    const labels = Object.keys(byIlha);
+    const values = labels.map((k) => avg(byIlha[k].map((x) => x.rugo)).toFixed(2));
+
+    destroyChart('rugo');
+    charts.rugo = new Chart(document.getElementById('chartRugo'), {
+        type: 'bar',
+        data: {
+            labels: labels.length ? labels : ['Sem dados'],
+            datasets: [{ label: 'Rugosidade média', data: labels.length ? values : [0], backgroundColor: '#f1a208' }]
+        },
+        options: commonChartOptions()
+    });
+}
+
+function renderMorphoChart(rows) {
+    const byReg = {};
+    rows.forEach((r) => {
+        if (!byReg[r.regiao]) byReg[r.regiao] = [];
+        byReg[r.regiao].push(r);
+    });
+    const labels = Object.keys(byReg);
+
+    destroyChart('morpho');
+    charts.morpho = new Chart(document.getElementById('chartMorpho'), {
+        type: 'radar',
+        data: {
+            labels: ['MCI', 'MCR', 'MCT', 'MCA'],
+            datasets: labels.length ? labels.map((reg, idx) => {
+                const data = byReg[reg];
+                const color = idx === 0 ? 'rgba(37, 99, 235, 0.8)' : 'rgba(22, 163, 74, 0.8)';
+                const bg = idx === 0 ? 'rgba(37, 99, 235, 0.18)' : 'rgba(22, 163, 74, 0.18)';
+                return {
+                    label: reg,
+                    data: [
+                        avg(data.map((x) => x.mci)).toFixed(2),
+                        avg(data.map((x) => x.mcr)).toFixed(2),
+                        avg(data.map((x) => x.mct)).toFixed(2),
+                        avg(data.map((x) => x.mca)).toFixed(2)
+                    ],
+                    borderColor: color,
+                    backgroundColor: bg,
+                    borderWidth: 2,
+                    pointRadius: 3
+                };
+            }) : [{ label: 'Sem dados', data: [0,0,0,0], borderColor: '#64748b', backgroundColor: 'rgba(100,116,139,0.2)' }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    min: 0,
+                    max: 4,
+                    ticks: { stepSize: 1, backdropColor: 'transparent', color: getComputedStyle(document.body).getPropertyValue('--chart-tick').trim() },
+                    pointLabels: { color: getComputedStyle(document.body).getPropertyValue('--chart-label').trim() },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--grid').trim() }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--chart-label').trim() } }
+            }
+        }
+    });
+}
+
+function renderEstratoChart(rows) {
+    const byEstrato = {};
+    rows.forEach((r) => {
+        byEstrato[r.estrato] = (byEstrato[r.estrato] || 0) + 1;
+    });
+    const labels = Object.keys(byEstrato);
+    const values = labels.map((k) => byEstrato[k]);
+
+    destroyChart('estrato');
+    charts.estrato = new Chart(document.getElementById('chartEstrato'), {
+        type: 'doughnut',
+        data: {
+            labels: labels.length ? labels : ['Sem dados'],
+            datasets: [{
+                data: labels.length ? values : [0],
+                backgroundColor: ['#2563eb', '#16a34a', '#f1a208'],
+                borderColor: getComputedStyle(document.body).getPropertyValue('--card').trim(),
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--chart-label').trim() } }
+            }
+        }
+    });
+}
+
+function renderTempSecchiChart(rows) {
+    const byIlha = {};
+    rows.forEach((r) => {
+        if (!byIlha[r.ilha]) byIlha[r.ilha] = [];
+        byIlha[r.ilha].push(r);
+    });
+    const labels = Object.keys(byIlha);
+
+    destroyChart('tempSecchi');
+    charts.tempSecchi = new Chart(document.getElementById('chartTempSecchi'), {
+        type: 'scatter',
+        data: {
+            datasets: labels.length ? labels.map((ilha, idx) => {
+                const data = byIlha[ilha];
+                const colors = ['#2563eb', '#16a34a', '#f1a208', '#e11d48', '#8b5cf6'];
+                return {
+                    label: ilha,
+                    data: data.map((r) => ({ x: r.temp, y: r.secchi })),
+                    backgroundColor: colors[idx % colors.length],
+                    borderColor: colors[idx % colors.length],
+                    showLine: false,
+                    borderWidth: 0
+                };
+            }) : [{ label: 'Sem dados', data: [], backgroundColor: '#64748b' }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { 
+                    title: { display: true, text: 'Temperatura (°C)', color: getComputedStyle(document.body).getPropertyValue('--chart-label').trim() },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--chart-tick').trim() },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--grid').trim() }
+                },
+                y: { 
+                    title: { display: true, text: 'Secchi (m)', color: getComputedStyle(document.body).getPropertyValue('--chart-label').trim() },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--chart-tick').trim() },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--grid').trim() }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--chart-label').trim() } }
+            }
+        }
+    });
+}
+
+function renderStatsBox(rows) {
+    const temps = rows.map((r) => r.temp).filter(v => v > 0);
+    const secchis = rows.map((r) => r.secchi).filter(v => v > 0);
+    const rugos = rows.map((r) => r.rugo).filter(v => v > 0);
+    
+    const stats = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="border-left: 3px solid #2563eb; padding-left: 8px;">
+                <strong>Temperatura (°C)</strong><br>
+                Média: ${avg(temps).toFixed(1)}<br>
+                Min: ${temps.length ? min(temps).toFixed(1) : '—'}<br>
+                Max: ${temps.length ? max(temps).toFixed(1) : '—'}<br>
+                DP: ${stdDev(temps).toFixed(2)}
+            </div>
+            <div style="border-left: 3px solid #16a34a; padding-left: 8px;">
+                <strong>Secchi (m)</strong><br>
+                Média: ${avg(secchis).toFixed(1)}<br>
+                Min: ${secchis.length ? min(secchis).toFixed(1) : '—'}<br>
+                Max: ${secchis.length ? max(secchis).toFixed(1) : '—'}<br>
+                DP: ${stdDev(secchis).toFixed(2)}
+            </div>
+            <div style="border-left: 3px solid #f1a208; padding-left: 8px;">
+                <strong>Rugosidade</strong><br>
+                Média: ${avg(rugos).toFixed(1)}<br>
+                Min: ${rugos.length ? min(rugos) : '—'}<br>
+                Max: ${rugos.length ? max(rugos) : '—'}<br>
+                DP: ${stdDev(rugos).toFixed(2)}
+            </div>
+            <div style="border-left: 3px solid #e11d48; padding-left: 8px;">
+                <strong>Contagens</strong><br>
+                Amostras: ${rows.length}<br>
+                Ilhas: ${new Set(rows.map(r => r.ilha)).size}<br>
+                Regiões: ${new Set(rows.map(r => r.regiao)).size}<br>
+                Estratos: ${new Set(rows.map(r => r.estrato)).size}
+            </div>
+        </div>
+    `;
+    document.getElementById('statsBox').innerHTML = stats;
+}
+
+function renderTable(rows) {
+    const body = document.getElementById('tbRows');
+    body.innerHTML = rows.map((r) => `<tr>
+        <td>${r.id}</td><td>${r.regiao}</td><td>${r.ilha}</td><td>${r.ponto}</td><td>${r.estrato}</td>
+        <td>${r.temp.toFixed(1)}</td><td>${r.secchi.toFixed(1)}</td><td>${r.rugo}</td>
+        <td>${r.turf.toFixed(1)}</td><td>${r.mciTxt}</td><td>${r.mcrTxt}</td><td>${r.mctTxt}</td><td>${r.mcaTxt}</td>
+    </tr>`).join('');
+}
+
+function rerender() {
+    const rows = applyFilters(allRows, getFilters());
+    renderKpis(rows);
+    renderRegiaoChart(rows);
+    renderRugoChart(rows);
+    renderEstratoChart(rows);
+    renderTempSecchiChart(rows);
+    renderMorphoChart(rows);
+    renderTable(rows);
+    renderStatsBox(rows);
+}
+
+function wireEvents() {
+    ['fRegiao', 'fIlha', 'fEstrato'].forEach((id) => {
+        document.getElementById(id).addEventListener('change', rerender);
+    });
+    document.getElementById('btnReset').addEventListener('click', () => {
+        document.getElementById('fRegiao').value = 'all';
+        document.getElementById('fIlha').value = 'all';
+        document.getElementById('fEstrato').value = 'all';
+        rerender();
+    });
+}
+
+function initTheme() {
+    try {
+        const saved = localStorage.getItem('darkMode');
+        if (saved === 'true') document.body.classList.add('dark-mode');
+    } catch (_) {}
+    updateThemeButton();
+}
+
+function updateThemeButton() {
+    const btn = document.getElementById('themeToggle');
+    btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    try { localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')); } catch (_) {}
+    updateThemeButton();
+    rerender();
+}
+
+document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+(async function init() {
+    try {
+        initTheme();
+        const [resBase, resMorph] = await Promise.all([
+            fetch('data/fitobentos_integrado.csv'),
+            fetch('data/fitobentos_grupos_morfofuncionais.csv')
+        ]);
+        const [txtBase, txtMorph] = await Promise.all([resBase.text(), resMorph.text()]);
+        const baseRows = parseDelimited(txtBase, ';');
+        const morphRows = parseDelimited(txtMorph, ',');
+        allRows = inferRows(baseRows, morphRows);
+
+        const regioes = [...new Set(allRows.map((r) => r.regiao))].sort();
+        const ilhas = [...new Set(allRows.map((r) => r.ilha))].sort();
+        const estratos = [...new Set(allRows.map((r) => r.estrato))].sort();
+
+        setSelectOptions('fRegiao', regioes, 'Todas');
+        setSelectOptions('fIlha', ilhas, 'Todas');
+        setSelectOptions('fEstrato', estratos, 'Todos');
+
+        wireEvents();
+        rerender();
+    } catch (err) {
+        console.error('Falha ao carregar dashboard fitobentos', err);
+        alert('Falha ao carregar dados do módulo de fitobentos.');
+    }
+})();
+</script>
+</body>
+</html>

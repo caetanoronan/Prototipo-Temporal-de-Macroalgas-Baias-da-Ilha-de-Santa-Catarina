@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Macroalgas - Baias da Ilha de Santa Catarina</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --primary: #006d77;
+            --success: #2a9d8f;
+            --warning: #f1a208;
+            --danger: #d62828;
+            --bg: #f5f5f5;
+            --text: #1a1a1a;
+            --text-soft: #334155;
+            --text-muted: #4b5563;
+            --card: #ffffff;
+            --border: #d0d0d0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --header-bg: rgba(255,255,255,0.95);
+            --grid: #e2e8f0;
+            --chart-label: #334155;
+            --chart-tick: #475569;
+        }
+
+        body.dark-mode {
+            --bg: #1a1a1a;
+            --text: #e9ecef;
+            --text-soft: #dbe4ee;
+            --text-muted: #c8d3df;
+            --card: #2d3748;
+            --border: #5e6a78;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --header-bg: rgba(26, 33, 44, 0.94);
+            --grid: #4b5563;
+            --chart-label: #e2e8f0;
+            --chart-tick: #cbd5e1;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #406c73 0%, #2a9d8f 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        body.dark-mode { background: linear-gradient(135deg, #172026 0%, #243b3d 100%); }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 8px var(--shadow);
+            z-index: 100;
+        }
+
+        .page {
+            max-width: 1420px;
+            margin: 0 auto;
+            padding: 28px 20px 20px;
+        }
+
+        .header {
+            background: var(--header-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: var(--text-soft);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .field {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .field select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 14px;
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--card);
+            border-radius: 6px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .kpis {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .kpi {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        }
+
+        .kpi .value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--success);
+            line-height: 1.1;
+        }
+
+        .kpi .label {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .grid {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 320px;
+        }
+
+        .panel h2 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .panel p.meta {
+            margin: 0 0 8px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .panel canvas {
+            width: 100% !important;
+            height: 225px !important;
+        }
+
+        .panel p.note {
+            margin: 8px 0 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .full { grid-column: 1 / -1; }
+
+        .table-wrap {
+            max-height: 330px;
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th, td {
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            z-index: 1;
+        }
+
+        .footer {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 1100px) {
+            .toolbar, .grid { grid-template-columns: 1fr; }
+            .full { grid-column: 1; }
+        }
+    </style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
+
+<div class="page">
+    <section class="header">
+        <h1>Dashboard Integrado - Macroalgas das Baias da Ilha de Santa Catarina</h1>
+        <p>
+            Clone operacional do dashboard de fitobentos, atualizado para seis estacoes insulares
+            usadas no prototipo temporal: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limoes,
+            Ribeirao da Ilha e Caieira da Barra do Sul.
+        </p>
+        <div class="toolbar">
+            <div class="field">
+                <label for="fBaia">Baia</label>
+                <select id="fBaia"></select>
+            </div>
+            <div class="field">
+                <label for="fEstacao">Estacao</label>
+                <select id="fEstacao"></select>
+            </div>
+        </div>
+        <div class="actions">
+            <a class="btn" href="dashboard_fitobentos_ilhas.html">Dashboard original</a>
+            <a class="btn" href="data/macroalgas_baias_resultados.csv">Abrir planilha consolidada</a>
+            <a class="btn" href="data/macroalgas_baias_biomassa_dominantes.csv">Abrir biomassa dominante</a>
+            <button class="btn" id="btnReset" type="button">Resetar filtros</button>
+        </div>
+    </section>
+
+    <section class="kpis">
+        <div class="kpi"><div class="value" id="kpiN">0</div><div class="label">Estacoes no filtro</div></div>
+        <div class="kpi"><div class="value" id="kpiTaxa">0</div><div class="label">Riqueza media de taxons</div></div>
+        <div class="kpi"><div class="value" id="kpiTemp">0</div><div class="label">Temperatura media</div></div>
+        <div class="kpi"><div class="value" id="kpiSal">0</div><div class="label">Salinidade media</div></div>
+        <div class="kpi"><div class="value" id="kpiNh4">0</div><div class="label">N-NH4 medio</div></div>
+        <div class="kpi"><div class="value" id="kpiMax">0</div><div class="label">Maior riqueza</div></div>
+    </section>
+
+    <section class="grid">
+        <article class="panel">
+            <h2>Riqueza por Estacao</h2>
+            <p class="meta">Numero de taxons infragenericos registrados em cada local.</p>
+            <canvas id="chartRiqueza"></canvas>
+            <p class="note">Ribeirao da Ilha foi o ponto mais rico entre os seis locais selecionados.</p>
+        </article>
+
+        <article class="panel">
+            <h2>Nutrientes Inorganicos</h2>
+            <p class="meta">PID e N-amoniacal medidos na agua do mar.</p>
+            <canvas id="chartNutrientes"></canvas>
+            <p class="note">Saco dos Limoes e Ponta do Coral se destacam pelos valores mais altos de N-NH4.</p>
+        </article>
+
+        <article class="panel">
+            <h2>Temperatura e Salinidade</h2>
+            <p class="meta">Variaveis fisico-quimicas por estacao.</p>
+            <canvas id="chartFisico"></canvas>
+            <p class="note">A Caieira apresentou salinidade baixa no estudo original, enquanto Ponta do Coral teve salinidade mais alta.</p>
+        </article>
+
+        <article class="panel">
+            <h2>Biomassa Dominante</h2>
+            <p class="meta">Maior biomassa observada por estacao.</p>
+            <canvas id="chartDominante"></canvas>
+            <p class="note">Ponta das Canas foi estruturada por banco de Sargassum; Ponta do Coral por Gelidium.</p>
+        </article>
+
+        <article class="panel full">
+            <h2>Taxons Dominantes por Biomassa</h2>
+            <p class="meta">Principais especies/grupos com biomassa superior a 5% da biomassa local.</p>
+            <canvas id="chartTaxa"></canvas>
+            <p class="note">Valores em g.m-2 extraidos da Figura 4 e texto da dissertacao.</p>
+        </article>
+
+        <article class="panel full">
+            <h2>Tabela Integrada por Estacao</h2>
+            <p class="meta">Planilha visual com variaveis ambientais, riqueza e diagnostico fisionomico.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Estacao</th><th>Baia</th><th>Taxons</th><th>Riqueza sp.m-2</th><th>Temp</th><th>Sal</th><th>PID</th><th>N-NH4</th><th>Dominante 1</th><th>Biomassa</th><th>Interpretacao</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbRows"></tbody>
+                </table>
+            </div>
+        </article>
+    </section>
+
+    <section class="footer">
+        <b>Fonte:</b> Bouzon (2005), composicao e estrutura espacial da comunidade macrofitobentica de fundos consolidados das Baias da Ilha de Santa Catarina.
+        Os campos marcados como NA na planilha indicam valores nao explicitados numericamente nos trechos extraidos dos PDFs.
+    </section>
+</div>
+
+<script>
+const DATA = [
+    {estacao:"Ponta das Canas",baia:"Baia Norte",lat:-27.393333,lon:-48.433333,taxons:43,riqueza_m2:18.48,temp:24.5,sal:35,pid:0.02,nh4:1.03,fisionomia:"Banco de Sargassum associado a coralinaceas articuladas",dominantes:[["Sargassum stenophyllum",969.57],["Amphiroa beauvoisii",290.69],["Sargassum brachygonia",215.68],["Jania adhaerens",181.71],["Arthrocardia sp.",122.80]],interpretacao:"Area externa/menos central, comunidade estruturada por algas perenes"},
+    {estacao:"Sambaqui",baia:"Baia Norte",lat:-27.488333,lon:-48.540000,taxons:35,riqueza_m2:null,temp:24.8,sal:34,pid:0.04,nh4:0.49,fisionomia:"Banco misto com Sargassum, Hypnea e Gelidiopsis",dominantes:[["Sargassum filipendula",453.40],["Hypnea musciformis",259.31],["Gelidiopsis variabilis",162.36],["Sargassum vulgare",134.81],["Gelidium crinale",115.87]],interpretacao:"Estacao intermediaria com forte biomassa de feoficeas e rodoficeas"},
+    {estacao:"Ponta do Coral",baia:"Baia Norte",lat:-27.570000,lon:-48.536667,taxons:19,riqueza_m2:8.00,temp:26.0,sal:36,pid:0.00,nh4:2.25,fisionomia:"Tapete algal em area central urbanizada",dominantes:[["Gelidium crinale",569.19],["Chondracanthus acicularis",176.99],["Centroceras clavulatum",111.17],["Gymnogongrus griffithsiae",75.58],["Cladophora sp.",66.36]],interpretacao:"Sinal de simplificacao relativa e maior N-amoniacal"},
+    {estacao:"Saco dos Limoes",baia:"Baia Sul",lat:-27.613333,lon:-48.553333,taxons:15,riqueza_m2:null,temp:21.0,sal:31,pid:0.03,nh4:3.26,fisionomia:"Comunidade oportunista/tapete algal",dominantes:[["Enteromorpha flexuosa",282.75],["Bostrychia radicans",99.51],["Ulva lactuca",71.64],["Gelidiella trinitatensis",53.53]],interpretacao:"Maior N-amoniacal entre os seis pontos, forte sinal de eutrofizacao"},
+    {estacao:"Ribeirao da Ilha",baia:"Baia Sul",lat:-27.731667,lon:-48.565000,taxons:69,riqueza_m2:null,temp:19.0,sal:32,pid:0.06,nh4:0.83,fisionomia:"Comunidade diversa com rodoficeas e tapete misto",dominantes:[["Gelidiopsis variabilis",86.26],["Spyridia filamentosa",62.09],["Centroceras clavulatum",54.87],["Herposiphonia secunda",52.34],["Acanthophora spicifera",44.90]],interpretacao:"Maior riqueza taxonomica entre os seis locais"},
+    {estacao:"Caieira da Barra do Sul",baia:"Baia Sul",lat:-27.813333,lon:-48.561667,taxons:45,riqueza_m2:23.70,temp:19.0,sal:25,pid:0.02,nh4:1.74,fisionomia:"Comunidade com Sargassum, Codium e Hypnea",dominantes:[["Sargassum stenophyllum",104.42],["Codium decorticatum",86.23],["Hypnea musciformis",65.45]],interpretacao:"Area sul insular rica, com baixa salinidade pontual no estudo"}
+];
+
+let charts = {};
+
+function avg(values) {
+    const clean = values.filter((v) => Number.isFinite(v));
+    return clean.length ? clean.reduce((a, b) => a + b, 0) / clean.length : 0;
+}
+
+function maxBy(rows, key) {
+    return rows.reduce((best, row) => row[key] > best[key] ? row : best, rows[0] || {});
+}
+
+function cssVar(name) {
+    return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+function setSelectOptions(id, values, labelAll) {
+    const sel = document.getElementById(id);
+    sel.innerHTML = `<option value="all">${labelAll}</option>` + values.map((v) => `<option value="${v}">${v}</option>`).join("");
+}
+
+function getFilters() {
+    return {
+        baia: document.getElementById("fBaia").value,
+        estacao: document.getElementById("fEstacao").value
+    };
+}
+
+function filteredRows() {
+    const f = getFilters();
+    return DATA.filter((row) => {
+        if (f.baia !== "all" && row.baia !== f.baia) return false;
+        if (f.estacao !== "all" && row.estacao !== f.estacao) return false;
+        return true;
+    });
+}
+
+function destroyChart(id) {
+    if (charts[id]) charts[id].destroy();
+}
+
+function commonOptions() {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: cssVar("--chart-label"), boxWidth: 14 } } },
+        scales: {
+            x: { ticks: { color: cssVar("--chart-tick") }, grid: { color: cssVar("--grid") } },
+            y: { beginAtZero: true, ticks: { color: cssVar("--chart-tick") }, grid: { color: cssVar("--grid") } }
+        }
+    };
+}
+
+function renderKpis(rows) {
+    const richer = maxBy(rows, "taxons");
+    document.getElementById("kpiN").textContent = rows.length;
+    document.getElementById("kpiTaxa").textContent = avg(rows.map((r) => r.taxons)).toFixed(1);
+    document.getElementById("kpiTemp").textContent = avg(rows.map((r) => r.temp)).toFixed(1) + " C";
+    document.getElementById("kpiSal").textContent = avg(rows.map((r) => r.sal)).toFixed(1);
+    document.getElementById("kpiNh4").textContent = avg(rows.map((r) => r.nh4)).toFixed(2);
+    document.getElementById("kpiMax").textContent = richer.estacao ? `${richer.taxons}` : "0";
+}
+
+function renderRiqueza(rows) {
+    destroyChart("riqueza");
+    charts.riqueza = new Chart(document.getElementById("chartRiqueza"), {
+        type: "bar",
+        data: {
+            labels: rows.map((r) => r.estacao),
+            datasets: [{ label: "Taxons", data: rows.map((r) => r.taxons), backgroundColor: "#2a9d8f" }]
+        },
+        options: commonOptions()
+    });
+}
+
+function renderNutrientes(rows) {
+    destroyChart("nutrientes");
+    charts.nutrientes = new Chart(document.getElementById("chartNutrientes"), {
+        type: "bar",
+        data: {
+            labels: rows.map((r) => r.estacao),
+            datasets: [
+                { label: "PID (uM)", data: rows.map((r) => r.pid), backgroundColor: "#2563eb" },
+                { label: "N-NH4 (uM)", data: rows.map((r) => r.nh4), backgroundColor: "#d62828" }
+            ]
+        },
+        options: commonOptions()
+    });
+}
+
+function renderFisico(rows) {
+    destroyChart("fisico");
+    charts.fisico = new Chart(document.getElementById("chartFisico"), {
+        type: "bar",
+        data: {
+            labels: rows.map((r) => r.estacao),
+            datasets: [
+                { label: "Temperatura (C)", data: rows.map((r) => r.temp), backgroundColor: "#f1a208" },
+                { label: "Salinidade", data: rows.map((r) => r.sal), backgroundColor: "#006d77" }
+            ]
+        },
+        options: commonOptions()
+    });
+}
+
+function renderDominante(rows) {
+    destroyChart("dominante");
+    charts.dominante = new Chart(document.getElementById("chartDominante"), {
+        type: "bar",
+        data: {
+            labels: rows.map((r) => r.estacao),
+            datasets: [{ label: "Maior biomassa (g.m-2)", data: rows.map((r) => r.dominantes[0][1]), backgroundColor: "#7c3aed" }]
+        },
+        options: commonOptions()
+    });
+}
+
+function renderTaxa(rows) {
+    const pairs = rows.flatMap((r) => r.dominantes.map((d) => ({ label: `${r.estacao}: ${d[0]}`, value: d[1] })));
+    destroyChart("taxa");
+    charts.taxa = new Chart(document.getElementById("chartTaxa"), {
+        type: "bar",
+        data: {
+            labels: pairs.map((p) => p.label),
+            datasets: [{ label: "Biomassa (g.m-2)", data: pairs.map((p) => p.value), backgroundColor: "#0ea5e9" }]
+        },
+        options: {
+            ...commonOptions(),
+            scales: {
+                x: { ticks: { color: cssVar("--chart-tick"), maxRotation: 65, minRotation: 35 }, grid: { color: cssVar("--grid") } },
+                y: { beginAtZero: true, ticks: { color: cssVar("--chart-tick") }, grid: { color: cssVar("--grid") } }
+            }
+        }
+    });
+}
+
+function renderTable(rows) {
+    document.getElementById("tbRows").innerHTML = rows.map((r) => `
+        <tr>
+            <td>${r.estacao}</td>
+            <td>${r.baia}</td>
+            <td>${r.taxons}</td>
+            <td>${r.riqueza_m2 === null ? "NA" : r.riqueza_m2.toFixed(2)}</td>
+            <td>${r.temp.toFixed(1)}</td>
+            <td>${r.sal}</td>
+            <td>${r.pid.toFixed(2)}</td>
+            <td>${r.nh4.toFixed(2)}</td>
+            <td>${r.dominantes[0][0]}</td>
+            <td>${r.dominantes[0][1].toFixed(2)}</td>
+            <td>${r.interpretacao}</td>
+        </tr>
+    `).join("");
+}
+
+function rerender() {
+    const rows = filteredRows();
+    renderKpis(rows);
+    renderRiqueza(rows);
+    renderNutrientes(rows);
+    renderFisico(rows);
+    renderDominante(rows);
+    renderTaxa(rows);
+    renderTable(rows);
+}
+
+function initTheme() {
+    try {
+        if (localStorage.getItem("macroalgasDarkMode") === "true") document.body.classList.add("dark-mode");
+    } catch (_) {}
+    updateThemeButton();
+}
+
+function updateThemeButton() {
+    document.getElementById("themeToggle").textContent = document.body.classList.contains("dark-mode") ? "Modo claro" : "Modo escuro";
+}
+
+document.getElementById("themeToggle").addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    try { localStorage.setItem("macroalgasDarkMode", document.body.classList.contains("dark-mode")); } catch (_) {}
+    updateThemeButton();
+    rerender();
+});
+
+document.getElementById("btnReset").addEventListener("click", () => {
+    document.getElementById("fBaia").value = "all";
+    document.getElementById("fEstacao").value = "all";
+    rerender();
+});
+
+["fBaia", "fEstacao"].forEach((id) => document.getElementById(id).addEventListener("change", rerender));
+
+initTheme();
+setSelectOptions("fBaia", [...new Set(DATA.map((r) => r.baia))].sort(), "Todas");
+setSelectOptions("fEstacao", DATA.map((r) => r.estacao), "Todas");
+rerender();
+</script>
+</body>
+</html>

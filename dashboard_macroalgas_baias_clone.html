@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Macroalgas - Baias da Ilha de Santa Catarina</title>
+    <title>Dashboard Macroalgas - Baías da Ilha de Santa Catarina</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <style>
         * { box-sizing: border-box; }
@@ -259,19 +259,19 @@
 
 <div class="page">
     <section class="header">
-        <h1>Dashboard Integrado - Macroalgas das Baias da Ilha de Santa Catarina</h1>
+        <h1>Dashboard Integrado - Macroalgas das Baías da Ilha de Santa Catarina</h1>
         <p>
-            Clone operacional do dashboard de fitobentos, atualizado para seis estacoes insulares
-            usadas no prototipo temporal: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limoes,
-            Ribeirao da Ilha e Caieira da Barra do Sul.
+            Clone operacional do dashboard de fitobentos, atualizado para seis estações insulares
+            usadas no protótipo temporal: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limões,
+            Ribeirão da Ilha e Caieira da Barra do Sul.
         </p>
         <div class="toolbar">
             <div class="field">
-                <label for="fBaia">Baia</label>
+                <label for="fBaia">Baía</label>
                 <select id="fBaia"></select>
             </div>
             <div class="field">
-                <label for="fEstacao">Estacao</label>
+                <label for="fEstacao">Estação</label>
                 <select id="fEstacao"></select>
             </div>
         </div>
@@ -284,58 +284,58 @@
     </section>
 
     <section class="kpis">
-        <div class="kpi"><div class="value" id="kpiN">0</div><div class="label">Estacoes no filtro</div></div>
-        <div class="kpi"><div class="value" id="kpiTaxa">0</div><div class="label">Riqueza media de taxons</div></div>
-        <div class="kpi"><div class="value" id="kpiTemp">0</div><div class="label">Temperatura media</div></div>
-        <div class="kpi"><div class="value" id="kpiSal">0</div><div class="label">Salinidade media</div></div>
-        <div class="kpi"><div class="value" id="kpiNh4">0</div><div class="label">N-NH4 medio</div></div>
+        <div class="kpi"><div class="value" id="kpiN">0</div><div class="label">Estações no filtro</div></div>
+        <div class="kpi"><div class="value" id="kpiTaxa">0</div><div class="label">Riqueza média de táxons</div></div>
+        <div class="kpi"><div class="value" id="kpiTemp">0</div><div class="label">Temperatura média</div></div>
+        <div class="kpi"><div class="value" id="kpiSal">0</div><div class="label">Salinidade média</div></div>
+        <div class="kpi"><div class="value" id="kpiNh4">0</div><div class="label">N-NH4 médio</div></div>
         <div class="kpi"><div class="value" id="kpiMax">0</div><div class="label">Maior riqueza</div></div>
     </section>
 
     <section class="grid">
         <article class="panel">
-            <h2>Riqueza por Estacao</h2>
-            <p class="meta">Numero de taxons infragenericos registrados em cada local.</p>
+            <h2>Riqueza por Estação</h2>
+            <p class="meta">Número de táxons infragenéricos registrados em cada local.</p>
             <canvas id="chartRiqueza"></canvas>
-            <p class="note">Ribeirao da Ilha foi o ponto mais rico entre os seis locais selecionados.</p>
+            <p class="note">Ribeirão da Ilha foi o ponto mais rico entre os seis locais selecionados.</p>
         </article>
 
         <article class="panel">
-            <h2>Nutrientes Inorganicos</h2>
-            <p class="meta">PID e N-amoniacal medidos na agua do mar.</p>
+            <h2>Nutrientes Inorgânicos</h2>
+            <p class="meta">PID e N-amoniacal medidos na água do mar.</p>
             <canvas id="chartNutrientes"></canvas>
-            <p class="note">Saco dos Limoes e Ponta do Coral se destacam pelos valores mais altos de N-NH4.</p>
+            <p class="note">Saco dos Limões e Ponta do Coral se destacam pelos valores mais altos de N-NH4.</p>
         </article>
 
         <article class="panel">
             <h2>Temperatura e Salinidade</h2>
-            <p class="meta">Variaveis fisico-quimicas por estacao.</p>
+            <p class="meta">Variáveis físico-químicas por estação.</p>
             <canvas id="chartFisico"></canvas>
             <p class="note">A Caieira apresentou salinidade baixa no estudo original, enquanto Ponta do Coral teve salinidade mais alta.</p>
         </article>
 
         <article class="panel">
             <h2>Biomassa Dominante</h2>
-            <p class="meta">Maior biomassa observada por estacao.</p>
+            <p class="meta">Maior biomassa observada por estação.</p>
             <canvas id="chartDominante"></canvas>
             <p class="note">Ponta das Canas foi estruturada por banco de Sargassum; Ponta do Coral por Gelidium.</p>
         </article>
 
         <article class="panel full">
-            <h2>Taxons Dominantes por Biomassa</h2>
-            <p class="meta">Principais especies/grupos com biomassa superior a 5% da biomassa local.</p>
+            <h2>Táxons Dominantes por Biomassa</h2>
+            <p class="meta">Principais espécies/grupos com biomassa superior a 5% da biomassa local.</p>
             <canvas id="chartTaxa"></canvas>
-            <p class="note">Valores em g.m-2 extraidos da Figura 4 e texto da dissertacao.</p>
+            <p class="note">Valores em g.m-2 extraídos da Figura 4 e do texto da dissertação.</p>
         </article>
 
         <article class="panel full">
-            <h2>Tabela Integrada por Estacao</h2>
-            <p class="meta">Planilha visual com variaveis ambientais, riqueza e diagnostico fisionomico.</p>
+            <h2>Tabela Integrada por Estação</h2>
+            <p class="meta">Planilha visual com variáveis ambientais, riqueza e diagnóstico fisionômico.</p>
             <div class="table-wrap">
                 <table>
                     <thead>
                     <tr>
-                        <th>Estacao</th><th>Baia</th><th>Taxons</th><th>Riqueza sp.m-2</th><th>Temp</th><th>Sal</th><th>PID</th><th>N-NH4</th><th>Dominante 1</th><th>Biomassa</th><th>Interpretacao</th>
+                        <th>Estação</th><th>Baía</th><th>Táxons</th><th>Riqueza sp.m-2</th><th>Temp</th><th>Sal</th><th>PID</th><th>N-NH4</th><th>Dominante 1</th><th>Biomassa</th><th>Interpretação</th>
                     </tr>
                     </thead>
                     <tbody id="tbRows"></tbody>
@@ -345,19 +345,19 @@
     </section>
 
     <section class="footer">
-        <b>Fonte:</b> Bouzon (2005), composicao e estrutura espacial da comunidade macrofitobentica de fundos consolidados das Baias da Ilha de Santa Catarina.
-        Os campos marcados como NA na planilha indicam valores nao explicitados numericamente nos trechos extraidos dos PDFs.
+        <b>Fonte:</b> Bouzon (2005), composição e estrutura espacial da comunidade macrofitobêntica de fundos consolidados das Baías da Ilha de Santa Catarina.
+        Os campos marcados como NA na planilha indicam valores não explicitados numericamente nos trechos extraídos dos PDFs.
     </section>
 </div>
 
 <script>
 const DATA = [
-    {estacao:"Ponta das Canas",baia:"Baia Norte",lat:-27.393333,lon:-48.433333,taxons:43,riqueza_m2:18.48,temp:24.5,sal:35,pid:0.02,nh4:1.03,fisionomia:"Banco de Sargassum associado a coralinaceas articuladas",dominantes:[["Sargassum stenophyllum",969.57],["Amphiroa beauvoisii",290.69],["Sargassum brachygonia",215.68],["Jania adhaerens",181.71],["Arthrocardia sp.",122.80]],interpretacao:"Area externa/menos central, comunidade estruturada por algas perenes"},
-    {estacao:"Sambaqui",baia:"Baia Norte",lat:-27.488333,lon:-48.540000,taxons:35,riqueza_m2:null,temp:24.8,sal:34,pid:0.04,nh4:0.49,fisionomia:"Banco misto com Sargassum, Hypnea e Gelidiopsis",dominantes:[["Sargassum filipendula",453.40],["Hypnea musciformis",259.31],["Gelidiopsis variabilis",162.36],["Sargassum vulgare",134.81],["Gelidium crinale",115.87]],interpretacao:"Estacao intermediaria com forte biomassa de feoficeas e rodoficeas"},
-    {estacao:"Ponta do Coral",baia:"Baia Norte",lat:-27.570000,lon:-48.536667,taxons:19,riqueza_m2:8.00,temp:26.0,sal:36,pid:0.00,nh4:2.25,fisionomia:"Tapete algal em area central urbanizada",dominantes:[["Gelidium crinale",569.19],["Chondracanthus acicularis",176.99],["Centroceras clavulatum",111.17],["Gymnogongrus griffithsiae",75.58],["Cladophora sp.",66.36]],interpretacao:"Sinal de simplificacao relativa e maior N-amoniacal"},
-    {estacao:"Saco dos Limoes",baia:"Baia Sul",lat:-27.613333,lon:-48.553333,taxons:15,riqueza_m2:null,temp:21.0,sal:31,pid:0.03,nh4:3.26,fisionomia:"Comunidade oportunista/tapete algal",dominantes:[["Enteromorpha flexuosa",282.75],["Bostrychia radicans",99.51],["Ulva lactuca",71.64],["Gelidiella trinitatensis",53.53]],interpretacao:"Maior N-amoniacal entre os seis pontos, forte sinal de eutrofizacao"},
-    {estacao:"Ribeirao da Ilha",baia:"Baia Sul",lat:-27.731667,lon:-48.565000,taxons:69,riqueza_m2:null,temp:19.0,sal:32,pid:0.06,nh4:0.83,fisionomia:"Comunidade diversa com rodoficeas e tapete misto",dominantes:[["Gelidiopsis variabilis",86.26],["Spyridia filamentosa",62.09],["Centroceras clavulatum",54.87],["Herposiphonia secunda",52.34],["Acanthophora spicifera",44.90]],interpretacao:"Maior riqueza taxonomica entre os seis locais"},
-    {estacao:"Caieira da Barra do Sul",baia:"Baia Sul",lat:-27.813333,lon:-48.561667,taxons:45,riqueza_m2:23.70,temp:19.0,sal:25,pid:0.02,nh4:1.74,fisionomia:"Comunidade com Sargassum, Codium e Hypnea",dominantes:[["Sargassum stenophyllum",104.42],["Codium decorticatum",86.23],["Hypnea musciformis",65.45]],interpretacao:"Area sul insular rica, com baixa salinidade pontual no estudo"}
+    {estacao:"Ponta das Canas",baia:"Baía Norte",lat:-27.393333,lon:-48.433333,taxons:43,riqueza_m2:18.48,temp:24.5,sal:35,pid:0.02,nh4:1.03,fisionomia:"Banco de Sargassum associado a coralináceas articuladas",dominantes:[["Sargassum stenophyllum",969.57],["Amphiroa beauvoisii",290.69],["Sargassum brachygonia",215.68],["Jania adhaerens",181.71],["Arthrocardia sp.",122.80]],interpretacao:"Área externa/menos central, comunidade estruturada por algas perenes"},
+    {estacao:"Sambaqui",baia:"Baía Norte",lat:-27.488333,lon:-48.540000,taxons:35,riqueza_m2:null,temp:24.8,sal:34,pid:0.04,nh4:0.49,fisionomia:"Banco misto com Sargassum, Hypnea e Gelidiopsis",dominantes:[["Sargassum filipendula",453.40],["Hypnea musciformis",259.31],["Gelidiopsis variabilis",162.36],["Sargassum vulgare",134.81],["Gelidium crinale",115.87]],interpretacao:"Estação intermediária com forte biomassa de feofíceas e rodofíceas"},
+    {estacao:"Ponta do Coral",baia:"Baía Norte",lat:-27.570000,lon:-48.536667,taxons:19,riqueza_m2:8.00,temp:26.0,sal:36,pid:0.00,nh4:2.25,fisionomia:"Tapete algal em área central urbanizada",dominantes:[["Gelidium crinale",569.19],["Chondracanthus acicularis",176.99],["Centroceras clavulatum",111.17],["Gymnogongrus griffithsiae",75.58],["Cladophora sp.",66.36]],interpretacao:"Sinal de simplificação relativa e maior N-amoniacal"},
+    {estacao:"Saco dos Limões",baia:"Baía Sul",lat:-27.613333,lon:-48.553333,taxons:15,riqueza_m2:null,temp:21.0,sal:31,pid:0.03,nh4:3.26,fisionomia:"Comunidade oportunista/tapete algal",dominantes:[["Enteromorpha flexuosa",282.75],["Bostrychia radicans",99.51],["Ulva lactuca",71.64],["Gelidiella trinitatensis",53.53]],interpretacao:"Maior N-amoniacal entre os seis pontos, forte sinal de eutrofização"},
+    {estacao:"Ribeirão da Ilha",baia:"Baía Sul",lat:-27.731667,lon:-48.565000,taxons:69,riqueza_m2:null,temp:19.0,sal:32,pid:0.06,nh4:0.83,fisionomia:"Comunidade diversa com rodofíceas e tapete misto",dominantes:[["Gelidiopsis variabilis",86.26],["Spyridia filamentosa",62.09],["Centroceras clavulatum",54.87],["Herposiphonia secunda",52.34],["Acanthophora spicifera",44.90]],interpretacao:"Maior riqueza taxonômica entre os seis locais"},
+    {estacao:"Caieira da Barra do Sul",baia:"Baía Sul",lat:-27.813333,lon:-48.561667,taxons:45,riqueza_m2:23.70,temp:19.0,sal:25,pid:0.02,nh4:1.74,fisionomia:"Comunidade com Sargassum, Codium e Hypnea",dominantes:[["Sargassum stenophyllum",104.42],["Codium decorticatum",86.23],["Hypnea musciformis",65.45]],interpretacao:"Área sul insular rica, com baixa salinidade pontual no estudo"}
 ];
 
 let charts = {};
@@ -416,7 +416,7 @@ function renderKpis(rows) {
     const richer = maxBy(rows, "taxons");
     document.getElementById("kpiN").textContent = rows.length;
     document.getElementById("kpiTaxa").textContent = avg(rows.map((r) => r.taxons)).toFixed(1);
-    document.getElementById("kpiTemp").textContent = avg(rows.map((r) => r.temp)).toFixed(1) + " C";
+    document.getElementById("kpiTemp").textContent = avg(rows.map((r) => r.temp)).toFixed(1) + " °C";
     document.getElementById("kpiSal").textContent = avg(rows.map((r) => r.sal)).toFixed(1);
     document.getElementById("kpiNh4").textContent = avg(rows.map((r) => r.nh4)).toFixed(2);
     document.getElementById("kpiMax").textContent = richer.estacao ? `${richer.taxons}` : "0";
@@ -428,7 +428,7 @@ function renderRiqueza(rows) {
         type: "bar",
         data: {
             labels: rows.map((r) => r.estacao),
-            datasets: [{ label: "Taxons", data: rows.map((r) => r.taxons), backgroundColor: "#2a9d8f" }]
+            datasets: [{ label: "Táxons", data: rows.map((r) => r.taxons), backgroundColor: "#2a9d8f" }]
         },
         options: commonOptions()
     });
@@ -441,8 +441,8 @@ function renderNutrientes(rows) {
         data: {
             labels: rows.map((r) => r.estacao),
             datasets: [
-                { label: "PID (uM)", data: rows.map((r) => r.pid), backgroundColor: "#2563eb" },
-                { label: "N-NH4 (uM)", data: rows.map((r) => r.nh4), backgroundColor: "#d62828" }
+                { label: "PID (µM)", data: rows.map((r) => r.pid), backgroundColor: "#2563eb" },
+                { label: "N-NH4 (µM)", data: rows.map((r) => r.nh4), backgroundColor: "#d62828" }
             ]
         },
         options: commonOptions()
@@ -456,7 +456,7 @@ function renderFisico(rows) {
         data: {
             labels: rows.map((r) => r.estacao),
             datasets: [
-                { label: "Temperatura (C)", data: rows.map((r) => r.temp), backgroundColor: "#f1a208" },
+                { label: "Temperatura (°C)", data: rows.map((r) => r.temp), backgroundColor: "#f1a208" },
                 { label: "Salinidade", data: rows.map((r) => r.sal), backgroundColor: "#006d77" }
             ]
         },

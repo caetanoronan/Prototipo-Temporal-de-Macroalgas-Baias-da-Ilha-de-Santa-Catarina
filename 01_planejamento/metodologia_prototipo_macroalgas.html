@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metodologia - Prototipo Temporal de Macroalgas</title>
+    <title>Metodologia - Protótipo Temporal de Macroalgas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -249,6 +249,7 @@
             body.print-ficha #ficha,
             body.print-precampo #precampo,
             body.print-materiais #materiais,
+            body.print-multimidia #multimidia,
             body.print-publicacao #publicacao {
                 display: block !important;
             }
@@ -262,15 +263,15 @@
 <button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
 <main class="page">
     <header>
-        <h1>Prototipo Temporal de Campo para Identificacao de Macroalgas</h1>
+        <h1>Protótipo Temporal de Campo para Identificação de Macroalgas</h1>
         <p>
-            Material operacional para simular e padronizar uma saida de campo nas seis estacoes
-            insulares das Baias da Ilha de Santa Catarina, com base na metodologia de Bouzon (2005)
+            Material operacional para simular e padronizar uma saída de campo nas seis estações
+            insulares das Baías da Ilha de Santa Catarina, com base na metodologia de Bouzon (2005)
             e Bouzon et al. (2006).
         </p>
         <div class="refs">
             <strong>Autor:</strong> Ronan Armando Caetano.
-            <strong>Referencias:</strong>
+            <strong>Referências:</strong>
             <a href="../../assets/articles/bouzon_2006.pdf">Bouzon et al. 2006</a> |
             <a href="../../assets/articles/bouzon_2005.pdf">Bouzon 2005</a> |
             <a href="../index.html">Voltar ao portal</a>
@@ -278,29 +279,35 @@
     </header>
 
     <nav class="tabs" aria-label="Abas da metodologia">
-        <button class="tab-btn active" data-tab="intro" type="button">Introducao</button>
+        <button class="tab-btn active" data-tab="intro" type="button">Introdução</button>
         <button class="tab-btn" data-tab="metodo" type="button">Metodologia</button>
         <button class="tab-btn" data-tab="ficha" type="button">Ficha de campo</button>
-        <button class="tab-btn" data-tab="precampo" type="button">Pre-campo</button>
+        <button class="tab-btn" data-tab="precampo" type="button">Pré-campo</button>
         <button class="tab-btn" data-tab="materiais" type="button">Materiais</button>
-        <button class="tab-btn" data-tab="sequencia" type="button">Sequencia</button>
+        <button class="tab-btn" data-tab="sequencia" type="button">Sequência</button>
+        <button class="tab-btn" data-tab="multimidia" type="button">Multimídia</button>
         <button class="tab-btn" data-tab="publicacao" type="button">GitHub Pages</button>
     </nav>
 
     <section class="tab active" id="intro">
-        <h2>Introducao do prototipo</h2>
+        <h2>Introdução do protótipo</h2>
         <p>
-            O prototipo organiza uma simulacao de campo para reconhecimento, amostragem e
-            documentacao de comunidades macroalgais em costoes rochosos. A proposta segue um
-            desenho comparativo entre seis estacoes insulares distribuidas ao longo das Baias Norte
-            e Sul: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limoes, Ribeirao da Ilha e
+            O protótipo organiza uma simulação de campo para reconhecimento, amostragem e
+            documentação de comunidades macroalgais em costões rochosos. A proposta segue um
+            desenho comparativo entre seis estações insulares distribuídas ao longo das Baías Norte
+            e Sul: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limões, Ribeirão da Ilha e
             Caieira da Barra do Sul.
         </p>
         <p>
-            A leitura ecologica central e comparar locais com diferentes graus de urbanizacao,
-            riqueza de taxons, biomassa dominante e sinais de eutrofizacao. O protocolo combina
+            A leitura ecológica central é comparar locais com diferentes graus de urbanização,
+            riqueza de táxons, biomassa dominante e sinais de eutrofização. O protocolo combina
             coleta quantitativa por quadrados, coleta complementar para taxonomia, fotos in situ e
-            medidas fisico-quimicas simples.
+            medidas físico-químicas simples.
+        </p>
+        <p>
+            O registro fotográfico e audiovisual também compõe o protocolo: as imagens in situ
+            servem para rastreabilidade das amostras, documentação científica, divulgação
+            ambiental e materiais futuros de apresentação.
         </p>
     </section>
 
@@ -310,31 +317,35 @@
             <div class="box">
                 <h3>Desenho amostral</h3>
                 <ul>
-                    <li>Coleta em mare baixa de sizigia.</li>
-                    <li>Um cabo guia de 10 m paralelo a linha de costa.</li>
-                    <li>9 quadrados por estacao.</li>
+                    <li>Coleta em maré baixa de sizígia.</li>
+                    <li>Um cabo-guia de 10 m paralelo à linha de costa.</li>
+                    <li>9 quadrados por estação.</li>
                     <li>Quadrados de 25 x 25 cm, equivalentes a 0,0625 m2.</li>
+                    <li>Posições definidas antes do campo por sorteio simples de coordenadas ao longo do cabo-guia.</li>
                     <li>Amostragem destrutiva da macroflora dentro de cada quadrado.</li>
                 </ul>
             </div>
             <div class="box">
-                <h3>Variaveis registradas</h3>
+                <h3>Variáveis registradas</h3>
                 <ul>
                     <li>Coordenadas GPS.</li>
-                    <li>Temperatura da agua.</li>
-                    <li>Salinidade.</li>
-                    <li>Transparencia visual.</li>
+                    <li>Temperatura da água, com 3 leituras por estação.</li>
+                    <li>Salinidade, com 3 leituras por estação.</li>
+                    <li>Transparência visual.</li>
                     <li>Hidrodinamismo observado.</li>
-                    <li>Substrato, declividade e impactos visiveis.</li>
+                    <li>Substrato, declividade e impactos visíveis.</li>
                 </ul>
             </div>
         </div>
         <h3>Processamento posterior</h3>
         <p>
             O material coletado deve ser triado, identificado e, quando houver continuidade do
-            protocolo laboratorial, seco em estufa a 60 C por 48 h para determinacao de peso seco.
-            Coletas complementares devem apoiar a identificacao taxonomica dos exemplares fora
-            dos quadrados.
+            protocolo laboratorial, seco em estufa a 60 °C por 48 h para determinação do peso seco.
+            Coletas complementares devem apoiar a identificação taxonômica dos exemplares fora
+            dos quadrados. O processamento ou a fixação deve iniciar preferencialmente no mesmo
+            dia da coleta, idealmente em até 6 h após a retirada do material do costão. Se houver
+            atraso, manter as amostras refrigeradas e registrar o tempo decorrido até o início do
+            processamento.
         </p>
     </section>
 
@@ -345,45 +356,45 @@
             <a class="btn secondary" href="../05_gis_mapas/mapa_prototipo_armacao_clone.html">Abrir mapa</a>
         </div>
 
-        <h3>Identificacao geral</h3>
+        <h3>Identificação geral</h3>
         <p>Projeto: <span class="field-line"></span></p>
         <p>Equipe: <span class="field-line"></span></p>
-        <p>Data: ____ / ____ / ______ &nbsp;&nbsp; Hora inicio: __________ &nbsp;&nbsp; Hora termino: __________</p>
+        <p>Data: ____ / ____ / ______ &nbsp;&nbsp; Hora início: __________ &nbsp;&nbsp; Hora término: __________</p>
 
-        <h3>Estacao</h3>
+        <h3>Estação</h3>
         <div class="checkbox-row">
             <span class="check">Ponta das Canas</span>
             <span class="check">Sambaqui</span>
             <span class="check">Ponta do Coral</span>
-            <span class="check">Saco dos Limoes</span>
-            <span class="check">Ribeirao da Ilha</span>
+            <span class="check">Saco dos Limões</span>
+            <span class="check">Ribeirão da Ilha</span>
             <span class="check">Caieira da Barra do Sul</span>
         </div>
         <p>Coordenadas GPS: <span class="field-line"></span></p>
-        <p>Mare: <span class="check">Sizigia</span> <span class="check">Quadratura</span> &nbsp;&nbsp; Altura aproximada da mare: <span class="field-line"></span></p>
+        <p>Maré: <span class="check">Sizígia</span> <span class="check">Quadratura</span> &nbsp;&nbsp; Altura aproximada da maré: <span class="field-line"></span></p>
 
-        <h3>Condicoes ambientais</h3>
+        <h3>Condições ambientais</h3>
         <div class="grid">
             <div>
-                <p>Temperatura da agua: __________ C</p>
-                <p>Salinidade: __________ &permil;</p>
-                <p>Transparencia: <span class="check">Alta</span> <span class="check">Media</span> <span class="check">Baixa</span></p>
+                <p>Temperatura da água: R1 ______ °C &nbsp; R2 ______ °C &nbsp; R3 ______ °C &nbsp; Média ______ °C</p>
+                <p>Salinidade: R1 ______ &permil; &nbsp; R2 ______ &permil; &nbsp; R3 ______ &permil; &nbsp; Média ______ &permil;</p>
+                <p>Transparência: <span class="check">Alta</span> <span class="check">Média</span> <span class="check">Baixa</span></p>
                 <p>Hidrodinamismo: <span class="check">Fraco</span> <span class="check">Moderado</span> <span class="check">Forte</span></p>
             </div>
             <div>
                 <p>Substrato predominante:</p>
-                <p><span class="check">Rocha macica</span> <span class="check">Blocos</span> <span class="check">Cascalho</span> <span class="check">Areia</span> <span class="check">Misto</span></p>
-                <p>Declividade do costao: <span class="check">Suave</span> <span class="check">Moderada</span> <span class="check">Ingreme</span></p>
-                <p>Impactos visiveis: <span class="check">Esgoto</span> <span class="check">Lixo solido</span> <span class="check">Bioincrustacao excessiva</span> <span class="check">Sedimentacao</span> <span class="check">Nenhum</span></p>
+                <p><span class="check">Rocha maciça</span> <span class="check">Blocos</span> <span class="check">Cascalho</span> <span class="check">Areia</span> <span class="check">Misto</span></p>
+                <p>Declividade do costão: <span class="check">Suave</span> <span class="check">Moderada</span> <span class="check">Íngreme</span></p>
+                <p>Impactos visíveis: <span class="check">Esgoto</span> <span class="check">Lixo sólido</span> <span class="check">Bioincrustação excessiva</span> <span class="check">Sedimentação</span> <span class="check">Nenhum</span></p>
             </div>
         </div>
-        <p>Observacoes gerais:</p>
+        <p>Observações gerais:</p>
         <p style="min-height: 54px; border: 1px solid var(--line);"></p>
 
         <h3>Amostragem quantitativa - 9 quadrados, 25 x 25 cm</h3>
         <table>
             <thead>
-            <tr><th>Quadrado</th><th>Zona (sup/med/inf)</th><th>Especies dominantes</th><th>Observacoes</th><th>Coletado</th></tr>
+            <tr><th>Quadrado</th><th>Zona (sup./méd./inf.)</th><th>Espécies dominantes</th><th>Foto/escala</th><th>Coletado</th></tr>
             </thead>
             <tbody>
             <tr><td>Q1</td><td></td><td></td><td></td><td>[ ]</td></tr>
@@ -398,178 +409,278 @@
             </tbody>
         </table>
 
-        <p>Codigo das amostras: <span class="field-line"></span></p>
+        <p>Código das amostras: <span class="field-line"></span></p>
         <h3>Coletas complementares</h3>
-        <p>Especies coletadas fora dos quadrados:</p>
+        <p>Espécies coletadas fora dos quadrados:</p>
         <p style="min-height: 54px; border: 1px solid var(--line);"></p>
-        <p>Fotos realizadas? <span class="check">Sim</span> <span class="check">Nao</span> &nbsp;&nbsp; Codigo das fotos: <span class="field-line"></span></p>
+        <h3>Registro multimídia</h3>
+        <p>Fotos realizadas? <span class="check">Sim</span> <span class="check">Não</span> &nbsp;&nbsp; Código/pasta das fotos: <span class="field-line"></span></p>
+        <p>Etiqueta fotografada antes dos quadrados? <span class="check">Sim</span> <span class="check">Não</span> &nbsp;&nbsp; Escala visual presente? <span class="check">Sim</span> <span class="check">Não</span></p>
+        <p>Vídeo de hidrodinamismo: <span class="check">Sim</span> <span class="check">Não</span> &nbsp;&nbsp; Link_Fotos: <span class="field-line"></span></p>
     </section>
 
     <section class="tab" id="precampo">
-        <h2>Plano de pre-campo</h2>
+        <h2>Plano de pré-campo</h2>
         <div class="print-actions">
-            <button class="btn" type="button" onclick="printSection('precampo')">Imprimir pre-campo</button>
+            <button class="btn" type="button" onclick="printSection('precampo')">Imprimir pré-campo</button>
             <a class="btn secondary" href="../index.html">Voltar ao portal</a>
         </div>
         <p>
-            O pre-campo e a etapa que reduz improviso. A ideia e chegar ao costao com a janela de
-            mare, a rota, a equipe, as etiquetas e o desenho amostral ja decididos. Isso protege a
-            comparabilidade entre estacoes e evita que cada ponto seja amostrado com criterios
+            O pré-campo é a etapa que reduz improvisos. A ideia é chegar ao costão com a janela de
+            maré, a rota, a equipe, as etiquetas e o desenho amostral já decididos. Isso protege a
+            comparabilidade entre estações e evita que cada ponto seja amostrado com critérios
             diferentes.
         </p>
         <h3>1. Planejamento temporal</h3>
         <ul>
-            <li><strong>Mare baixa de sizigia:</strong> priorizar a menor altura de mare disponivel, pois o metodo depende da exposicao segura do entre-mares e da franja superior do infralitoral.</li>
-            <li><strong>Janela minima:</strong> reservar pelo menos 3 h por estacao, incluindo montagem do cabo, sorteio/posicionamento dos quadrados, fotos e embalagem.</li>
-            <li><strong>Vento:</strong> checar direcao e intensidade; abaixo de 15 nos tende a facilitar fotos, permanencia no costao e coleta de agua.</li>
-            <li><strong>Ressaca:</strong> adiar se houver ondulacao perigosa ou agua cobrindo a faixa alvo.</li>
+            <li><strong>Maré baixa de sizígia:</strong> priorizar a menor altura de maré disponível, pois o método depende da exposição segura do entremarés e da franja superior do infralitoral.</li>
+            <li><strong>Janela mínima:</strong> reservar pelo menos 3 h por estação, incluindo montagem do cabo, sorteio/posicionamento dos quadrados, fotos e embalagem.</li>
+            <li><strong>Vento:</strong> checar direção e intensidade; abaixo de 15 nós tende a facilitar fotos, permanência no costão e coleta de água.</li>
+            <li><strong>Ressaca:</strong> adiar se houver ondulação perigosa ou água cobrindo a faixa-alvo.</li>
             <li><strong>Luz:</strong> registrar cobertura de nuvens; luz difusa ajuda a reduzir reflexos em fotos in situ.</li>
-            <li><strong>Tabela de mare:</strong> levar horarios dos 2 dias anteriores e posteriores para ajustar rota se houver atraso.</li>
+            <li><strong>Tábua de maré:</strong> levar horários dos 2 dias anteriores e posteriores para ajustar a rota se houver atraso.</li>
+            <li><strong>Medições em triplicata:</strong> fazer as 3 leituras de temperatura e salinidade na mesma faixa de profundidade, preferencialmente no início, meio e fim do transecto, evitando poças de maré aquecidas ou pontos muito rasos que possam enviesar a média da estação.</li>
+            <li><strong>Janela audiovisual:</strong> reservar 10 min iniciais e 10 min finais por estação para imagens obrigatórias, sem comprometer a coleta biológica na maré baixa.</li>
         </ul>
 
-        <h3>2. Reconhecimento previo dos pontos</h3>
+        <h3>2. Reconhecimento prévio dos pontos</h3>
         <ul>
-            <li><strong>Acesso:</strong> confirmar trilha, rua, escada, praia ou costao pelo qual a equipe entra e sai com material.</li>
-            <li><strong>Restricoes:</strong> verificar se ha propriedade privada, area militar, obra, area de cultivo ou restricao temporaria.</li>
-            <li><strong>Risco fisico:</strong> mapear pedras soltas, limo escorregadio, blocos instaveis e locais que isolam com a subida da mare.</li>
-            <li><strong>Logistica:</strong> anotar estacionamento, distancia ate o costao, ponto de encontro e rota alternativa.</li>
-            <li><strong>Comunicacao:</strong> checar sinal de celular e combinar horario de retorno com alguem fora da equipe.</li>
+            <li><strong>Acesso:</strong> confirmar trilha, rua, escada, praia ou costão pelo qual a equipe entra e sai com material.</li>
+            <li><strong>Restrições:</strong> verificar se há propriedade privada, área militar, obra, área de cultivo ou restrição temporária.</li>
+            <li><strong>Risco físico:</strong> mapear pedras soltas, limo escorregadio, blocos instáveis e locais que isolam com a subida da maré.</li>
+            <li><strong>Logística:</strong> anotar estacionamento, distância até o costão, ponto de encontro e rota alternativa.</li>
+            <li><strong>Comunicação:</strong> checar sinal de celular e combinar horário de retorno com alguém fora da equipe.</li>
         </ul>
 
-        <h3>3. Padronizacao do desenho amostral</h3>
+        <h3>3. Padronização do desenho amostral</h3>
         <ul>
-            <li><strong>Transecto:</strong> definir previamente se o cabo de 10 m sera orientado no mesmo sentido da linha de costa em todos os pontos.</li>
-            <li><strong>Zona alvo:</strong> manter criterio constante para superior, medio e inferior do entre-mares.</li>
-            <li><strong>Infralitoral raso:</strong> definir ate onde o mergulho livre sera usado para reconhecimento complementar.</li>
-            <li><strong>Aleatorizacao:</strong> levar pares de coordenadas ja sorteados para posicionar os 9 quadrados, economizando tempo no campo.</li>
-            <li><strong>Distancia minima:</strong> evitar quadrados sobrepostos ou excessivamente proximos, preservando independencia amostral.</li>
+            <li><strong>Transecto:</strong> definir previamente se o cabo de 10 m será orientado no mesmo sentido da linha de costa em todos os pontos.</li>
+            <li><strong>Zona-alvo:</strong> manter critério constante para superior, médio e inferior do entremarés.</li>
+            <li><strong>Infralitoral raso:</strong> definir até onde o mergulho livre será usado para reconhecimento complementar.</li>
+            <li><strong>Aleatorização:</strong> levar pares de coordenadas já sorteados para posicionar os 9 quadrados, economizando tempo no campo. O sorteio deve ser feito antes da saída em planilha eletrônica ou script simples, usando números aleatórios para a distância ao longo do cabo de 10 m e para a posição transversal dentro da zona-alvo. Guardar a tabela sorteada junto da ficha de campo, com data, estação e responsável pelo sorteio.</li>
+            <li><strong>Distância mínima:</strong> evitar quadrados sobrepostos ou excessivamente próximos, preservando independência amostral.</li>
         </ul>
 
         <h3>4. Rotulagem antecipada</h3>
         <p>
-            Prepare etiquetas impermeaveis antes da saida. O formato recomendado e
+            Prepare etiquetas impermeáveis antes da saída. O formato recomendado é
             <strong>ESTACAO-Q#-DATA</strong>, por exemplo <strong>SAM-Q3-12MAI</strong>.
-            Use uma etiqueta externa no saco e outra interna, escrita a lapis ou material resistente.
+            Use uma etiqueta externa no saco e outra interna, escrita a lápis ou com material resistente.
         </p>
-        <h3>Checklist rapido para marcar antes de sair</h3>
+        <h3>5. Preparação audiovisual</h3>
+        <ul>
+            <li><strong>Equipamentos:</strong> carregar baterias de câmeras, celulares e caixas estanques na noite anterior, esvaziar cartões de memória e limpar lentes.</li>
+            <li><strong>Roteiro mínimo:</strong> definir as tomadas obrigatórias da estação, incluindo vista aberta do costão, detalhe de poça de maré, instalação do transecto e raspagem do quadrado 25 x 25 cm.</li>
+            <li><strong>Responsável:</strong> designar uma pessoa para coordenar o registro multimídia ou bloquear rigidamente as janelas de 10 min no início e no fim da estação.</li>
+        </ul>
+        <h3>Checklist rápido para marcar antes de sair</h3>
         <table>
             <thead><tr><th>Item</th><th>Conferido</th><th>Observacao</th></tr></thead>
             <tbody>
-            <tr><td>Tabua de mare e horario alvo</td><td>[ ]</td><td></td></tr>
-            <tr><td>Previsao de vento e ondulacao</td><td>[ ]</td><td></td></tr>
+            <tr><td>Tábua de maré e horário-alvo</td><td>[ ]</td><td></td></tr>
+            <tr><td>Previsão de vento e ondulação</td><td>[ ]</td><td></td></tr>
             <tr><td>Rota e acesso confirmados</td><td>[ ]</td><td></td></tr>
-            <tr><td>Numeros aleatorios dos quadrados</td><td>[ ]</td><td></td></tr>
+            <tr><td>Números aleatórios dos quadrados</td><td>[ ]</td><td></td></tr>
             <tr><td>Etiquetas de amostras prontas</td><td>[ ]</td><td></td></tr>
+            <tr><td>Baterias cheias, memória livre e lentes limpas</td><td>[ ]</td><td></td></tr>
+            <tr><td>Roteiro audiovisual e responsável definidos</td><td>[ ]</td><td></td></tr>
             <tr><td>Equipe e contatos combinados</td><td>[ ]</td><td></td></tr>
             </tbody>
         </table>
     </section>
 
     <section class="tab" id="materiais">
-        <h2>Materiais obrigatorios</h2>
+        <h2>Materiais obrigatórios</h2>
         <div class="print-actions">
             <button class="btn" type="button" onclick="printSection('materiais')">Imprimir materiais</button>
             <a class="btn secondary" href="../index.html">Voltar ao portal</a>
         </div>
         <p>
-            Esta lista foi separada por funcao para facilitar a divisao entre membros da equipe.
-            A recomendacao e conferir tudo uma vez no laboratorio e outra vez no ponto de encontro.
-            Materiais de medicao, rotulagem e seguranca devem ficar acessiveis, nao no fundo da mochila.
+            Esta lista foi separada por função para facilitar a divisão entre membros da equipe.
+            A recomendação é conferir tudo uma vez no laboratório e outra vez no ponto de encontro.
+            Materiais de medição, rotulagem e segurança devem ficar acessíveis, não no fundo da mochila.
         </p>
         <div class="grid">
             <div class="box">
-                <h3>Equipamentos cientificos</h3>
+                <h3>Equipamentos científicos</h3>
                 <ul>
-                    <li><strong>Quadrado 25 x 25 cm:</strong> unidade padrao para biomassa e comparacao entre estacoes.</li>
-                    <li><strong>Cabo guia 10 m:</strong> eixo paralelo a linha de costa para orientar a area de sorteio.</li>
-                    <li><strong>Espatulas inox:</strong> remocao completa do material macroalgal dentro de cada quadrado.</li>
-                    <li><strong>GPS:</strong> registro da estacao e, se possivel, do inicio/fim do transecto.</li>
-                    <li><strong>Termometro:</strong> temperatura da agua no momento da amostragem.</li>
-                    <li><strong>Refratometro:</strong> salinidade local, importante para interpretar diferencas entre as Baias.</li>
-                    <li><strong>Frascos 500 ml:</strong> coleta de agua para nutrientes, previamente lavados conforme protocolo.</li>
-                    <li><strong>Caneta permanente e etiquetas:</strong> rastreabilidade das amostras ate o laboratorio.</li>
+                    <li><strong>Quadrado 25 x 25 cm:</strong> unidade-padrão para biomassa e comparação entre estações.</li>
+                    <li><strong>Cabo-guia 10 m:</strong> eixo paralelo à linha de costa para orientar a área de sorteio.</li>
+                    <li><strong>Espátulas inox:</strong> remoção completa do material macroalgal dentro de cada quadrado.</li>
+                    <li><strong>GPS:</strong> registro da estação e, se possível, do início/fim do transecto.</li>
+                    <li><strong>Termômetro:</strong> temperatura da água no momento da amostragem, com 3 leituras por estação para cálculo da média local.</li>
+                    <li><strong>Refratômetro:</strong> salinidade local, com 3 leituras por estação, importante para interpretar diferenças entre as Baías.</li>
+                    <li><strong>Frascos 500 ml:</strong> coleta de água para nutrientes, previamente lavados conforme protocolo, mantidos refrigerados e ao abrigo de luz até o laboratório.</li>
+                    <li><strong>Régua de PVC ou escala visual:</strong> referência de tamanho para fotos científicas dos quadrados e organismos.</li>
+                    <li><strong>Caneta permanente e etiquetas:</strong> rastreabilidade das amostras até o laboratório.</li>
                 </ul>
             </div>
             <div class="box">
-                <h3>Preservacao e seguranca</h3>
+                <h3>Preservação e segurança</h3>
                 <ul>
-                    <li><strong>Formaldeido 4%:</strong> fixacao do material, com cuidado de transporte e uso de EPI.</li>
-                    <li><strong>Agua do mar extra:</strong> preparo e diluicao quando necessario.</li>
+                    <li><strong>Formaldeído 4%:</strong> fixação do material, com cuidado de transporte e uso de EPI.</li>
+                    <li><strong>Água do mar extra:</strong> preparo e diluição quando necessário.</li>
                     <li><strong>Sacos zip:</strong> armazenamento separado por quadrado e coleta complementar.</li>
-                    <li><strong>Caixa termica:</strong> transporte organizado das amostras e frascos de agua.</li>
-                    <li><strong>Luvas nitrilicas:</strong> protecao durante coleta, fixacao e manuseio de organismos.</li>
-                    <li><strong>Bota antiderrapante:</strong> seguranca no costao molhado.</li>
-                    <li><strong>Oculos, protetor solar e kit primeiros socorros:</strong> itens minimos de protecao da equipe.</li>
+                    <li><strong>Caixa térmica com gelo reciclável:</strong> transporte organizado das amostras e frascos de água, mantendo refrigeração próxima de 4 °C até a chegada ao laboratório.</li>
+                    <li><strong>Luvas nitrílicas:</strong> proteção durante coleta, fixação e manuseio de organismos.</li>
+                    <li><strong>Bota antiderrapante:</strong> segurança no costão molhado.</li>
+                    <li><strong>Óculos, protetor solar e kit de primeiros socorros:</strong> itens mínimos de proteção da equipe.</li>
+                    <li><strong>Câmera, celular ou caixa estanque:</strong> registro de fotos, vídeos curtos e áudio ambiente, com baterias carregadas e memória livre.</li>
                 </ul>
             </div>
         </div>
+        <h3>Amostras de água para nutrientes</h3>
+        <p>
+            Para análises de nutrientes dissolvidos, como PID e N-NH4, coletar a água em frascos
+            limpos de 500 ml, manter imediatamente em caixa térmica com gelo reciclável, protegida
+            da luz, e encaminhar ao laboratório no mesmo dia. A filtragem deve seguir o protocolo
+            analítico adotado; quando o objetivo for nutriente dissolvido, filtrar preferencialmente
+            ainda em campo com filtro apropriado ou, se isso não for operacionalmente viável, no
+            laboratório logo após a chegada, registrando horário de coleta, horário de filtragem e
+            condição de conservação.
+        </p>
         <h3>Hidrodinamismo, se for aplicado</h3>
         <p>
-            Blocos numerados, barbante, suporte em T, papel aluminio e balanca pre-campo para
+            Blocos numerados, barbante, suporte em T, papel-alumínio e balança pré-campo para
             registro do peso inicial.
         </p>
         <h3>Checklist de materiais</h3>
         <table>
-            <thead><tr><th>Grupo</th><th>Item</th><th>Responsavel</th><th>Conferido</th></tr></thead>
+            <thead><tr><th>Grupo</th><th>Item</th><th>Responsável</th><th>Conferido</th></tr></thead>
             <tbody>
             <tr><td>Amostragem</td><td>Quadrado 25 x 25 cm</td><td></td><td>[ ]</td></tr>
             <tr><td>Amostragem</td><td>Cabo guia 10 m</td><td></td><td>[ ]</td></tr>
-            <tr><td>Amostragem</td><td>Espatulas inox</td><td></td><td>[ ]</td></tr>
-            <tr><td>Medicao</td><td>GPS, termometro e refratometro</td><td></td><td>[ ]</td></tr>
-            <tr><td>Amostras</td><td>Frascos, sacos zip e etiquetas</td><td></td><td>[ ]</td></tr>
-            <tr><td>Preservacao</td><td>Formaldeido 4%, agua do mar extra e caixa termica</td><td></td><td>[ ]</td></tr>
-            <tr><td>Seguranca</td><td>Luvas, bota, oculos, protetor solar e primeiros socorros</td><td></td><td>[ ]</td></tr>
+            <tr><td>Amostragem</td><td>Espátulas inox</td><td></td><td>[ ]</td></tr>
+            <tr><td>Medição</td><td>GPS, termômetro e refratômetro</td><td></td><td>[ ]</td></tr>
+            <tr><td>Multimídia</td><td>Câmera/celular, caixa estanque, baterias, memória livre e pano para lentes</td><td></td><td>[ ]</td></tr>
+            <tr><td>Multimídia</td><td>Régua de PVC ou escala visual para fotos científicas</td><td></td><td>[ ]</td></tr>
+            <tr><td>Amostras</td><td>Frascos, sacos zip, filtros quando aplicável e etiquetas</td><td></td><td>[ ]</td></tr>
+            <tr><td>Preservação</td><td>Formaldeído 4%, água do mar extra e caixa térmica com gelo reciclável</td><td></td><td>[ ]</td></tr>
+            <tr><td>Segurança</td><td>Luvas, bota, óculos, protetor solar e primeiros socorros</td><td></td><td>[ ]</td></tr>
             </tbody>
         </table>
     </section>
 
     <section class="tab" id="sequencia">
-        <h2>Sequencia ideal por estacao</h2>
+        <h2>Sequência ideal por estação</h2>
         <ol>
             <li>Registrar coordenadas.</li>
-            <li>Medir temperatura.</li>
-            <li>Medir salinidade.</li>
-            <li>Instalar transecto.</li>
-            <li>Posicionar quadrados.</li>
+            <li>Fazer foto aberta da estação e registrar a etiqueta inicial da estação.</li>
+            <li>Medir temperatura em triplicata e registrar a média.</li>
+            <li>Medir salinidade em triplicata e registrar a média.</li>
+            <li>Instalar transecto e registrar foto ou vídeo curto da instalação.</li>
+            <li>Posicionar quadrados conforme a tabela de coordenadas sorteadas.</li>
+            <li>Fotografar a etiqueta de cada quadrado antes da foto in situ correspondente.</li>
             <li>Coletar macroalgas.</li>
-            <li>Coletar agua.</li>
+            <li>Coletar água, refrigerar imediatamente e anotar horário de coleta.</li>
             <li>Instalar blocos de gesso, caso esta etapa seja aplicada.</li>
-            <li>Fazer fotos gerais e fotos in situ.</li>
-            <li>Conferir checklist final antes de sair da estacao.</li>
+            <li>Fazer fotos gerais, fotos in situ com escala visual e vídeo curto do hidrodinamismo local.</li>
+            <li>Conferir checklist final antes de sair da estação.</li>
         </ol>
     </section>
 
+    <section class="tab" id="multimidia">
+        <h2>Divulgação científica e registro multimídia</h2>
+        <div class="print-actions">
+            <button class="btn" type="button" onclick="printSection('multimidia')">Imprimir multimídia</button>
+            <a class="btn secondary" href="../index.html">Voltar ao portal</a>
+        </div>
+        <p>
+            Imagens e vídeos de alta qualidade fazem parte da documentação científica e também
+            apoiam divulgação ambiental, aulas, apresentações e defesa. Como a maré de sizígia
+            oferece pouco tempo operacional, o registro precisa ser planejado e não deve atrasar
+            a coleta biológica.
+        </p>
+
+        <h3>1. Pré-campo audiovisual</h3>
+        <div class="grid">
+            <div class="box">
+                <h3>Equipamentos</h3>
+                <ul>
+                    <li>Carregar baterias de câmeras, celulares e caixas estanques na noite anterior.</li>
+                    <li>Esvaziar cartões de memória e conferir espaço de armazenamento.</li>
+                    <li>Limpar lentes e separar pano seco, caixa de transporte e proteção contra respingos.</li>
+                </ul>
+            </div>
+            <div class="box">
+                <h3>Roteiro e responsabilidade</h3>
+                <ul>
+                    <li>Definir as tomadas obrigatórias antes da saída.</li>
+                    <li>Designar um membro da equipe como responsável pelo registro ou reservar 10 min iniciais e 10 min finais para captação.</li>
+                    <li>Priorizar imagens que documentem método, ambiente e rastreabilidade das amostras.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>2. Procedimentos de fotografia</h3>
+        <ul>
+            <li><strong>Contexto e detalhe:</strong> iniciar com foto aberta da paisagem ou do costão inteiro antes de fotografar organismos, poças de maré ou detalhes dos quadrados.</li>
+            <li><strong>Escala visual:</strong> toda foto científica deve incluir uma referência de tamanho, como régua de PVC, moeda ou ponta da espátula inox.</li>
+            <li><strong>Rastreabilidade:</strong> fotografar a etiqueta da amostra, por exemplo <strong>SAM-Q3</strong>, imediatamente antes de fotografar o quadrado correspondente no costão.</li>
+            <li><strong>Quadrados:</strong> registrar os 9 quadrados in situ com enquadramento estável, escala visível e código fotografado antes da imagem principal.</li>
+        </ul>
+
+        <h3>3. Captação de vídeo e áudio</h3>
+        <ul>
+            <li><strong>Duração:</strong> gravar clipes curtos de 15 a 30 s, com câmera firme e sem movimentos bruscos.</li>
+            <li><strong>B-roll ambiental:</strong> registrar ondas, vento, hidrodinamismo nas rochas e movimento natural das macroalgas submersas.</li>
+            <li><strong>Orientação:</strong> gravar preferencialmente na horizontal, garantindo uso posterior em apresentações, datashow e YouTube.</li>
+            <li><strong>Método em ação:</strong> registrar instalação do cabo-guia, posicionamento do quadrado e raspagem controlada de pelo menos um quadrado.</li>
+        </ul>
+
+        <h3>Checklist multimídia rápido</h3>
+        <table>
+            <thead><tr><th>Item</th><th>Conferido</th><th>Observacao</th></tr></thead>
+            <tbody>
+            <tr><td>Baterias cheias, armazenamento livre e lentes limpas</td><td>[ ]</td><td></td></tr>
+            <tr><td>Foto da vista geral da estação, costão ou praia</td><td>[ ]</td><td></td></tr>
+            <tr><td>Foto ou vídeo da equipe instalando o transecto de 10 m</td><td>[ ]</td><td></td></tr>
+            <tr><td>Fotos in situ dos 9 quadrados, com etiqueta fotografada antes e escala visível</td><td>[ ]</td><td></td></tr>
+            <tr><td>Vídeo curto de 15 a 30 s mostrando hidrodinamismo local nas rochas</td><td>[ ]</td><td></td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. Gestão pós-campo</h3>
+        <ul>
+            <li><strong>Descarregamento imediato:</strong> fazer backup das mídias no mesmo dia de chegada ao laboratório; não manter os arquivos apenas no cartão de memória.</li>
+            <li><strong>Estrutura de pastas:</strong> organizar por data e local, por exemplo <strong>2026_05_12_Sambaqui/Fotos_Quadrados</strong>.</li>
+            <li><strong>Renomeação:</strong> renomear imagens importantes com o código exato da amostra, por exemplo <strong>SAM_Q1_in_situ.jpg</strong>.</li>
+            <li><strong>Integração de dados:</strong> criar na planilha principal uma coluna <strong>Link_Fotos</strong> com o link da pasta na nuvem, conectando dados biológicos e registro visual.</li>
+        </ul>
+    </section>
+
     <section class="tab" id="publicacao">
-        <h2>Checklist para novo repositorio e GitHub Pages</h2>
+        <h2>Checklist para novo repositório e GitHub Pages</h2>
         <div class="print-actions">
             <button class="btn" type="button" onclick="printSection('publicacao')">Imprimir checklist</button>
             <a class="btn secondary" href="../index.html">Voltar ao portal</a>
         </div>
         <p>
-            Este checklist organiza os passos para transformar o prototipo local em um produto publico
-            hospedado no GitHub Pages. A melhor pratica e publicar apenas arquivos necessarios ao portal,
+            Este checklist organiza os passos para transformar o protótipo local em um produto público
+            hospedado no GitHub Pages. A melhor prática é publicar apenas arquivos necessários ao portal,
             revisar nomes de arquivos com acentos e confirmar se os links relativos continuam funcionando
-            depois do envio para o repositorio.
+            depois do envio para o repositório.
         </p>
 
         <h3>1. Preparar a pasta do produto</h3>
         <table>
-            <thead><tr><th>Etapa</th><th>Acao</th><th>Status</th></tr></thead>
+            <thead><tr><th>Etapa</th><th>Ação</th><th>Status</th></tr></thead>
             <tbody>
-            <tr><td>Nome do projeto</td><td>Definir nome curto para o repositorio, por exemplo <strong>prototipo-macroalgas-baias-sc</strong>.</td><td>[ ]</td></tr>
-            <tr><td>Arquivos essenciais</td><td>Separar <strong>index.html</strong>, mapa, metodologia, dashboard, CSVs e referencias permitidas.</td><td>[ ]</td></tr>
-            <tr><td>Links relativos</td><td>Testar links entre paginas usando caminhos relativos, sem depender de <strong>file:///</strong>.</td><td>[ ]</td></tr>
-            <tr><td>Nomes de arquivos</td><td>Preferir nomes sem espacos e sem acentos para PDFs e CSVs que serao publicados.</td><td>[ ]</td></tr>
-            <tr><td>Creditos</td><td>Manter autoria e referencias bibliograficas visiveis no portal e no mapa.</td><td>[ ]</td></tr>
+            <tr><td>Nome do projeto</td><td>Definir nome curto para o repositório, por exemplo <strong>prototipo-macroalgas-baias-sc</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Arquivos essenciais</td><td>Separar <strong>index.html</strong>, mapa, metodologia, dashboard, CSVs, mídias selecionadas e referências permitidas.</td><td>[ ]</td></tr>
+            <tr><td>Mídias públicas</td><td>Publicar apenas fotos e vídeos selecionados e otimizados; manter arquivos brutos em backup externo ou nuvem.</td><td>[ ]</td></tr>
+            <tr><td>Links relativos</td><td>Testar links entre páginas usando caminhos relativos, sem depender de <strong>file:///</strong>.</td><td>[ ]</td></tr>
+            <tr><td>Nomes de arquivos</td><td>Preferir nomes sem espaços e sem acentos para PDFs e CSVs que serão publicados.</td><td>[ ]</td></tr>
+            <tr><td>Créditos</td><td>Manter autoria e referências bibliográficas visíveis no portal e no mapa.</td><td>[ ]</td></tr>
             </tbody>
         </table>
 
-        <h3>2. Criar o repositorio no GitHub</h3>
+        <h3>2. Criar o repositório no GitHub</h3>
         <table>
-            <thead><tr><th>Etapa</th><th>Acao</th><th>Status</th></tr></thead>
+            <thead><tr><th>Etapa</th><th>Ação</th><th>Status</th></tr></thead>
             <tbody>
-            <tr><td>Novo repositorio</td><td>No GitHub, clicar em <strong>New repository</strong> e criar como publico se for usar GitHub Pages publico.</td><td>[ ]</td></tr>
-            <tr><td>Descricao</td><td>Adicionar uma descricao curta: portal de campo para macroalgas das Baias da Ilha de Santa Catarina.</td><td>[ ]</td></tr>
+            <tr><td>Novo repositório</td><td>No GitHub, clicar em <strong>New repository</strong> e criar como público se for usar GitHub Pages público.</td><td>[ ]</td></tr>
+            <tr><td>Descrição</td><td>Adicionar uma descrição curta: portal de campo para macroalgas das Baías da Ilha de Santa Catarina.</td><td>[ ]</td></tr>
             <tr><td>Branch principal</td><td>Usar <strong>main</strong> como branch principal.</td><td>[ ]</td></tr>
             <tr><td>README</td><td>Adicionar resumo, autoria, fontes e lista dos produtos publicados.</td><td>[ ]</td></tr>
             </tbody>
@@ -577,7 +688,7 @@
 
         <h3>3. Enviar os arquivos</h3>
         <table>
-            <thead><tr><th>Etapa</th><th>Comando/acao</th><th>Status</th></tr></thead>
+            <thead><tr><th>Etapa</th><th>Comando/ação</th><th>Status</th></tr></thead>
             <tbody>
             <tr><td>Inicializar Git</td><td><code>git init</code></td><td>[ ]</td></tr>
             <tr><td>Adicionar remoto</td><td><code>git remote add origin https://github.com/USUARIO/REPOSITORIO.git</code></td><td>[ ]</td></tr>
@@ -591,12 +702,12 @@
         <table>
             <thead><tr><th>Etapa</th><th>Acao</th><th>Status</th></tr></thead>
             <tbody>
-            <tr><td>Settings</td><td>Abrir <strong>Settings</strong> do repositorio.</td><td>[ ]</td></tr>
+            <tr><td>Settings</td><td>Abrir <strong>Settings</strong> do repositório.</td><td>[ ]</td></tr>
             <tr><td>Pages</td><td>Entrar em <strong>Pages</strong> no menu lateral.</td><td>[ ]</td></tr>
             <tr><td>Source</td><td>Selecionar <strong>Deploy from a branch</strong>.</td><td>[ ]</td></tr>
             <tr><td>Branch</td><td>Escolher <strong>main</strong> e pasta <strong>/root</strong>.</td><td>[ ]</td></tr>
             <tr><td>Salvar</td><td>Aguardar a URL no formato <strong>https://usuario.github.io/repositorio/</strong>.</td><td>[ ]</td></tr>
-            <tr><td>Validacao final</td><td>Testar mapa, dashboard, metodologia, planilhas, modo escuro e links dos PDFs.</td><td>[ ]</td></tr>
+            <tr><td>Validação final</td><td>Testar mapa, dashboard, metodologia, planilhas, modo escuro, links dos PDFs e links de fotos selecionadas.</td><td>[ ]</td></tr>
             </tbody>
         </table>
     </section>
@@ -643,13 +754,13 @@ themeToggle.addEventListener("click", () => {
 });
 
 function printSection(sectionId) {
-    document.body.classList.remove("print-ficha", "print-precampo", "print-materiais", "print-publicacao");
+    document.body.classList.remove("print-ficha", "print-precampo", "print-materiais", "print-multimidia", "print-publicacao");
     document.body.classList.add(`print-${sectionId}`);
     window.print();
 }
 
 window.addEventListener("afterprint", () => {
-    document.body.classList.remove("print-ficha", "print-precampo", "print-materiais", "print-publicacao");
+    document.body.classList.remove("print-ficha", "print-precampo", "print-materiais", "print-multimidia", "print-publicacao");
 });
 </script>
 </body>

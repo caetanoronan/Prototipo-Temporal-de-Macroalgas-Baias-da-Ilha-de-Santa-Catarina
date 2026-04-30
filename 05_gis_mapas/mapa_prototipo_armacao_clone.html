@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mapa Prototipo Macroalgas Temporal - Clone Operacional</title>
+    <title>Mapa Protótipo Macroalgas Temporal - Clone Operacional</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     <style>
         :root {
@@ -392,8 +392,8 @@
     <section class="map-wrap">
         <div class="map-hud">
             <div class="map-title">
-                <h1>Mapa Operacional - Prototipo Macroalgas Temporal</h1>
-                <p>Seis estacoes insulares das Baias Norte e Sul para simulacao de campo</p>
+                <h1>Mapa Operacional - Protótipo Macroalgas Temporal</h1>
+                <p>Seis estações insulares das Baías Norte e Sul para simulação de campo</p>
             </div>
         </div>
         <div class="compass" aria-label="Rosa dos ventos">
@@ -413,7 +413,7 @@
         <div id="map"></div>
         <div class="map-credit">
             <strong>Autor:</strong> Ronan Armando Caetano<br>
-            <strong>Referencias:</strong>
+            <strong>Referências:</strong>
             <a href="../../assets/articles/bouzon_2006.pdf">Bouzon et al. 2006</a> |
             <a href="../../assets/articles/bouzon_2005.pdf">Bouzon 2005</a>
         </div>
@@ -423,29 +423,29 @@
     <aside>
         <div class="panel-head">
             <div class="panel-copy">
-                <h2>Camadas do Prototipo</h2>
-                <p>Ative/desative os procedimentos de campo por estacao.</p>
+                <h2>Camadas do Protótipo</h2>
+                <p>Ative/desative os procedimentos de campo por estação.</p>
             </div>
             <button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
         </div>
 
         <div class="stats">
-            <div class="stat"><b id="nStations">0</b>Pontos unicos</div>
+            <div class="stat"><b id="nStations">0</b>Pontos únicos</div>
             <div class="stat"><b id="nRecords">0</b>Registros</div>
             <div class="stat"><b id="nLayers">0</b>Camadas</div>
-            <div class="stat"><b id="nVisible">0</b>Visiveis</div>
+            <div class="stat"><b id="nVisible">0</b>Visíveis</div>
         </div>
 
         <div class="filter">
             <strong>Mapas base</strong>
-            <p style="margin:6px 0 0;font-size:0.82rem;color:var(--muted);">Mapa OSM e satelite para leitura da linha de costa.</p>
+            <p style="margin:6px 0 0;font-size:0.82rem;color:var(--muted);">Mapa OSM e satélite para leitura da linha de costa.</p>
         </div>
 
         <div class="filter" id="layerFilter"></div>
         <div class="station-list" id="stationList"></div>
 
         <div class="controls">
-            <button type="button" onclick="resetMap()">Resetar visao</button>
+            <button type="button" onclick="resetMap()">Resetar visão</button>
             <button type="button" onclick="toggleAll(true)">Ativar tudo</button>
             <button type="button" onclick="toggleAll(false)">Desativar tudo</button>
         </div>
@@ -459,38 +459,38 @@ const FALLBACK_CSV = `name,lat,lon,layer
 Ponta das Canas,-27.393333,-48.433333,quadrat_biomass
 Sambaqui,-27.488333,-48.540000,quadrat_biomass
 Ponta do Coral,-27.570000,-48.536667,quadrat_biomass
-Saco dos Limoes,-27.613333,-48.553333,quadrat_biomass
-Ribeirao da Ilha,-27.731667,-48.565000,quadrat_biomass
+Saco dos Limões,-27.613333,-48.553333,quadrat_biomass
+Ribeirão da Ilha,-27.731667,-48.565000,quadrat_biomass
 Caieira da Barra do Sul,-27.813333,-48.561667,quadrat_biomass
 Ponta das Canas,-27.393333,-48.433333,taxonomy_collect
 Sambaqui,-27.488333,-48.540000,taxonomy_collect
 Ponta do Coral,-27.570000,-48.536667,taxonomy_collect
-Saco dos Limoes,-27.613333,-48.553333,taxonomy_collect
-Ribeirao da Ilha,-27.731667,-48.565000,taxonomy_collect
+Saco dos Limões,-27.613333,-48.553333,taxonomy_collect
+Ribeirão da Ilha,-27.731667,-48.565000,taxonomy_collect
 Caieira da Barra do Sul,-27.813333,-48.561667,taxonomy_collect
 Ponta das Canas,-27.393333,-48.433333,photo_in_situ
 Sambaqui,-27.488333,-48.540000,photo_in_situ
 Ponta do Coral,-27.570000,-48.536667,photo_in_situ
-Saco dos Limoes,-27.613333,-48.553333,photo_in_situ
-Ribeirao da Ilha,-27.731667,-48.565000,photo_in_situ
+Saco dos Limões,-27.613333,-48.553333,photo_in_situ
+Ribeirão da Ilha,-27.731667,-48.565000,photo_in_situ
 Caieira da Barra do Sul,-27.813333,-48.561667,photo_in_situ
 Ponta das Canas,-27.393333,-48.433333,water_sample_lab
 Sambaqui,-27.488333,-48.540000,water_sample_lab
 Ponta do Coral,-27.570000,-48.536667,water_sample_lab
-Saco dos Limoes,-27.613333,-48.553333,water_sample_lab
-Ribeirao da Ilha,-27.731667,-48.565000,water_sample_lab
+Saco dos Limões,-27.613333,-48.553333,water_sample_lab
+Ribeirão da Ilha,-27.731667,-48.565000,water_sample_lab
 Caieira da Barra do Sul,-27.813333,-48.561667,water_sample_lab
 Ponta das Canas,-27.393333,-48.433333,water_probe
 Sambaqui,-27.488333,-48.540000,water_probe
 Ponta do Coral,-27.570000,-48.536667,water_probe
-Saco dos Limoes,-27.613333,-48.553333,water_probe
-Ribeirao da Ilha,-27.731667,-48.565000,water_probe
+Saco dos Limões,-27.613333,-48.553333,water_probe
+Ribeirão da Ilha,-27.731667,-48.565000,water_probe
 Caieira da Barra do Sul,-27.813333,-48.561667,water_probe
 Ponta das Canas,-27.393333,-48.433333,free_dive_survey
 Sambaqui,-27.488333,-48.540000,free_dive_survey
 Ponta do Coral,-27.570000,-48.536667,free_dive_survey
-Saco dos Limoes,-27.613333,-48.553333,free_dive_survey
-Ribeirao da Ilha,-27.731667,-48.565000,free_dive_survey
+Saco dos Limões,-27.613333,-48.553333,free_dive_survey
+Ribeirão da Ilha,-27.731667,-48.565000,free_dive_survey
 Caieira da Barra do Sul,-27.813333,-48.561667,free_dive_survey`;
 const MAP_BOUNDS = [
     [-27.86, -48.62],
@@ -512,9 +512,9 @@ const LAYER_COLORS = {
 
 const LAYER_LABELS = {
     quadrat_biomass: "Quadrados 25 x 25 cm / biomassa",
-    taxonomy_collect: "Coleta taxonomica complementar",
+    taxonomy_collect: "Coleta taxonômica complementar",
     photo_in_situ: "Foto in situ",
-    water_sample_lab: "Amostra de agua para laboratorio",
+    water_sample_lab: "Amostra de água para laboratório",
     water_probe: "Temperatura e salinidade",
     free_dive_survey: "Mergulho livre infralitoral"
 };
@@ -612,7 +612,7 @@ function showReferencePoint(name) {
 
     activeReferenceMarker.bindPopup(`
         <div style="font-family:Segoe UI,Tahoma,sans-serif;line-height:1.45;">
-            <strong>🚩 ${ref.name}</strong><br>
+            <strong>P ${ref.name}</strong><br>
             Tipo: Ponto de referência<br>
             Lat: ${ref.lat.toFixed(6)}<br>
             Lon: ${ref.lon.toFixed(6)}
@@ -627,7 +627,7 @@ function createFlagIcon(color) {
     const safeColor = color || "#334155";
     return L.divIcon({
         className: "",
-        html: `<div class="flag-marker"><span class="base" style="background:${safeColor};"></span><span class="pole"></span><span class="flag">🚩</span></div>`,
+        html: `<div class="flag-marker"><span class="base" style="background:${safeColor};"></span><span class="pole"></span><span class="flag">P</span></div>`,
         iconSize: [18, 22],
         iconAnchor: [9, 21],
         popupAnchor: [0, -16],
@@ -698,7 +698,7 @@ async function loadCsvData() {
         const rows = parseCsv(csvText);
         populateMap(rows);
     } catch (error) {
-        console.warn("CSV indisponivel, usando fallback local.", error);
+        console.warn("CSV indisponível, usando fallback local.", error);
         populateMap(parseCsv(FALLBACK_CSV));
     }
 }
@@ -770,7 +770,7 @@ function renderLegend() {
 
 function renderStations() {
     const list = document.getElementById("stationList");
-    list.innerHTML = "<strong>Pontos de referencia</strong>";
+    list.innerHTML = "<strong>Pontos de referência</strong>";
 
     const unique = {};
     DATA.forEach((d) => {
@@ -786,7 +786,7 @@ function renderStations() {
         if (info.name === selectedReferenceName) {
             card.classList.add("selected");
         }
-        card.innerHTML = `<h4>🚩 ${info.name}</h4><p>Ponto de referência local</p><p>${info.lat.toFixed(6)}, ${info.lon.toFixed(6)}</p>`;
+        card.innerHTML = `<h4>P ${info.name}</h4><p>Ponto de referência local</p><p>${info.lat.toFixed(6)}, ${info.lon.toFixed(6)}</p>`;
         card.addEventListener("click", () => {
             selectedReferenceName = info.name;
             renderStations();

@@ -137,6 +137,10 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = if (deployBackend) {
           value: functionRuntime
         }
         {
+          name: 'AzureWebJobsFeatureFlags'
+          value: 'EnableWorkerIndexing'
+        }
+        {
           name: 'COSMOS_DATABASE'
           value: cosmosDatabaseName
         }

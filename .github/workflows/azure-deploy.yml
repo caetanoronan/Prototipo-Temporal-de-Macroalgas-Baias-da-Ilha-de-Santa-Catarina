@@ -18,6 +18,10 @@ on:
       - 'assets/**'
       - 'data/**'
 
+concurrency:
+  group: azure-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   id-token: write
   contents: read
@@ -78,6 +82,7 @@ jobs:
           fi
 
           az deployment group create \
+            --name "azure-deploy-${GITHUB_RUN_ID}" \
             --resource-group "$AZURE_RESOURCE_GROUP" \
             --template-file infra/main.bicep \
             --parameters @infra/main.parameters.json "${extra_parameters[@]}"

@@ -275,9 +275,15 @@
                 <li>Confira todos os codigos fisicos das amostras contra a planilha.</li>
                 <li>Complete massa umida, se ela for parte do protocolo.</li>
                 <li>Seque o material conforme protocolo e complete massa seca.</li>
-                <li>Reabra o app, importe o Backup JSON, complete as massas ou edite a planilha consolidada em Excel/R/Python.</li>
-                <li>Use a biomassa calculada em g/m2 para comparar estacoes.</li>
+                <li>Salve a planilha mantendo as colunas <code>stationId</code>, <code>quadrat</code>, <code>wetMassG</code> e <code>dryMassG</code>.</li>
+                <li>Reabra o app e, se necessario, importe o Backup JSON para recuperar os dados do campo.</li>
+                <li>Na aba <strong>Exportar</strong>, use <strong>Importar CSV quadrados com pesos</strong>.</li>
+                <li>O app atualiza os quadrados correspondentes, recalcula <code>biomassGM2</code> e atualiza a aba <strong>Resultados</strong>.</li>
+                <li>Exporte o Excel final para analise, relatorio e arquivamento.</li>
             </ol>
+            <div class="callout ok">
+                A correspondencia e feita por <code>stationId + quadrat</code>. Por isso, preserve essas duas colunas quando editar a planilha no laboratorio.
+            </div>
         </section>
 
         <section>

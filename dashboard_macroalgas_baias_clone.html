@@ -208,6 +208,48 @@
             line-height: 1.45;
         }
 
+        .legend-accordion {
+            margin-top: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .legend-accordion summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 10px 12px;
+            font-weight: 700;
+            color: var(--text-soft);
+        }
+
+        .legend-accordion summary::-webkit-details-marker { display: none; }
+
+        .legend-accordion summary::after {
+            content: "▾";
+            float: right;
+            color: var(--primary);
+        }
+
+        .legend-accordion[open] summary::after {
+            content: "▴";
+        }
+
+        .legend-body {
+            padding: 0 12px 12px;
+        }
+
+        .legend-body table {
+            margin-top: 8px;
+            font-size: 11px;
+        }
+
+        .legend-body th,
+        .legend-body td {
+            white-space: normal;
+        }
+
         .full { grid-column: 1 / -1; }
 
         .table-wrap {
@@ -281,6 +323,68 @@
             <a class="btn" href="data/macroalgas_baias_biomassa_dominantes.csv">Abrir biomassa dominante</a>
             <button class="btn" id="btnReset" type="button">Resetar filtros</button>
         </div>
+        <details class="legend-accordion">
+            <summary>Legendas históricas da apresentação</summary>
+            <div class="legend-body">
+                <p style="margin:0 0 6px; color: var(--text-muted); font-size: 12px;">Use este bloco para orientar slides e narrativas do dashboard sem ocupar a tela principal.</p>
+                <strong>Legenda de estações</strong>
+                <table>
+                    <thead>
+                    <tr><th>Sigla</th><th>Local</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>AM-2012</td><td>Armação (2012)</td></tr>
+                    <tr><td>ANT-2005</td><td>Praia do Antenor (G.C.R.) (2005)</td></tr>
+                    <tr><td>BAR-2005</td><td>Barreiros (Continente) (2005)</td></tr>
+                    <tr><td>BL-2012</td><td>Barra da Lagoa (2012)</td></tr>
+                    <tr><td>CAI-2005</td><td>Caieira da Barra do Sul (Ilha) (2005)</td></tr>
+                    <tr><td>CL-2012</td><td>Canal da Barra da Lagoa (2012)</td></tr>
+                    <tr><td>CN-2012</td><td>Pontas das Canas (2012)</td></tr>
+                    <tr><td>COQ-2005</td><td>Coqueiros (Continente) (2005)</td></tr>
+                    <tr><td>CS-2012</td><td>Caieira da Barra do Sul (2012)</td></tr>
+                    <tr><td>CV-2012</td><td>Canasvieiras (2012)</td></tr>
+                    <tr><td>DN-2012</td><td>Daniela (2012)</td></tr>
+                    <tr><td>FT-2012</td><td>Forte (2012)</td></tr>
+                    <tr><td>GT-2012</td><td>Galheta (2012)</td></tr>
+                    <tr><td>GV-2012</td><td>Gravatá (2012)</td></tr>
+                    <tr><td>IG-2012</td><td>Ingleses (2012)</td></tr>
+                    <tr><td>LC-2012</td><td>Lagoa da Conceição (2012)</td></tr>
+                    <tr><td>LN-2012</td><td>Lagoinha do Norte (2012)</td></tr>
+                    <tr><td>PAL-2005</td><td>Palmas (Gov. Celso Ramos) (2005)</td></tr>
+                    <tr><td>PAP-2005</td><td>Ponta do Papagaio (Palhoça) (2005)</td></tr>
+                    <tr><td>PBA-2005</td><td>Ponta de Baixo (Continente) (2005)</td></tr>
+                    <tr><td>PC-2012</td><td>Ponta do Coral (2012)</td></tr>
+                    <tr><td>PCA-2005</td><td>Ponta das Canas (Ilha) (2005)</td></tr>
+                    <tr><td>PCO-2005</td><td>Ponta do Coral (Ilha) (2005)</td></tr>
+                    <tr><td>RI-2012</td><td>Ribeirão da Ilha (2012)</td></tr>
+                    <tr><td>RIB-2005</td><td>Ribeirão da Ilha (Ilha) (2005)</td></tr>
+                    <tr><td>RP-2012</td><td>Ponta do Rapa (2012)</td></tr>
+                    <tr><td>SA-2012</td><td>Santinho (2012)</td></tr>
+                    <tr><td>SAC-2005</td><td>Saco dos Limões (Ilha) (2005)</td></tr>
+                    <tr><td>SAM-2005</td><td>Sambaqui (Ilha) (2005)</td></tr>
+                    <tr><td>SB-2012</td><td>Sambaqui (2012)</td></tr>
+                    <tr><td>SL-2012</td><td>Saco dos Limões (2012)</td></tr>
+                    <tr><td>SQ-2012</td><td>Saquinho (2012)</td></tr>
+                    <tr><td>ST-2012</td><td>Santo Antônio de Lisboa (2012)</td></tr>
+                    </tbody>
+                </table>
+                <strong style="display:block;margin-top:10px;">Legenda ambiental</strong>
+                <table>
+                    <thead>
+                    <tr><th>Termo</th><th>Significado</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>N-NH4 (µM)</td><td>Nitrogênio amoniacal dissolvido.</td></tr>
+                    <tr><td>PID (µM)</td><td>Fósforo inorgânico dissolvido.</td></tr>
+                    <tr><td>Biomassa (g/m²)</td><td>Massa média do fitobentos por área.</td></tr>
+                    <tr><td>E. coli (NMP/100 ml)</td><td>Indicador microbiológico de qualidade da água.</td></tr>
+                    <tr><td>P</td><td>Balneabilidade própria.</td></tr>
+                    <tr><td>I</td><td>Balneabilidade imprópria.</td></tr>
+                    <tr><td>Escala log</td><td>Usada para comparar ordens de grandeza no mesmo eixo.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
     </section>
 
     <section class="kpis">

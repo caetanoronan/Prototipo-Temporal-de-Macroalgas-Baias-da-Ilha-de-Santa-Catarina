@@ -146,6 +146,67 @@
         .legend strong { display: block; margin-bottom: 6px; }
         .legend-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
 
+        .legend-accordion {
+            position: absolute;
+            z-index: 1000;
+            left: 12px;
+            top: 188px;
+            width: 248px;
+            background: rgba(255, 255, 255, 0.93);
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            box-shadow: 0 4px 12px rgba(16, 42, 67, 0.12);
+            overflow: hidden;
+        }
+
+        .legend-accordion summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 10px 12px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .legend-accordion summary::-webkit-details-marker { display: none; }
+
+        .legend-accordion summary::after {
+            content: "▾";
+            float: right;
+            color: var(--accent);
+        }
+
+        .legend-accordion[open] summary::after {
+            content: "▴";
+        }
+
+        .legend-body {
+            padding: 0 10px 10px;
+            color: var(--text);
+            font-size: 0.7rem;
+            line-height: 1.35;
+            max-height: 190px;
+            overflow: auto;
+        }
+
+        .legend-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            font-size: 0.68rem;
+        }
+
+        .legend-body th,
+        .legend-body td {
+            border: 1px solid var(--line);
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .legend-body th {
+            background: rgba(34, 197, 94, 0.12);
+        }
+
         .map-credit {
             position: absolute;
             z-index: 1000;
@@ -166,9 +227,15 @@
 
         body.dark-mode .map-title,
         body.dark-mode .legend,
+        body.dark-mode .legend-accordion,
         body.dark-mode .map-credit,
         body.dark-mode .compass {
             background: rgba(31, 41, 55, 0.82);
+        }
+
+        body.dark-mode .legend-accordion summary,
+        body.dark-mode .legend-body {
+            color: var(--text);
         }
 
         .map-credit strong { color: var(--accent); }
@@ -374,6 +441,11 @@
                 top: 116px;
             }
 
+            .legend-accordion {
+                top: 214px;
+                width: min(248px, calc(100% - 24px));
+            }
+
             aside {
                 height: 50vh;
                 border-left: none;
@@ -417,6 +489,67 @@
             <a href="../../assets/articles/bouzon_2006.pdf">Bouzon et al. 2006</a> |
             <a href="../../assets/articles/bouzon_2005.pdf">Bouzon 2005</a>
         </div>
+        <details class="legend-accordion">
+            <summary>Legendas históricas da apresentação</summary>
+            <div class="legend-body">
+                <strong>Legenda de estações</strong>
+                <table>
+                    <thead>
+                        <tr><th>Sigla</th><th>Local</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>AM-2012</td><td>Armação (2012)</td></tr>
+                        <tr><td>ANT-2005</td><td>Praia do Antenor (G.C.R.) (2005)</td></tr>
+                        <tr><td>BAR-2005</td><td>Barreiros (Continente) (2005)</td></tr>
+                        <tr><td>BL-2012</td><td>Barra da Lagoa (2012)</td></tr>
+                        <tr><td>CAI-2005</td><td>Caieira da Barra do Sul (Ilha) (2005)</td></tr>
+                        <tr><td>CL-2012</td><td>Canal da Barra da Lagoa (2012)</td></tr>
+                        <tr><td>CN-2012</td><td>Pontas das Canas (2012)</td></tr>
+                        <tr><td>COQ-2005</td><td>Coqueiros (Continente) (2005)</td></tr>
+                        <tr><td>CS-2012</td><td>Caieira da Barra do Sul (2012)</td></tr>
+                        <tr><td>CV-2012</td><td>Canasvieiras (2012)</td></tr>
+                        <tr><td>DN-2012</td><td>Daniela (2012)</td></tr>
+                        <tr><td>FT-2012</td><td>Forte (2012)</td></tr>
+                        <tr><td>GT-2012</td><td>Galheta (2012)</td></tr>
+                        <tr><td>GV-2012</td><td>Gravatá (2012)</td></tr>
+                        <tr><td>IG-2012</td><td>Ingleses (2012)</td></tr>
+                        <tr><td>LC-2012</td><td>Lagoa da Conceição (2012)</td></tr>
+                        <tr><td>LN-2012</td><td>Lagoinha do Norte (2012)</td></tr>
+                        <tr><td>PAL-2005</td><td>Palmas (Gov. Celso Ramos) (2005)</td></tr>
+                        <tr><td>PAP-2005</td><td>Ponta do Papagaio (Palhoça) (2005)</td></tr>
+                        <tr><td>PBA-2005</td><td>Ponta de Baixo (Continente) (2005)</td></tr>
+                        <tr><td>PC-2012</td><td>Ponta do Coral (2012)</td></tr>
+                        <tr><td>PCA-2005</td><td>Ponta das Canas (Ilha) (2005)</td></tr>
+                        <tr><td>PCO-2005</td><td>Ponta do Coral (Ilha) (2005)</td></tr>
+                        <tr><td>RI-2012</td><td>Ribeirão da Ilha (2012)</td></tr>
+                        <tr><td>RIB-2005</td><td>Ribeirão da Ilha (Ilha) (2005)</td></tr>
+                        <tr><td>RP-2012</td><td>Ponta do Rapa (2012)</td></tr>
+                        <tr><td>SA-2012</td><td>Santinho (2012)</td></tr>
+                        <tr><td>SAC-2005</td><td>Saco dos Limões (Ilha) (2005)</td></tr>
+                        <tr><td>SAM-2005</td><td>Sambaqui (Ilha) (2005)</td></tr>
+                        <tr><td>SB-2012</td><td>Sambaqui (2012)</td></tr>
+                        <tr><td>SL-2012</td><td>Saco dos Limões (2012)</td></tr>
+                        <tr><td>SQ-2012</td><td>Saquinho (2012)</td></tr>
+                        <tr><td>ST-2012</td><td>Santo Antônio de Lisboa (2012)</td></tr>
+                    </tbody>
+                </table>
+                <strong style="display:block;margin-top:10px;">Legenda ambiental</strong>
+                <table>
+                    <thead>
+                        <tr><th>Termo</th><th>Significado</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>N-NH4 (µM)</td><td>Nitrogênio amoniacal dissolvido.</td></tr>
+                        <tr><td>PID (µM)</td><td>Fósforo inorgânico dissolvido.</td></tr>
+                        <tr><td>Biomassa (g/m²)</td><td>Massa média do fitobentos por área.</td></tr>
+                        <tr><td>E. coli (NMP/100 ml)</td><td>Indicador microbiológico de qualidade da água.</td></tr>
+                        <tr><td>P</td><td>Balneabilidade própria.</td></tr>
+                        <tr><td>I</td><td>Balneabilidade imprópria.</td></tr>
+                        <tr><td>Escala log</td><td>Usada para comparar ordens de grandeza no mesmo eixo.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
         <div class="legend" id="legend"></div>
     </section>
 

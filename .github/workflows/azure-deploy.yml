@@ -89,4 +89,4 @@ jobs:
         run: |
           echo "Infra deployed to resource group: $AZURE_RESOURCE_GROUP"
           echo "Static site content uploaded."
-          echo "Function App resource is provisioned; API code deployment can be added in a second workflow."
+          echo "Backend resources are disabled by default. Function API deployment can be added later."

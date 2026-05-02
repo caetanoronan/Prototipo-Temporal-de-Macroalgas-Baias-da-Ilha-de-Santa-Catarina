@@ -385,6 +385,10 @@
                         <label for="lon">Longitude</label>
                         <input id="lon" name="lon" type="number" step="0.000001" required />
                     </div>
+                    <div>
+                        <label for="gpsAccuracyM">Precisao GPS (m)</label>
+                        <input id="gpsAccuracyM" name="gpsAccuracyM" type="number" step="0.1" placeholder="Preenchido pelo GPS" />
+                    </div>
                 </div>
 
                 <h2>Condicoes ambientais</h2>
@@ -582,11 +586,13 @@
                     <label class="check"><input type="checkbox" /> Conferi Dados e Resultados</label>
                     <label class="check"><input type="checkbox" /> Baixei CSV estacoes</label>
                     <label class="check"><input type="checkbox" /> Baixei CSV quadrados</label>
+                    <label class="check"><input type="checkbox" /> Baixei CSV consolidado</label>
                     <label class="check"><input type="checkbox" /> Baixei Backup JSON</label>
                 </div>
                 <div class="actions">
                     <button class="success" type="button" id="exportStations">Baixar CSV estacoes</button>
                     <button class="success" type="button" id="exportQuadrats">Baixar CSV quadrados</button>
+                    <button class="success" type="button" id="exportConsolidated">Baixar CSV consolidado</button>
                     <button class="success" type="button" id="exportExcel">Baixar Excel</button>
                     <button type="button" id="exportJson">Backup JSON</button>
                     <button type="button" id="importQuadratCsvBtn">Importar CSV quadrados com pesos</button>
@@ -605,7 +611,7 @@
         const DRAFT_KEY = "macroalgasCampoDraftV1";
         const AREA_M2 = 0.0625;
         const stationColumns = [
-            "id", "project", "team", "date", "station", "startTime", "endTime", "lat", "lon",
+            "id", "project", "team", "date", "station", "startTime", "endTime", "lat", "lon", "gpsAccuracyM",
             "tideType", "tideHeight", "transparency", "hydrodynamics", "temp1", "temp2", "temp3",
             "tempMean", "sal1", "sal2", "sal3", "salMean", "substrate", "slope", "impacts",
             "sampleCodes", "photosDone", "photoFolder", "labelPhoto", "visualScale", "hydroVideo",
@@ -614,6 +620,14 @@
         const quadratColumns = [
             "stationId", "station", "date", "quadrat", "zone", "transectM", "offsetM",
             "dominantSpecies", "photoRef", "collected", "wetMassG", "dryMassG", "biomassGM2", "notes"
+        ];
+        const consolidatedColumns = [
+            "stationId", "project", "team", "date", "station", "startTime", "endTime", "lat", "lon", "gpsAccuracyM",
+            "tideType", "tideHeight", "transparency", "hydrodynamics", "tempMean", "salMean", "substrate", "slope",
+            "impacts", "sampleCodes", "photosDone", "photoFolder", "labelPhoto", "visualScale", "hydroVideo",
+            "photoLink", "waterSampleTime", "processingDelayHours", "outsideSpecies", "stationNotes",
+            "quadrat", "zone", "transectM", "offsetM", "dominantSpecies", "photoRef", "collected",
+            "wetMassG", "dryMassG", "biomassGM2", "quadratNotes"
         ];
         const state = loadState();
         let lastBackupAt = "";
@@ -899,6 +913,7 @@
                 endTime: data.get("endTime"),
                 lat: data.get("lat"),
                 lon: data.get("lon"),
+                gpsAccuracyM: data.get("gpsAccuracyM"),
                 tideType: data.get("tideType"),
                 tideHeight: data.get("tideHeight"),
                 transparency: data.get("transparency"),
@@ -999,6 +1014,56 @@
             });
         }
 
+        function buildConsolidatedRows() {
+            const stationIndex = new Map(state.stations.map(station => [station.id, station]));
+            return state.quadrats.map(quadrat => {
+                const station = stationIndex.get(quadrat.stationId) || {};
+                return {
+                    stationId: quadrat.stationId,
+                    project: station.project,
+                    team: station.team,
+                    date: station.date || quadrat.date,
+                    station: station.station || quadrat.station,
+                    startTime: station.startTime,
+                    endTime: station.endTime,
+                    lat: station.lat,
+                    lon: station.lon,
+                    gpsAccuracyM: station.gpsAccuracyM,
+                    tideType: station.tideType,
+                    tideHeight: station.tideHeight,
+                    transparency: station.transparency,
+                    hydrodynamics: station.hydrodynamics,
+                    tempMean: station.tempMean,
+                    salMean: station.salMean,
+                    substrate: station.substrate,
+                    slope: station.slope,
+                    impacts: station.impacts,
+                    sampleCodes: station.sampleCodes,
+                    photosDone: station.photosDone,
+                    photoFolder: station.photoFolder,
+                    labelPhoto: station.labelPhoto,
+                    visualScale: station.visualScale,
+                    hydroVideo: station.hydroVideo,
+                    photoLink: station.photoLink,
+                    waterSampleTime: station.waterSampleTime,
+                    processingDelayHours: station.processingDelayHours,
+                    outsideSpecies: station.outsideSpecies,
+                    stationNotes: station.notes,
+                    quadrat: quadrat.quadrat,
+                    zone: quadrat.zone,
+                    transectM: quadrat.transectM,
+                    offsetM: quadrat.offsetM,
+                    dominantSpecies: quadrat.dominantSpecies,
+                    photoRef: quadrat.photoRef,
+                    collected: quadrat.collected,
+                    wetMassG: quadrat.wetMassG,
+                    dryMassG: quadrat.dryMassG,
+                    biomassGM2: quadrat.biomassGM2,
+                    quadratNotes: quadrat.notes
+                };
+            });
+        }
+
         function renderResults() {
             const results = buildResults();
             const speciesCounts = {};
@@ -1067,8 +1132,15 @@
             navigator.geolocation.getCurrentPosition(position => {
                 document.getElementById("lat").value = position.coords.latitude.toFixed(6);
                 document.getElementById("lon").value = position.coords.longitude.toFixed(6);
+                document.getElementById("gpsAccuracyM").value = Number.isFinite(position.coords.accuracy)
+                    ? position.coords.accuracy.toFixed(1)
+                    : "";
                 saveDraft();
-            }, () => alert("Nao foi possivel capturar GPS."));
+            }, () => alert("Nao foi possivel capturar GPS."), {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            });
         });
 
         document.getElementById("randomizeQuadrats").addEventListener("click", () => {
@@ -1090,6 +1162,10 @@
 
         document.getElementById("exportQuadrats").addEventListener("click", () => {
             download(`macroalgas_quadrados_${todayId()}.csv`, toCsv(state.quadrats, quadratColumns), "text/csv;charset=utf-8");
+        });
+
+        document.getElementById("exportConsolidated").addEventListener("click", () => {
+            download(`macroalgas_consolidado_${todayId()}.csv`, toCsv(buildConsolidatedRows(), consolidatedColumns), "text/csv;charset=utf-8");
         });
 
         document.getElementById("exportExcel").addEventListener("click", () => {

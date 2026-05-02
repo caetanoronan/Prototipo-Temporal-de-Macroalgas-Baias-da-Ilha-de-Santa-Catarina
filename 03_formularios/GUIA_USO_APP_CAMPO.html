@@ -266,6 +266,9 @@
                 <li>Abra o CSV no Excel/R/Python e confira se as colunas estao separadas corretamente.</li>
                 <li>Salve um Backup JSON por aparelho usado no campo.</li>
             </ul>
+            <div class="callout ok">
+                Para analise sem depender de Excel pago, use <strong>Baixar CSV consolidado</strong>. Ele gera uma linha por quadrado, repetindo os dados da estacao junto dos dados biologicos.
+            </div>
         </section>
 
         <section>
@@ -295,6 +298,42 @@
                 <li>Se o GPS falhar, registre coordenadas por outro app ou pelo mapa e preencha manualmente.</li>
                 <li>Nunca apague os dados do navegador antes de confirmar que CSV, Excel e JSON foram salvos.</li>
             </ul>
+        </section>
+
+        <section>
+            <h2>8. Precisao do GPS</h2>
+            <p>
+                Quando o botao <strong>Capturar GPS</strong> funciona, o navegador retorna latitude, longitude e uma estimativa
+                de precisao horizontal em metros, salva como <code>gpsAccuracyM</code>. Esse valor nao e garantia absoluta,
+                mas e uma boa indicacao da confiabilidade do ponto.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>gpsAccuracyM</th>
+                        <th>Interpretacao pratica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0 a 10 m</td>
+                        <td>Bom para registrar a estacao em campo com celular.</td>
+                    </tr>
+                    <tr>
+                        <td>10 a 30 m</td>
+                        <td>Aceitavel para local geral, mas confira no mapa e nas fotos.</td>
+                    </tr>
+                    <tr>
+                        <td>Acima de 30 m</td>
+                        <td>Baixa precisao; aguarde mais sinal, tente area aberta ou registre observacao.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Em costao, a precisao pode piorar por nuvens, paredao rochoso, construcoes, bateria baixa, modo economia
+                de energia e permissao limitada do navegador. Para pontos oficiais, o ideal e conferir com GPS dedicado
+                ou revisar as coordenadas sobre imagem/mapa depois do campo.
+            </p>
         </section>
     </main>
 </body>

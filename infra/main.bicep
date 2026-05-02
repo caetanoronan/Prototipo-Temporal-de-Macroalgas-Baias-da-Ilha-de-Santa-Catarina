@@ -39,9 +39,6 @@ param quadratsContainerName string = 'quadrats'
 @description('Cosmos DB container for sync events.')
 param syncEventsContainerName string = 'sync_events'
 
-@description('App Insights name.')
-param appInsightsName string = 'appi-ufsc-ptm-dev'
-
 @description('Function App hosting plan name.')
 param functionPlanName string = 'asp-ufsc-ptm-dev'
 
@@ -93,17 +90,6 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = if (deployBack
   }
 }
 
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = if (deployBackend) {
-  name: appInsightsName
-  location: location
-  tags: tags
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    WorkspaceResourceId: null
-  }
-}
-
 resource functionPlan 'Microsoft.Web/serverfarms@2023-12-01' = if (deployBackend) {
   name: functionPlanName
   location: location
@@ -149,14 +135,6 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = if (deployBackend) {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: functionRuntime
-        }
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appInsights!.properties.InstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights!.properties.ConnectionString
         }
         {
           name: 'COSMOS_DATABASE'

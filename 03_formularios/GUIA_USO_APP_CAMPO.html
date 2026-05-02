@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guia de Uso - App de Campo Macroalgas</title>
+    <style>
+        :root {
+            --bg: #eef4f6;
+            --paper: #ffffff;
+            --ink: #17242f;
+            --muted: #5a6b76;
+            --line: #cdd9df;
+            --accent: #006d77;
+            --warn: #9c5a00;
+            --ok: #1b7f4a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+            line-height: 1.55;
+        }
+
+        header {
+            background: #073b4c;
+            color: #fff;
+            padding: 18px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.35rem;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            color: #d9eef2;
+        }
+
+        main {
+            width: min(1020px, 94vw);
+            margin: 0 auto;
+            padding: 16px 0 34px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        a.button {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            padding: 9px 12px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        section {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            color: var(--accent);
+            font-size: 1.08rem;
+        }
+
+        h3 {
+            margin: 16px 0 8px;
+            font-size: 0.98rem;
+        }
+
+        p { margin: 0 0 8px; }
+
+        ul, ol {
+            margin: 8px 0 0;
+            padding-left: 22px;
+        }
+
+        li { margin-bottom: 6px; }
+
+        .callout {
+            border: 1px solid #efd48e;
+            background: #fff8e6;
+            color: #65420b;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .ok {
+            border-color: #b9dfca;
+            background: #edf8f2;
+            color: var(--ok);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid #dce5e9;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background: #e7f1f3;
+        }
+
+        code {
+            background: #edf3f5;
+            padding: 1px 4px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 760px) {
+            table { font-size: 0.86rem; }
+            th, td { padding: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Guia de uso e validacao - App de Campo Macroalgas</h1>
+        <p>Fluxo recomendado para usar o app em campo, validar os dados e finalizar a planilha no laboratorio.</p>
+    </header>
+
+    <main>
+        <nav>
+            <a class="button" href="app_campo_macroalgas.html">Abrir app de campo</a>
+            <a class="button" href="../01_planejamento/metodologia_prototipo_macroalgas.html#ficha">Abrir ficha original</a>
+        </nav>
+
+        <section>
+            <h2>1. Objetivo do app</h2>
+            <p>
+                O app substitui a ficha em papel durante o piloto de campo. Ele registra dados gerais da estacao,
+                condicoes ambientais, 9 quadrados por estacao, referencias de fotos, observacoes e coletas
+                complementares. Ao final, gera planilhas CSV/Excel e um backup JSON.
+            </p>
+            <div class="callout ok">
+                Versao atual: <strong>v0.1 piloto operacional</strong>. Ela e adequada para teste em campo, desde que os dados sejam conferidos e exportados ao final da saida.
+            </div>
+        </section>
+
+        <section>
+            <h2>2. O que testar antes de sair para campo</h2>
+            <ol>
+                <li>Abra o app no celular pelo GitHub Pages.</li>
+                <li>Preencha uma estacao ficticia com equipe, data, GPS e condicoes ambientais.</li>
+                <li>Na aba <strong>Quadrados</strong>, clique em <strong>Sortear coordenadas 0-10 m</strong>.</li>
+                <li>Preencha pelo menos 2 quadrados com zona, especie dominante, foto e coleta.</li>
+                <li>Salve a estacao e confira as abas <strong>Dados</strong> e <strong>Resultados</strong>.</li>
+                <li>Exporte CSV de estacoes, CSV de quadrados, Excel e Backup JSON.</li>
+                <li>Feche o navegador, abra novamente e confirme se os registros continuam no aparelho.</li>
+                <li>Importe o Backup JSON em outro navegador ou computador para confirmar que ele recupera os dados.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>3. Uso em campo: passo a passo</h2>
+            <h3>Antes de iniciar a estacao</h3>
+            <ol>
+                <li>Abra o app e clique em <strong>Usar data/hora atual</strong>.</li>
+                <li>Preencha equipe, estacao e horario de inicio.</li>
+                <li>Use <strong>Capturar GPS</strong> se houver sinal; se nao funcionar, digite as coordenadas manualmente.</li>
+                <li>Registre mare, transparencia, hidrodinamismo, substrato, declividade e impactos visiveis.</li>
+            </ol>
+
+            <h3>Durante os 9 quadrados</h3>
+            <ol>
+                <li>Abra a aba <strong>Quadrados</strong>.</li>
+                <li>Use as coordenadas sorteadas ou preencha manualmente a posicao no transecto.</li>
+                <li>Para cada quadrado, registre zona, especies dominantes, foto/escala, se foi coletado e observacoes.</li>
+                <li>Use codigos de amostra consistentes, por exemplo <code>SAM-Q1-20260502</code>.</li>
+                <li>Fotografe a etiqueta antes da foto do quadrado, para manter rastreabilidade.</li>
+            </ol>
+
+            <h3>Antes de sair da estacao</h3>
+            <ol>
+                <li>Volte para <strong>Registro</strong> e preencha hora de termino.</li>
+                <li>Confira se a pasta/link de fotos foi anotada.</li>
+                <li>Clique em <strong>Salvar estacao</strong>.</li>
+                <li>Abra <strong>Dados</strong> e confirme que a estacao e os 9 quadrados apareceram.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>4. Sobre a balanca: precisa levar para campo?</h2>
+            <div class="callout">
+                <strong>Resposta curta:</strong> nao e obrigatorio levar balanca para campo. Para este protocolo, o mais robusto e pesar no laboratorio.
+            </div>
+            <p>
+                A massa seca depende de processamento posterior: triagem, limpeza, secagem em estufa e pesagem em balanca de precisao.
+                Portanto, os campos <strong>Massa umida</strong> e <strong>Massa seca</strong> podem ficar em branco durante a coleta.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dado</th>
+                        <th>Onde registrar</th>
+                        <th>Comentario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Codigo da amostra</td>
+                        <td>Campo</td>
+                        <td>Obrigatorio para ligar quadrado, saco, etiqueta, foto e planilha.</td>
+                    </tr>
+                    <tr>
+                        <td>Coletado: Sim/Nao</td>
+                        <td>Campo</td>
+                        <td>Registra se o material do quadrado foi realmente removido.</td>
+                    </tr>
+                    <tr>
+                        <td>Massa umida</td>
+                        <td>Preferencialmente laboratorio</td>
+                        <td>Pode ser medida no retorno, apos escorrer/padronizar o excesso de agua.</td>
+                    </tr>
+                    <tr>
+                        <td>Massa seca</td>
+                        <td>Laboratorio</td>
+                        <td>Deve ser medida apos secagem padronizada, por exemplo estufa a 60 C por 48 h, se esse for o protocolo adotado.</td>
+                    </tr>
+                    <tr>
+                        <td>Biomassa g/m2</td>
+                        <td>Calculada pelo app</td>
+                        <td>O app calcula quando a massa seca e preenchida. Area do quadrado: 0,0625 m2.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Levar uma balanca ao campo so faz sentido se houver uma pergunta especifica sobre massa umida imediata
+                e condicoes adequadas para pesagem. Em costao, vento, umidade, sal e instabilidade tendem a piorar a precisao.
+            </p>
+        </section>
+
+        <section>
+            <h2>5. Como validar a qualidade dos dados</h2>
+            <ul>
+                <li>Confirme que cada estacao tem exatamente 9 quadrados.</li>
+                <li>Confira se os codigos das amostras batem com etiquetas e fotos.</li>
+                <li>Verifique se temperatura e salinidade tem 3 leituras ou justificativa em observacoes.</li>
+                <li>Abra a aba <strong>Resultados</strong> e procure valores estranhos, como biomassa muito alta por erro de unidade.</li>
+                <li>Abra o CSV no Excel/R/Python e confira se as colunas estao separadas corretamente.</li>
+                <li>Salve um Backup JSON por aparelho usado no campo.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>6. Fluxo recomendado no laboratorio</h2>
+            <ol>
+                <li>Importe ou abra os CSV/Excel exportados do campo.</li>
+                <li>Confira todos os codigos fisicos das amostras contra a planilha.</li>
+                <li>Complete massa umida, se ela for parte do protocolo.</li>
+                <li>Seque o material conforme protocolo e complete massa seca.</li>
+                <li>Reabra o app, importe o Backup JSON, complete as massas ou edite a planilha consolidada em Excel/R/Python.</li>
+                <li>Use a biomassa calculada em g/m2 para comparar estacoes.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>7. Plano minimo de contingencia</h2>
+            <ul>
+                <li>Leve uma ficha impressa como backup.</li>
+                <li>Leve bateria externa para o celular.</li>
+                <li>Ao final de cada estacao, exporte pelo menos o Backup JSON se houver internet/arquivo disponivel.</li>
+                <li>Se o GPS falhar, registre coordenadas por outro app ou pelo mapa e preencha manualmente.</li>
+                <li>Nunca apague os dados do navegador antes de confirmar que CSV, Excel e JSON foram salvos.</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

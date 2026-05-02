@@ -6,6 +6,7 @@
     <title>App de Campo - Macroalgas</title>
     <style>
         :root {
+            color-scheme: light;
             --bg: #eef4f6;
             --panel: #ffffff;
             --ink: #17242f;
@@ -18,6 +19,20 @@
             --soft: #f6fafb;
         }
 
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1720;
+            --panel: #16222d;
+            --ink: #e6eef2;
+            --muted: #9fb1bb;
+            --line: #31424d;
+            --accent: #5ac3cf;
+            --accent-2: #f08a96;
+            --ok: #79d6a2;
+            --warn: #f1b85f;
+            --soft: #13202a;
+        }
+
         * { box-sizing: border-box; }
 
         body {
@@ -28,9 +43,23 @@
         }
 
         header {
-            background: #073b4c;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: linear-gradient(135deg, #073b4c, #0a5a6b);
             color: #fff;
             padding: 16px;
+        }
+
+        body.dark-mode header {
+            background: linear-gradient(135deg, #08141e, #122a38);
+        }
+
+        header > div {
+            flex: 1 1 0;
+            min-width: 0;
         }
 
         header h1 {
@@ -44,6 +73,32 @@
             color: #d9eef2;
             font-size: 0.92rem;
             line-height: 1.4;
+        }
+
+        .header-link {
+            color: #d9eef2;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        body.dark-mode .header-link {
+            color: #9fe6ef;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--ink);
+            border-radius: 999px;
+            padding: 9px 14px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        body.dark-mode .theme-toggle {
+            box-shadow: none;
         }
 
         main {
@@ -130,7 +185,7 @@
             padding: 9px;
             min-height: 39px;
             font: inherit;
-            background: #fff;
+            background: var(--panel);
             color: var(--ink);
         }
 
@@ -213,7 +268,7 @@
             overflow-x: auto;
             border: 1px solid var(--line);
             border-radius: 8px;
-            background: #fff;
+            background: var(--panel);
         }
 
         table {
@@ -240,6 +295,15 @@
 
         tr:hover td { background: #f8fbfc; }
 
+        body.dark-mode th {
+            background: #21313d;
+            color: var(--ink);
+        }
+
+        body.dark-mode tr:hover td {
+            background: #1d2a35;
+        }
+
         .notice {
             padding: 10px;
             border-radius: 8px;
@@ -249,6 +313,12 @@
             font-size: 0.88rem;
             line-height: 1.45;
             margin-bottom: 12px;
+        }
+
+        body.dark-mode .notice {
+            background: #2c2515;
+            border-color: #7b5f1d;
+            color: #f6dca0;
         }
 
         .status-bar {
@@ -317,9 +387,12 @@
 </head>
 <body>
     <header>
-        <h1>App de Campo - Macroalgas</h1>
-        <p>v0.1 piloto operacional: ficha digital para registrar estacoes, 9 quadrados, midias, exportar planilhas e gerar resultados basicos.</p>
-        <p><a href="GUIA_USO_APP_CAMPO.html" style="color: #d9eef2; font-weight: 700;">Abrir guia de uso e validacao em campo</a></p>
+        <div>
+            <h1>App de Campo - Macroalgas</h1>
+            <p>v0.1 piloto operacional: ficha digital para registrar estações, 9 quadrados, mídias, exportar planilhas e gerar resultados básicos.</p>
+            <p><a class="header-link" href="GUIA_USO_APP_CAMPO.html">Abrir guia de uso e validação em campo</a></p>
+        </div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar modo escuro">Modo escuro</button>
     </header>
 
     <main>
@@ -333,21 +406,21 @@
 
         <section class="view active" id="registro">
             <div class="notice">
-                Os dados ficam salvos neste navegador usando armazenamento local. Ao final do campo, exporte CSV/Excel e Backup JSON antes de limpar cache, trocar de aparelho ou usar outro navegador.
+                Os dados ficam salvos neste navegador usando armazenamento local. Ao final do campo, exporte CSV/Excel e backup JSON antes de limpar o cache, trocar de aparelho ou usar outro navegador.
             </div>
 
             <div class="status-bar">
                 <div class="status-pill"><strong>Status</strong><span id="saveStatus">Pronto para coleta</span></div>
-                <div class="status-pill"><strong>Ultimo backup</strong><span id="backupStatus">Ainda nao exportado nesta sessao</span></div>
-                <div class="status-pill"><strong>Teste minimo</strong><span>Salvar 1 estacao, exportar CSV/Excel/JSON e reabrir</span></div>
+                <div class="status-pill"><strong>Último backup</strong><span id="backupStatus">Ainda não exportado nesta sessão</span></div>
+                <div class="status-pill"><strong>Teste mínimo</strong><span>Salvar 1 estação, exportar CSV/Excel/JSON e reabrir</span></div>
             </div>
 
             <form id="stationForm" class="panel">
-                <h2>Identificacao geral da estacao</h2>
+                <h2>Identificação geral da estação</h2>
                 <div class="grid">
                     <div>
                         <label for="project">Projeto</label>
-                        <input id="project" name="project" value="Prototipo Temporal de Macroalgas" required />
+                        <input id="project" name="project" value="Protótipo Temporal de Macroalgas" required />
                     </div>
                     <div>
                         <label for="team">Equipe</label>
@@ -358,7 +431,7 @@
                         <input id="date" name="date" type="date" required />
                     </div>
                     <div>
-                        <label for="station">Estacao</label>
+                        <label for="station">Estação</label>
                         <select id="station" name="station" required>
                             <option value="">Selecione</option>
                             <option>Ponta das Canas</option>
@@ -374,7 +447,7 @@
                         <input id="startTime" name="startTime" type="time" required />
                     </div>
                     <div>
-                        <label for="endTime">Hora termino</label>
+                        <label for="endTime">Hora término</label>
                         <input id="endTime" name="endTime" type="time" />
                     </div>
                     <div>
@@ -386,29 +459,29 @@
                         <input id="lon" name="lon" type="number" step="0.000001" required />
                     </div>
                     <div>
-                        <label for="gpsAccuracyM">Precisao GPS (m)</label>
+                        <label for="gpsAccuracyM">Precisão GPS (m)</label>
                         <input id="gpsAccuracyM" name="gpsAccuracyM" type="number" step="0.1" placeholder="Preenchido pelo GPS" />
                     </div>
                 </div>
 
-                <h2>Condicoes ambientais</h2>
+                <h2>Condições ambientais</h2>
                 <div class="grid">
                     <div>
-                        <label for="tideType">Mare</label>
+                        <label for="tideType">Maré</label>
                         <select id="tideType" name="tideType">
-                            <option>Sizigia</option>
+                            <option value="Sizigia">Sizígia</option>
                             <option>Quadratura</option>
                         </select>
                     </div>
                     <div>
-                        <label for="tideHeight">Altura da mare (m)</label>
+                        <label for="tideHeight">Altura da maré (m)</label>
                         <input id="tideHeight" name="tideHeight" type="number" step="0.01" />
                     </div>
                     <div>
-                        <label for="transparency">Transparencia</label>
+                        <label for="transparency">Transparência</label>
                         <select id="transparency" name="transparency">
                             <option>Alta</option>
-                            <option>Media</option>
+                            <option value="Media">Média</option>
                             <option>Baixa</option>
                         </select>
                     </div>
@@ -424,7 +497,7 @@
 
                 <div class="grid two">
                     <div>
-                        <h3>Temperatura da agua (C)</h3>
+                        <h3>Temperatura da água (°C)</h3>
                         <div class="grid three">
                             <input name="temp1" type="number" step="0.1" placeholder="R1" />
                             <input name="temp2" type="number" step="0.1" placeholder="R2" />
@@ -443,69 +516,69 @@
 
                 <h3>Substrato predominante</h3>
                 <div class="check-grid" data-check-group="substrate">
-                    <label class="check"><input type="checkbox" value="Rocha macica" /> Rocha macica</label>
+                    <label class="check"><input type="checkbox" value="Rocha macica" /> Rocha maciça</label>
                     <label class="check"><input type="checkbox" value="Blocos" /> Blocos</label>
                     <label class="check"><input type="checkbox" value="Cascalho" /> Cascalho</label>
                     <label class="check"><input type="checkbox" value="Areia" /> Areia</label>
                     <label class="check"><input type="checkbox" value="Misto" /> Misto</label>
                 </div>
 
-                <h3>Impactos visiveis</h3>
+                <h3>Impactos visíveis</h3>
                 <div class="check-grid" data-check-group="impacts">
                     <label class="check"><input type="checkbox" value="Esgoto" /> Esgoto</label>
-                    <label class="check"><input type="checkbox" value="Lixo solido" /> Lixo solido</label>
-                    <label class="check"><input type="checkbox" value="Bioincrustacao excessiva" /> Bioincrustacao excessiva</label>
-                    <label class="check"><input type="checkbox" value="Sedimentacao" /> Sedimentacao</label>
+                    <label class="check"><input type="checkbox" value="Lixo solido" /> Lixo sólido</label>
+                    <label class="check"><input type="checkbox" value="Bioincrustacao excessiva" /> Bioincrustação excessiva</label>
+                    <label class="check"><input type="checkbox" value="Sedimentacao" /> Sedimentação</label>
                     <label class="check"><input type="checkbox" value="Nenhum" /> Nenhum</label>
                 </div>
 
                 <div class="grid two" style="margin-top: 10px;">
                     <div>
-                        <label for="slope">Declividade do costao</label>
+                        <label for="slope">Declividade do costão</label>
                         <select id="slope" name="slope">
                             <option>Suave</option>
                             <option>Moderada</option>
-                            <option>Ingreme</option>
+                            <option value="Ingreme">Íngreme</option>
                         </select>
                     </div>
                     <div>
-                        <label for="sampleCodes">Codigos das amostras</label>
+                        <label for="sampleCodes">Códigos das amostras</label>
                         <input id="sampleCodes" name="sampleCodes" placeholder="Ex.: SAM-Q1 a SAM-Q9" />
                     </div>
                 </div>
 
-                <h2>Registro multimidia e complementares</h2>
+                <h2>Registro multimídia e complementares</h2>
                 <div class="grid">
                     <div>
                         <label for="photosDone">Fotos realizadas?</label>
                         <select id="photosDone" name="photosDone">
                             <option>Sim</option>
-                            <option>Nao</option>
+                            <option value="Nao">Não</option>
                         </select>
                     </div>
                     <div>
-                        <label for="photoFolder">Pasta/codigo das fotos</label>
+                        <label for="photoFolder">Pasta/código das fotos</label>
                         <input id="photoFolder" name="photoFolder" placeholder="2026_05_12_Sambaqui" />
                     </div>
                     <div>
                         <label for="labelPhoto">Etiqueta fotografada?</label>
                         <select id="labelPhoto" name="labelPhoto">
                             <option>Sim</option>
-                            <option>Nao</option>
+                            <option value="Nao">Não</option>
                         </select>
                     </div>
                     <div>
                         <label for="visualScale">Escala visual?</label>
                         <select id="visualScale" name="visualScale">
                             <option>Sim</option>
-                            <option>Nao</option>
+                            <option value="Nao">Não</option>
                         </select>
                     </div>
                     <div>
-                        <label for="hydroVideo">Video de hidrodinamismo?</label>
+                        <label for="hydroVideo">Vídeo de hidrodinamismo?</label>
                         <select id="hydroVideo" name="hydroVideo">
                             <option>Sim</option>
-                            <option>Nao</option>
+                            <option value="Nao">Não</option>
                         </select>
                     </div>
                     <div>
@@ -513,38 +586,38 @@
                         <input id="photoLink" name="photoLink" placeholder="Drive, OneDrive ou pasta local" />
                     </div>
                     <div>
-                        <label for="waterSampleTime">Horario coleta de agua</label>
+                        <label for="waterSampleTime">Horário da coleta de água</label>
                         <input id="waterSampleTime" name="waterSampleTime" type="time" />
                     </div>
                     <div>
-                        <label for="processingDelayHours">Atraso ate processamento (h)</label>
+                        <label for="processingDelayHours">Atraso até processamento (h)</label>
                         <input id="processingDelayHours" name="processingDelayHours" type="number" step="0.1" />
                     </div>
                 </div>
 
                 <div style="margin-top: 10px;">
-                    <label for="outsideSpecies">Especies coletadas fora dos quadrados</label>
-                    <textarea id="outsideSpecies" name="outsideSpecies" placeholder="Lista livre, separada por ponto e virgula"></textarea>
+                    <label for="outsideSpecies">Espécies coletadas fora dos quadrados</label>
+                    <textarea id="outsideSpecies" name="outsideSpecies" placeholder="Lista livre, separada por ponto e vírgula"></textarea>
                 </div>
 
                 <div style="margin-top: 10px;">
-                    <label for="notes">Observacoes gerais</label>
-                    <textarea id="notes" name="notes" placeholder="Condicoes, riscos, desvios do protocolo, anomalias ambientais..."></textarea>
+                    <label for="notes">Observações gerais</label>
+                    <textarea id="notes" name="notes" placeholder="Condições, riscos, desvios do protocolo, anomalias ambientais..."></textarea>
                 </div>
 
                 <div class="actions">
-                    <button class="primary" type="submit">Salvar estacao</button>
+                    <button class="primary" type="submit">Salvar estação</button>
                     <button type="button" id="fillNow">Usar data/hora atual</button>
                     <button type="button" id="getGps">Capturar GPS</button>
-                    <button type="reset">Limpar formulario</button>
+                    <button type="reset">Limpar formulário</button>
                 </div>
             </form>
         </section>
 
         <section class="view" id="quadrados">
             <div class="panel">
-                <h2>Quadrados da estacao atual</h2>
-                <p class="mini">Preencha os 9 quadrados. Ao salvar a estacao, estes registros entram na planilha de quadrados. Massa umida e massa seca podem ficar em branco no campo e ser completadas no laboratorio, usando o codigo da amostra.</p>
+                <h2>Quadrados da estação atual</h2>
+                <p class="mini">Preencha os 9 quadrados. Ao salvar a estação, estes registros entram na planilha de quadrados. Massa úmida e massa seca podem ficar em branco no campo e ser completadas no laboratório, usando o código da amostra.</p>
                 <div class="actions">
                     <button type="button" id="randomizeQuadrats">Sortear coordenadas 0-10 m</button>
                     <button type="button" id="clearQuadrats">Limpar quadrados</button>
@@ -579,18 +652,18 @@
 
         <section class="view" id="exportacao">
             <div class="panel">
-                <h2>Exportacao e importacao</h2>
-                <p class="mini">CSV abre no Excel, LibreOffice, R e Python. O arquivo Excel gerado e HTML compativel com Excel, com duas abas/tabelas: estacoes e quadrados.</p>
+                <h2>Exportação e importação</h2>
+                <p class="mini">CSV abre no Excel, LibreOffice, R e Python. O arquivo Excel gerado é HTML compatível com Excel, com duas abas/tabelas: estações e quadrados.</p>
                 <h3>Checklist antes de sair do campo</h3>
                 <div class="check-grid">
                     <label class="check"><input type="checkbox" /> Conferi Dados e Resultados</label>
-                    <label class="check"><input type="checkbox" /> Baixei CSV estacoes</label>
+                    <label class="check"><input type="checkbox" /> Baixei CSV estações</label>
                     <label class="check"><input type="checkbox" /> Baixei CSV quadrados</label>
                     <label class="check"><input type="checkbox" /> Baixei CSV consolidado</label>
-                    <label class="check"><input type="checkbox" /> Baixei Backup JSON</label>
+                    <label class="check"><input type="checkbox" /> Baixei backup JSON</label>
                 </div>
                 <div class="actions">
-                    <button class="success" type="button" id="exportStations">Baixar CSV estacoes</button>
+                    <button class="success" type="button" id="exportStations">Baixar CSV estações</button>
                     <button class="success" type="button" id="exportQuadrats">Baixar CSV quadrados</button>
                     <button class="success" type="button" id="exportConsolidated">Baixar CSV consolidado</button>
                     <button class="success" type="button" id="exportExcel">Baixar Excel</button>
@@ -599,7 +672,7 @@
                     <button type="button" id="importJsonBtn">Importar JSON</button>
                     <button class="danger" type="button" id="clearAll">Apagar tudo</button>
                 </div>
-                <p class="mini" id="importCsvStatus" style="margin-top: 10px;">Importe o CSV de quadrados exportado pelo app depois de preencher wetMassG e/ou dryMassG no laboratorio.</p>
+                <p class="mini" id="importCsvStatus" style="margin-top: 10px;">Importe o CSV de quadrados exportado pelo app depois de preencher wetMassG e/ou dryMassG no laboratório.</p>
                 <input class="file-input" id="importJson" type="file" accept="application/json,.json" />
                 <input class="file-input" id="importQuadratCsv" type="file" accept=".csv,text/csv" />
             </div>
@@ -632,6 +705,28 @@
         const state = loadState();
         let lastBackupAt = "";
 
+        const themeToggle = document.getElementById("themeToggle");
+
+        function applyTheme(mode) {
+            const isDark = mode === "dark";
+            document.body.classList.toggle("dark-mode", isDark);
+            if (themeToggle) {
+                themeToggle.textContent = isDark ? "Modo claro" : "Modo escuro";
+                themeToggle.setAttribute("aria-label", isDark ? "Alternar para modo claro" : "Alternar modo escuro");
+            }
+            try {
+                localStorage.setItem("macroalgasCampoThemeV1", isDark ? "dark" : "light");
+            } catch (_) {}
+        }
+
+        function loadTheme() {
+            try {
+                return localStorage.getItem("macroalgasCampoThemeV1") === "dark" ? "dark" : "light";
+            } catch (_) {
+                return "light";
+            }
+        }
+
         function loadState() {
             try {
                 return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { stations: [], quadrats: [] };
@@ -656,7 +751,7 @@
         function updateBackupStatus() {
             const backupStatus = document.getElementById("backupStatus");
             if (!backupStatus) return;
-            backupStatus.textContent = lastBackupAt ? `Backup exportado em ${lastBackupAt}` : "Ainda nao exportado nesta sessao";
+            backupStatus.textContent = lastBackupAt ? `Backup exportado em ${lastBackupAt}` : "Ainda não exportado nesta sessão";
         }
 
         function formToObject(form) {
@@ -859,7 +954,7 @@
                             <label>Coletado</label>
                             <select name="q${i}_collected">
                                 <option>Sim</option>
-                                <option>Nao</option>
+                                <option value="Nao">Não</option>
                             </select>
                         </div>
                         <div>
@@ -880,7 +975,7 @@
                         </div>
                     </div>
                     <div style="margin-top: 8px;">
-                        <label>Especies dominantes</label>
+                        <label>Espécies dominantes</label>
                         <input name="q${i}_dominantSpecies" placeholder="Separar por ponto e virgula" />
                     </div>
                     <div style="margin-top: 8px;">
@@ -888,7 +983,7 @@
                         <input name="q${i}_photoRef" placeholder="Arquivo ou codigo da foto" />
                     </div>
                     <div style="margin-top: 8px;">
-                        <label>Observacoes</label>
+                        <label>Observações</label>
                         <textarea name="q${i}_notes"></textarea>
                     </div>
                 `;
@@ -1079,8 +1174,8 @@
             const salValues = state.stations.map(row => Number(row.salMean)).filter(Number.isFinite);
             const richness = results.map(row => Number(row.riqueza_dominantes)).filter(Number.isFinite);
             document.getElementById("resultMetrics").innerHTML = `
-                <div class="metric"><strong>${tempValues.length ? mean(tempValues) : ""}</strong><span>temperatura media geral</span></div>
-                <div class="metric"><strong>${salValues.length ? mean(salValues) : ""}</strong><span>salinidade media geral</span></div>
+                <div class="metric"><strong>${tempValues.length ? mean(tempValues) : ""}</strong><span>temperatura média geral</span></div>
+                <div class="metric"><strong>${salValues.length ? mean(salValues) : ""}</strong><span>salinidade média geral</span></div>
                 <div class="metric"><strong>${richness.length ? Math.max(...richness) : 0}</strong><span>maior riqueza dominante</span></div>
                 <div class="metric"><strong>${speciesRows.length}</strong><span>taxons dominantes citados</span></div>
             `;
@@ -1114,7 +1209,7 @@
             state.quadrats.push(...quadrats);
             clearDraft();
             saveState();
-            alert("Estacao salva com 9 quadrados.");
+            alert("Estação salva com 9 quadrados.");
         });
 
         document.getElementById("fillNow").addEventListener("click", () => {
@@ -1126,7 +1221,7 @@
 
         document.getElementById("getGps").addEventListener("click", () => {
             if (!navigator.geolocation) {
-                alert("GPS indisponivel neste navegador.");
+                alert("GPS indisponível neste navegador.");
                 return;
             }
             navigator.geolocation.getCurrentPosition(position => {
@@ -1136,7 +1231,7 @@
                     ? position.coords.accuracy.toFixed(1)
                     : "";
                 saveDraft();
-            }, () => alert("Nao foi possivel capturar GPS."), {
+            }, () => alert("Não foi possível capturar o GPS."), {
                 enableHighAccuracy: true,
                 timeout: 15000,
                 maximumAge: 0
@@ -1200,10 +1295,10 @@
                     const rows = parseCsv(reader.result);
                     const result = importQuadratWeights(rows);
                     const status = document.getElementById("importCsvStatus");
-                    status.textContent = `Importacao concluida: ${result.updated} quadrados atualizados, ${result.missing} sem correspondencia, ${result.skipped} linhas ignoradas.`;
+                    status.textContent = `Importação concluída: ${result.updated} quadrados atualizados, ${result.missing} sem correspondência, ${result.skipped} linhas ignoradas.`;
                     alert(status.textContent);
                 } catch (_) {
-                    alert("Nao foi possivel ler o CSV. Exporte novamente o CSV de quadrados pelo app e preserve as colunas stationId e quadrat.");
+                    alert("Não foi possível ler o CSV. Exporte novamente o CSV de quadrados pelo app e preserve as colunas stationId e quadrat.");
                 } finally {
                     event.target.value = "";
                 }
@@ -1227,7 +1322,7 @@
                     saveState();
                     alert("Backup importado.");
                 } catch (_) {
-                    alert("Arquivo JSON invalido.");
+                    alert("Arquivo JSON inválido.");
                 }
             };
             reader.readAsText(file);
@@ -1242,6 +1337,13 @@
             updateBackupStatus();
             saveState();
         });
+
+        if (themeToggle) {
+            applyTheme(loadTheme());
+            themeToggle.addEventListener("click", () => {
+                applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
+            });
+        }
 
         renderQuadratForm();
         restoreDraft();

@@ -57,8 +57,8 @@ jobs:
             state=$(az provider show --namespace "$namespace" --query registrationState -o tsv)
             echo "$namespace: $state"
             if [ "$state" != "Registered" ]; then
-              echo "$namespace is not registered. Ask a subscription owner to register it once before deploying."
-              exit 1
+              echo "$namespace is not registered yet. Registering and waiting for completion..."
+              az provider register --namespace "$namespace" --wait
             fi
           done
 

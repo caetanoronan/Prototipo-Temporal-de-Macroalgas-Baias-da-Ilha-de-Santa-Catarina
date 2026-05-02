@@ -47,25 +47,50 @@ jobs:
 
       - name: Check Azure resource provider
         run: |
-          state=$(az provider show --namespace Microsoft.Web --query registrationState -o tsv)
-          echo "Microsoft.Web: $state"
-          if [ "$state" != "Registered" ]; then
-            echo "Microsoft.Web is not registered. Ask a subscription owner to register it once before deploying Static Web Apps."
+          deploy_backend=$(jq -r '.parameters.deployBackend.value // false' infra/main.parameters.json)
+          namespaces=("Microsoft.Web")
+          if [ "$deploy_backend" = "true" ]; then
+            namespaces+=("Microsoft.Storage" "Microsoft.Insights" "Microsoft.DocumentDB")
+          fi
+
+          for namespace in "${namespaces[@]}"; do
+            state=$(az provider show --namespace "$namespace" --query registrationState -o tsv)
+            echo "$namespace: $state"
+            if [ "$state" != "Registered" ]; then
+              echo "$namespace is not registered. Ask a subscription owner to register it once before deploying."
+              exit 1
+            fi
+          done
+
+      - name: Deploy Bicep
+        env:
+          FIELD_API_KEY: ${{ secrets.FIELD_API_KEY }}
+        run: |
+          extra_parameters=()
+          deploy_backend=$(jq -r '.parameters.deployBackend.value // false' infra/main.parameters.json)
+          if [ "$deploy_backend" = "true" ] && [ -z "$FIELD_API_KEY" ]; then
+            echo "FIELD_API_KEY secret is required when deployBackend=true."
             exit 1
           fi
 
-      - name: Deploy Bicep
-        run: |
+          if [ -n "$FIELD_API_KEY" ]; then
+            extra_parameters+=(apiKey="$FIELD_API_KEY")
+          fi
+
           az deployment group create \
             --resource-group "$AZURE_RESOURCE_GROUP" \
             --template-file infra/main.bicep \
-            --parameters @infra/main.parameters.json
+            --parameters @infra/main.parameters.json "${extra_parameters[@]}"
 
       - name: Read Static Web App name from parameters
         id: params
         run: |
           SWA_NAME=$(jq -r '.parameters.staticWebAppName.value' infra/main.parameters.json)
+          FUNCTION_APP_NAME=$(jq -r '.parameters.functionAppName.value' infra/main.parameters.json)
+          DEPLOY_BACKEND=$(jq -r '.parameters.deployBackend.value // false' infra/main.parameters.json)
           echo "swa_name=$SWA_NAME" >> "$GITHUB_OUTPUT"
+          echo "function_app_name=$FUNCTION_APP_NAME" >> "$GITHUB_OUTPUT"
+          echo "deploy_backend=$DEPLOY_BACKEND" >> "$GITHUB_OUTPUT"
 
       - name: Get Static Web App deployment token
         id: token
@@ -85,8 +110,19 @@ jobs:
           app_location: ${{ env.SWA_APP_LOCATION }}
           skip_app_build: true
 
+      - name: Install API dependencies
+        if: steps.params.outputs.deploy_backend == 'true'
+        run: npm install --prefix api
+
+      - name: Deploy Function API
+        if: steps.params.outputs.deploy_backend == 'true'
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.params.outputs.function_app_name }}
+          package: api
+
       - name: Summary
         run: |
           echo "Infra deployed to resource group: $AZURE_RESOURCE_GROUP"
           echo "Static site content uploaded."
-          echo "Backend resources are disabled by default. Function API deployment can be added later."
+          echo "Backend deploy flag: ${{ steps.params.outputs.deploy_backend }}"

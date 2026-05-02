@@ -21,11 +21,15 @@ The backend resources are optional and should be enabled only when the app start
 Create this repository secret before running the workflow:
 
 - AZURE_CREDENTIALS
+- FIELD_API_KEY
 
 Use a service principal JSON with Contributor access on the subscription or resource group.
 For the first run, subscription-level permission is recommended because the workflow registers Azure resource providers
 such as `Microsoft.Web`. If the service principal only has resource-group access, ask the Azure subscription owner to
 register the providers once before running the workflow.
+
+`FIELD_API_KEY` is a shared pilot key used by the field app to sync with the Function API. It is not a substitute for
+user login, but it prevents casual anonymous writes during prototype testing.
 
 ## First run
 
@@ -40,22 +44,22 @@ Before the first deploy, register this Azure provider once at subscription level
 The workflow checks that `Microsoft.Web` is registered, but does not register it automatically because the GitHub
 service principal may only have deployment permissions.
 
-Default behavior:
+Current behavior:
 
-- deployBackend=false
+- deployBackend=true
 - Static Web App is deployed.
-- Function App, Storage, Application Insights and Cosmos DB are not created.
+- Function App, Storage, Application Insights and Cosmos DB serverless are deployed.
+- Function API code from `api/` is deployed after infrastructure.
 
-This keeps the first Azure test low-risk and low-cost.
+Cosmos DB uses serverless mode for the pilot to reduce idle cost.
 
 ## Enabling the backend later
 
-Only enable the backend when there is API code ready to receive app data.
+If you need to disable the backend temporarily:
 
-1. Set `deployBackend` to `true` in `infra/main.parameters.json`.
-2. Provide a secure `apiKey` parameter through a secret-based deployment process.
-3. Review Cosmos DB cost before running the workflow.
-4. Add a separate Function App code deployment workflow.
+1. Set `deployBackend` to `false` in `infra/main.parameters.json`.
+2. Rerun the workflow.
+3. The Static Web App remains available, but cloud sync stops.
 
 ## Notes
 

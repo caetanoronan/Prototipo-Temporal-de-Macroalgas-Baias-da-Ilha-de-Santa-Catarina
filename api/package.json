@@ -1,0 +1,16 @@
+{
+  "name": "macroalgas-field-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Azure Functions API for the macroalgae field app.",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start",
+    "check": "node --check src/functions/health.js && node --check src/functions/stations.js && node --check src/functions/quadrats.js && node --check src/functions/sync.js && node --check src/lib/http.js && node --check src/lib/cosmos.js"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^4.2.0",
+    "@azure/functions": "^4.7.0"
+  },
+  "devDependencies": {}
+}

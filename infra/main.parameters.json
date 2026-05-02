@@ -60,7 +60,7 @@
       "value": "3.11"
     },
     "deployBackend": {
-      "value": false
+      "value": true
     }
   }
 }

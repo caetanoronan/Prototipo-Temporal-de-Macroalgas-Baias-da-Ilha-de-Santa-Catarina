@@ -68,6 +68,9 @@ param deployBackend bool = false
 @description('API key used by the Function App when deployBackend is true. Provide through a secure parameter or secret.')
 param apiKey string = ''
 
+@description('Additional CORS origin for the existing GitHub Pages site.')
+param githubPagesOrigin string = 'https://caetanoronan.github.io'
+
 var tags = {
   project: project
   organization: organization
@@ -181,7 +184,7 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = if (deployBackend) {
         }
         {
           name: 'CORS_ALLOWED_ORIGINS'
-          value: 'https://${staticWebApp.properties.defaultHostname}'
+          value: 'https://${staticWebApp.properties.defaultHostname},${githubPagesOrigin}'
         }
         {
           name: 'API_KEY'
@@ -209,7 +212,11 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = if 
     consistencyPolicy: {
       defaultConsistencyLevel: 'Session'
     }
-    capabilities: []
+    capabilities: [
+      {
+        name: 'EnableServerless'
+      }
+    ]
     publicNetworkAccess: 'Enabled'
     disableLocalAuth: false
     enableFreeTier: false
@@ -223,9 +230,7 @@ resource cosmosSqlDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-02
     resource: {
       id: cosmosDatabaseName
     }
-    options: {
-      throughput: 400
-    }
+    options: {}
   }
 }
 

@@ -402,6 +402,7 @@
             <button data-view="dados" type="button">Dados</button>
             <button data-view="resultados" type="button">Resultados</button>
             <button data-view="exportacao" type="button">Exportar</button>
+            <button data-view="nuvem" type="button">Nuvem</button>
         </nav>
 
         <section class="view active" id="registro">
@@ -677,11 +678,46 @@
                 <input class="file-input" id="importQuadratCsv" type="file" accept=".csv,text/csv" />
             </div>
         </section>
+
+        <section class="view" id="nuvem">
+            <div class="notice">
+                A sincronização é offline-first: os dados continuam salvos neste celular e são enviados para a nuvem quando houver internet.
+            </div>
+            <div class="panel">
+                <h2>Configuração da nuvem</h2>
+                <div class="grid two">
+                    <div>
+                        <label for="cloudApiUrl">URL da Azure Function</label>
+                        <input id="cloudApiUrl" placeholder="https://func-ufsc-ptm-dev-001.azurewebsites.net/api" />
+                    </div>
+                    <div>
+                        <label for="cloudApiKey">API key</label>
+                        <input id="cloudApiKey" type="password" placeholder="Chave configurada no GitHub secret FIELD_API_KEY" />
+                    </div>
+                    <div>
+                        <label for="cloudCampaignId">Campanha</label>
+                        <input id="cloudCampaignId" value="piloto-2026" />
+                    </div>
+                    <div>
+                        <label for="cloudDeviceId">Dispositivo</label>
+                        <input id="cloudDeviceId" />
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="button" id="saveCloudConfig">Salvar configuração</button>
+                    <button type="button" id="testCloud">Testar conexão</button>
+                    <button class="success" type="button" id="uploadCloud">Enviar dados locais</button>
+                    <button class="success" type="button" id="downloadCloud">Baixar dados da nuvem</button>
+                </div>
+                <p class="mini" id="cloudStatus" style="margin-top: 10px;">Configure a URL da API antes de sincronizar.</p>
+            </div>
+        </section>
     </main>
 
     <script>
         const STORAGE_KEY = "macroalgasCampoV1";
         const DRAFT_KEY = "macroalgasCampoDraftV1";
+        const CLOUD_KEY = "macroalgasCampoCloudV1";
         const AREA_M2 = 0.0625;
         const stationColumns = [
             "id", "project", "team", "date", "station", "startTime", "endTime", "lat", "lon", "gpsAccuracyM",
@@ -739,6 +775,78 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             updateStatus("Dados salvos no navegador");
             renderAll();
+        }
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem("macroalgasDeviceId");
+            if (!deviceId) {
+                deviceId = `device-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+                localStorage.setItem("macroalgasDeviceId", deviceId);
+            }
+            return deviceId;
+        }
+
+        function loadCloudConfig() {
+            try {
+                return JSON.parse(localStorage.getItem(CLOUD_KEY)) || {};
+            } catch (_) {
+                return {};
+            }
+        }
+
+        function setCloudStatus(message) {
+            const cloudStatus = document.getElementById("cloudStatus");
+            if (!cloudStatus) return;
+            cloudStatus.textContent = `${message} - ${new Date().toLocaleString("pt-BR")}`;
+        }
+
+        function saveCloudConfig() {
+            const config = {
+                apiUrl: document.getElementById("cloudApiUrl").value.trim().replace(/\/$/, ""),
+                apiKey: document.getElementById("cloudApiKey").value,
+                campaignId: document.getElementById("cloudCampaignId").value.trim() || "default",
+                deviceId: document.getElementById("cloudDeviceId").value.trim() || getDeviceId()
+            };
+            localStorage.setItem(CLOUD_KEY, JSON.stringify(config));
+            setCloudStatus("Configuração salva");
+            return config;
+        }
+
+        function restoreCloudConfig() {
+            const config = loadCloudConfig();
+            document.getElementById("cloudApiUrl").value = config.apiUrl || "https://func-ufsc-ptm-dev-001.azurewebsites.net/api";
+            document.getElementById("cloudApiKey").value = config.apiKey || "";
+            document.getElementById("cloudCampaignId").value = config.campaignId || "piloto-2026";
+            document.getElementById("cloudDeviceId").value = config.deviceId || getDeviceId();
+        }
+
+        async function cloudRequest(path, options = {}) {
+            const config = loadCloudConfig();
+            if (!config.apiUrl) throw new Error("Configure a URL da API.");
+            const headers = {
+                "Content-Type": "application/json",
+                ...(options.headers || {})
+            };
+            if (config.apiKey) headers["x-api-key"] = config.apiKey;
+            const response = await fetch(`${config.apiUrl}${path}`, {
+                ...options,
+                headers
+            });
+            const body = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(body.error || `HTTP ${response.status}`);
+            return body;
+        }
+
+        function mergeByKey(existing, incoming, keyFn) {
+            const map = new Map(existing.map((item) => [keyFn(item), item]));
+            incoming.forEach((item) => {
+                const key = keyFn(item);
+                const current = map.get(key);
+                if (!current || String(item.updatedAt || item.createdAt || "") >= String(current.updatedAt || current.createdAt || "")) {
+                    map.set(key, { ...current, ...item });
+                }
+            });
+            return Array.from(map.values());
         }
 
         function updateStatus(message) {
@@ -1338,6 +1446,69 @@
             saveState();
         });
 
+        document.getElementById("saveCloudConfig").addEventListener("click", () => {
+            saveCloudConfig();
+        });
+
+        document.getElementById("testCloud").addEventListener("click", async () => {
+            try {
+                saveCloudConfig();
+                const result = await cloudRequest("/health");
+                setCloudStatus(`Conexão OK: ${result.service || "API"} ${result.version || ""}`);
+            } catch (error) {
+                setCloudStatus(`Falha na conexão: ${error.message}`);
+            }
+        });
+
+        document.getElementById("uploadCloud").addEventListener("click", async () => {
+            try {
+                const config = saveCloudConfig();
+                const payload = {
+                    campaignId: config.campaignId,
+                    deviceId: config.deviceId,
+                    stations: state.stations.map((station) => ({
+                        ...station,
+                        campaignId: config.campaignId,
+                        deviceId: config.deviceId
+                    })),
+                    quadrats: state.quadrats.map((quadrat) => ({
+                        ...quadrat,
+                        id: quadrat.id || `${quadrat.stationId}-${quadrat.quadrat}`,
+                        campaignId: config.campaignId,
+                        deviceId: config.deviceId
+                    }))
+                };
+                const result = await cloudRequest("/sync", {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                setCloudStatus(`Enviado: ${result.stationCount} estações e ${result.quadratCount} quadrados`);
+            } catch (error) {
+                setCloudStatus(`Falha ao enviar: ${error.message}`);
+            }
+        });
+
+        document.getElementById("downloadCloud").addEventListener("click", async () => {
+            try {
+                const config = saveCloudConfig();
+                const query = `campaignId=${encodeURIComponent(config.campaignId)}`;
+                const [stationsResult, quadratsResult] = await Promise.all([
+                    cloudRequest(`/stations?${query}`),
+                    cloudRequest(`/quadrats?${query}`)
+                ]);
+                state.stations = mergeByKey(state.stations, stationsResult.stations || [], (station) => station.id);
+                state.quadrats = mergeByKey(
+                    state.quadrats,
+                    quadratsResult.quadrats || [],
+                    (quadrat) => quadrat.id || `${quadrat.stationId}-${quadrat.quadrat}`
+                );
+                saveState();
+                setCloudStatus(`Baixado: ${stationsResult.stations?.length || 0} estações e ${quadratsResult.quadrats?.length || 0} quadrados`);
+            } catch (error) {
+                setCloudStatus(`Falha ao baixar: ${error.message}`);
+            }
+        });
+
         if (themeToggle) {
             applyTheme(loadTheme());
             themeToggle.addEventListener("click", () => {
@@ -1347,6 +1518,7 @@
 
         renderQuadratForm();
         restoreDraft();
+        restoreCloudConfig();
         updateBackupStatus();
         renderAll();
 

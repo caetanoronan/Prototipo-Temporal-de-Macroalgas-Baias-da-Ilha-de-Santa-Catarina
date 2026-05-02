@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "brazilsouth"
+    },
+    "staticWebAppLocation": {
+      "value": "East US2"
+    },
+    "project": {
+      "value": "ptm"
+    },
+    "organization": {
+      "value": "ufsc"
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "staticWebAppName": {
+      "value": "swa-ufsc-ptm-dev"
+    },
+    "functionAppName": {
+      "value": "func-ufsc-ptm-dev-001"
+    },
+    "functionStorageName": {
+      "value": "stufscptmdev001"
+    },
+    "cosmosAccountName": {
+      "value": "cosmos-ufsc-ptm-dev-001"
+    },
+    "cosmosDatabaseName": {
+      "value": "db_macroalgas"
+    },
+    "stationsContainerName": {
+      "value": "stations"
+    },
+    "quadratsContainerName": {
+      "value": "quadrats"
+    },
+    "syncEventsContainerName": {
+      "value": "sync_events"
+    },
+    "appInsightsName": {
+      "value": "appi-ufsc-ptm-dev"
+    },
+    "functionPlanName": {
+      "value": "asp-ufsc-ptm-dev"
+    },
+    "functionRuntime": {
+      "value": "node"
+    },
+    "functionsExtensionVersion": {
+      "value": "~4"
+    },
+    "nodeVersion": {
+      "value": "20"
+    },
+    "pythonVersion": {
+      "value": "3.11"
+    }
+  }
+}

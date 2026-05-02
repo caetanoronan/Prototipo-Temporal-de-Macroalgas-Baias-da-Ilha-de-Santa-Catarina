@@ -1,0 +1,83 @@
+name: Azure Deploy (Infra + Static Site)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+      - '.github/workflows/azure-deploy.yml'
+      - 'index.html'
+      - 'dashboard_macroalgas_baias_clone.html'
+      - '01_planejamento/**'
+      - '02_sops/**'
+      - '03_formularios/**'
+      - '04_dados_campo/**'
+      - '05_gis_mapas/**'
+      - 'assets/**'
+      - 'data/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_RESOURCE_GROUP: rg-ufsc-ptm-dev-bs
+  SWA_APP_LOCATION: /
+
+jobs:
+  deploy-infra:
+    name: Deploy Infrastructure (Bicep)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Ensure Resource Group
+        run: |
+          az group create \
+            --name "$AZURE_RESOURCE_GROUP" \
+            --location brazilsouth
+
+      - name: Deploy Bicep
+        run: |
+          az deployment group create \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --template-file infra/main.bicep \
+            --parameters @infra/main.parameters.json
+
+      - name: Read Static Web App name from parameters
+        id: params
+        run: |
+          SWA_NAME=$(jq -r '.parameters.staticWebAppName.value' infra/main.parameters.json)
+          echo "swa_name=$SWA_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Get Static Web App deployment token
+        id: token
+        run: |
+          TOKEN=$(az staticwebapp secrets list \
+            --name "${{ steps.params.outputs.swa_name }}" \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --query properties.apiKey -o tsv)
+          echo "swa_token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy Static Web App content
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.token.outputs.swa_token }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: ${{ env.SWA_APP_LOCATION }}
+          skip_app_build: true
+
+      - name: Summary
+        run: |
+          echo "Infra deployed to resource group: $AZURE_RESOURCE_GROUP"
+          echo "Static site content uploaded."
+          echo "Function App resource is provisioned; API code deployment can be added in a second workflow."

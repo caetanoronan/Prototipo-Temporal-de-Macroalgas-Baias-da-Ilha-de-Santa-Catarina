@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App de Campo - Macroalgas</title>
+    <style>
+        :root {
+            --bg: #eef4f6;
+            --panel: #ffffff;
+            --ink: #17242f;
+            --muted: #5a6b76;
+            --line: #cdd9df;
+            --accent: #006d77;
+            --accent-2: #b23a48;
+            --ok: #1b7f4a;
+            --warn: #a05a00;
+            --soft: #f6fafb;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+        }
+
+        header {
+            background: #073b4c;
+            color: #fff;
+            padding: 16px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            line-height: 1.2;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            color: #d9eef2;
+            font-size: 0.92rem;
+            line-height: 1.4;
+        }
+
+        main {
+            width: min(1180px, 96vw);
+            margin: 0 auto;
+            padding: 14px 0 28px;
+        }
+
+        .tabs {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            background: var(--bg);
+            padding: 10px 0;
+        }
+
+        .tabs button,
+        .actions button,
+        .icon-btn {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--ink);
+            border-radius: 8px;
+            padding: 9px 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tabs button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        h3 {
+            margin: 10px 0 8px;
+            font-size: 0.95rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 9px;
+            min-height: 39px;
+            font: inherit;
+            background: #fff;
+            color: var(--ink);
+        }
+
+        textarea {
+            min-height: 82px;
+            resize: vertical;
+        }
+
+        .check-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px;
+            background: var(--soft);
+            min-height: 40px;
+            font-size: 0.9rem;
+        }
+
+        .check input { width: auto; min-height: auto; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .primary {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: #fff !important;
+        }
+
+        .danger {
+            background: #fff5f5 !important;
+            border-color: #f2c3c3 !important;
+            color: #8f1d2c !important;
+        }
+
+        .success {
+            background: #edf8f2 !important;
+            border-color: #b9dfca !important;
+            color: var(--ok) !important;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .metric {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 1.35rem;
+            color: var(--accent);
+        }
+
+        .metric span {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 920px;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #edf1f3;
+            padding: 8px;
+            text-align: left;
+            font-size: 0.84rem;
+            vertical-align: top;
+        }
+
+        th {
+            background: #e7f1f3;
+            color: #18333b;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover td { background: #f8fbfc; }
+
+        .notice {
+            padding: 10px;
+            border-radius: 8px;
+            background: #fff8e6;
+            border: 1px solid #efd48e;
+            color: #65420b;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        .status-bar {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .status-pill {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 9px;
+            background: var(--panel);
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        .status-pill strong {
+            display: block;
+            color: var(--ink);
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .mini {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.4;
+        }
+
+        .quadrat-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 10px;
+            background: var(--soft);
+        }
+
+        .quadrat-card h3 {
+            margin: 0 0 8px;
+            color: var(--accent);
+        }
+
+        .quadrat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        @media (max-width: 920px) {
+            .grid,
+            .grid.two,
+            .grid.three,
+            .summary,
+            .status-bar,
+            .check-grid,
+            .quadrat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>App de Campo - Macroalgas</h1>
+        <p>v0.1 piloto operacional: ficha digital para registrar estacoes, 9 quadrados, midias, exportar planilhas e gerar resultados basicos.</p>
+    </header>
+
+    <main>
+        <nav class="tabs" aria-label="Navegacao do app">
+            <button class="active" data-view="registro" type="button">Registro</button>
+            <button data-view="quadrados" type="button">Quadrados</button>
+            <button data-view="dados" type="button">Dados</button>
+            <button data-view="resultados" type="button">Resultados</button>
+            <button data-view="exportacao" type="button">Exportar</button>
+        </nav>
+
+        <section class="view active" id="registro">
+            <div class="notice">
+                Os dados ficam salvos neste navegador usando armazenamento local. Ao final do campo, exporte CSV/Excel e Backup JSON antes de limpar cache, trocar de aparelho ou usar outro navegador.
+            </div>
+
+            <div class="status-bar">
+                <div class="status-pill"><strong>Status</strong><span id="saveStatus">Pronto para coleta</span></div>
+                <div class="status-pill"><strong>Ultimo backup</strong><span id="backupStatus">Ainda nao exportado nesta sessao</span></div>
+                <div class="status-pill"><strong>Teste minimo</strong><span>Salvar 1 estacao, exportar CSV/Excel/JSON e reabrir</span></div>
+            </div>
+
+            <form id="stationForm" class="panel">
+                <h2>Identificacao geral da estacao</h2>
+                <div class="grid">
+                    <div>
+                        <label for="project">Projeto</label>
+                        <input id="project" name="project" value="Prototipo Temporal de Macroalgas" required />
+                    </div>
+                    <div>
+                        <label for="team">Equipe</label>
+                        <input id="team" name="team" placeholder="Iniciais ou nomes" required />
+                    </div>
+                    <div>
+                        <label for="date">Data</label>
+                        <input id="date" name="date" type="date" required />
+                    </div>
+                    <div>
+                        <label for="station">Estacao</label>
+                        <select id="station" name="station" required>
+                            <option value="">Selecione</option>
+                            <option>Ponta das Canas</option>
+                            <option>Sambaqui</option>
+                            <option>Ponta do Coral</option>
+                            <option>Saco dos Limoes</option>
+                            <option>Ribeirao da Ilha</option>
+                            <option>Caieira da Barra do Sul</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="startTime">Hora inicio</label>
+                        <input id="startTime" name="startTime" type="time" required />
+                    </div>
+                    <div>
+                        <label for="endTime">Hora termino</label>
+                        <input id="endTime" name="endTime" type="time" />
+                    </div>
+                    <div>
+                        <label for="lat">Latitude</label>
+                        <input id="lat" name="lat" type="number" step="0.000001" required />
+                    </div>
+                    <div>
+                        <label for="lon">Longitude</label>
+                        <input id="lon" name="lon" type="number" step="0.000001" required />
+                    </div>
+                </div>
+
+                <h2>Condicoes ambientais</h2>
+                <div class="grid">
+                    <div>
+                        <label for="tideType">Mare</label>
+                        <select id="tideType" name="tideType">
+                            <option>Sizigia</option>
+                            <option>Quadratura</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tideHeight">Altura da mare (m)</label>
+                        <input id="tideHeight" name="tideHeight" type="number" step="0.01" />
+                    </div>
+                    <div>
+                        <label for="transparency">Transparencia</label>
+                        <select id="transparency" name="transparency">
+                            <option>Alta</option>
+                            <option>Media</option>
+                            <option>Baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="hydrodynamics">Hidrodinamismo</label>
+                        <select id="hydrodynamics" name="hydrodynamics">
+                            <option>Fraco</option>
+                            <option>Moderado</option>
+                            <option>Forte</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid two">
+                    <div>
+                        <h3>Temperatura da agua (C)</h3>
+                        <div class="grid three">
+                            <input name="temp1" type="number" step="0.1" placeholder="R1" />
+                            <input name="temp2" type="number" step="0.1" placeholder="R2" />
+                            <input name="temp3" type="number" step="0.1" placeholder="R3" />
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Salinidade</h3>
+                        <div class="grid three">
+                            <input name="sal1" type="number" step="0.1" placeholder="R1" />
+                            <input name="sal2" type="number" step="0.1" placeholder="R2" />
+                            <input name="sal3" type="number" step="0.1" placeholder="R3" />
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Substrato predominante</h3>
+                <div class="check-grid" data-check-group="substrate">
+                    <label class="check"><input type="checkbox" value="Rocha macica" /> Rocha macica</label>
+                    <label class="check"><input type="checkbox" value="Blocos" /> Blocos</label>
+                    <label class="check"><input type="checkbox" value="Cascalho" /> Cascalho</label>
+                    <label class="check"><input type="checkbox" value="Areia" /> Areia</label>
+                    <label class="check"><input type="checkbox" value="Misto" /> Misto</label>
+                </div>
+
+                <h3>Impactos visiveis</h3>
+                <div class="check-grid" data-check-group="impacts">
+                    <label class="check"><input type="checkbox" value="Esgoto" /> Esgoto</label>
+                    <label class="check"><input type="checkbox" value="Lixo solido" /> Lixo solido</label>
+                    <label class="check"><input type="checkbox" value="Bioincrustacao excessiva" /> Bioincrustacao excessiva</label>
+                    <label class="check"><input type="checkbox" value="Sedimentacao" /> Sedimentacao</label>
+                    <label class="check"><input type="checkbox" value="Nenhum" /> Nenhum</label>
+                </div>
+
+                <div class="grid two" style="margin-top: 10px;">
+                    <div>
+                        <label for="slope">Declividade do costao</label>
+                        <select id="slope" name="slope">
+                            <option>Suave</option>
+                            <option>Moderada</option>
+                            <option>Ingreme</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sampleCodes">Codigos das amostras</label>
+                        <input id="sampleCodes" name="sampleCodes" placeholder="Ex.: SAM-Q1 a SAM-Q9" />
+                    </div>
+                </div>
+
+                <h2>Registro multimidia e complementares</h2>
+                <div class="grid">
+                    <div>
+                        <label for="photosDone">Fotos realizadas?</label>
+                        <select id="photosDone" name="photosDone">
+                            <option>Sim</option>
+                            <option>Nao</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="photoFolder">Pasta/codigo das fotos</label>
+                        <input id="photoFolder" name="photoFolder" placeholder="2026_05_12_Sambaqui" />
+                    </div>
+                    <div>
+                        <label for="labelPhoto">Etiqueta fotografada?</label>
+                        <select id="labelPhoto" name="labelPhoto">
+                            <option>Sim</option>
+                            <option>Nao</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="visualScale">Escala visual?</label>
+                        <select id="visualScale" name="visualScale">
+                            <option>Sim</option>
+                            <option>Nao</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="hydroVideo">Video de hidrodinamismo?</label>
+                        <select id="hydroVideo" name="hydroVideo">
+                            <option>Sim</option>
+                            <option>Nao</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="photoLink">Link das fotos</label>
+                        <input id="photoLink" name="photoLink" placeholder="Drive, OneDrive ou pasta local" />
+                    </div>
+                    <div>
+                        <label for="waterSampleTime">Horario coleta de agua</label>
+                        <input id="waterSampleTime" name="waterSampleTime" type="time" />
+                    </div>
+                    <div>
+                        <label for="processingDelayHours">Atraso ate processamento (h)</label>
+                        <input id="processingDelayHours" name="processingDelayHours" type="number" step="0.1" />
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <label for="outsideSpecies">Especies coletadas fora dos quadrados</label>
+                    <textarea id="outsideSpecies" name="outsideSpecies" placeholder="Lista livre, separada por ponto e virgula"></textarea>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <label for="notes">Observacoes gerais</label>
+                    <textarea id="notes" name="notes" placeholder="Condicoes, riscos, desvios do protocolo, anomalias ambientais..."></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="primary" type="submit">Salvar estacao</button>
+                    <button type="button" id="fillNow">Usar data/hora atual</button>
+                    <button type="button" id="getGps">Capturar GPS</button>
+                    <button type="reset">Limpar formulario</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="view" id="quadrados">
+            <div class="panel">
+                <h2>Quadrados da estacao atual</h2>
+                <p class="mini">Preencha os 9 quadrados. Ao salvar a estacao, estes registros entram na planilha de quadrados.</p>
+                <div class="actions">
+                    <button type="button" id="randomizeQuadrats">Sortear coordenadas 0-10 m</button>
+                    <button type="button" id="clearQuadrats">Limpar quadrados</button>
+                </div>
+            </div>
+            <form id="quadratForm" class="quadrat-grid"></form>
+        </section>
+
+        <section class="view" id="dados">
+            <div class="summary" id="dataSummary"></div>
+            <div class="panel">
+                <h2>Estacoes salvas</h2>
+                <div class="table-wrap" id="stationTable"></div>
+            </div>
+            <div class="panel">
+                <h2>Quadrados salvos</h2>
+                <div class="table-wrap" id="quadratTable"></div>
+            </div>
+        </section>
+
+        <section class="view" id="resultados">
+            <div class="summary" id="resultMetrics"></div>
+            <div class="panel">
+                <h2>Resumo por estacao</h2>
+                <div class="table-wrap" id="resultTable"></div>
+            </div>
+            <div class="panel">
+                <h2>Frequencia de especies dominantes</h2>
+                <div class="table-wrap" id="speciesTable"></div>
+            </div>
+        </section>
+
+        <section class="view" id="exportacao">
+            <div class="panel">
+                <h2>Exportacao e importacao</h2>
+                <p class="mini">CSV abre no Excel, LibreOffice, R e Python. O arquivo Excel gerado e HTML compativel com Excel, com duas abas/tabelas: estacoes e quadrados.</p>
+                <h3>Checklist antes de sair do campo</h3>
+                <div class="check-grid">
+                    <label class="check"><input type="checkbox" /> Conferi Dados e Resultados</label>
+                    <label class="check"><input type="checkbox" /> Baixei CSV estacoes</label>
+                    <label class="check"><input type="checkbox" /> Baixei CSV quadrados</label>
+                    <label class="check"><input type="checkbox" /> Baixei Backup JSON</label>
+                </div>
+                <div class="actions">
+                    <button class="success" type="button" id="exportStations">Baixar CSV estacoes</button>
+                    <button class="success" type="button" id="exportQuadrats">Baixar CSV quadrados</button>
+                    <button class="success" type="button" id="exportExcel">Baixar Excel</button>
+                    <button type="button" id="exportJson">Backup JSON</button>
+                    <button type="button" id="importJsonBtn">Importar JSON</button>
+                    <button class="danger" type="button" id="clearAll">Apagar tudo</button>
+                </div>
+                <input class="file-input" id="importJson" type="file" accept="application/json,.json" />
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const STORAGE_KEY = "macroalgasCampoV1";
+        const DRAFT_KEY = "macroalgasCampoDraftV1";
+        const AREA_M2 = 0.0625;
+        const stationColumns = [
+            "id", "project", "team", "date", "station", "startTime", "endTime", "lat", "lon",
+            "tideType", "tideHeight", "transparency", "hydrodynamics", "temp1", "temp2", "temp3",
+            "tempMean", "sal1", "sal2", "sal3", "salMean", "substrate", "slope", "impacts",
+            "sampleCodes", "photosDone", "photoFolder", "labelPhoto", "visualScale", "hydroVideo",
+            "photoLink", "waterSampleTime", "processingDelayHours", "outsideSpecies", "notes", "createdAt"
+        ];
+        const quadratColumns = [
+            "stationId", "station", "date", "quadrat", "zone", "transectM", "offsetM",
+            "dominantSpecies", "photoRef", "collected", "wetMassG", "dryMassG", "biomassGM2", "notes"
+        ];
+        const state = loadState();
+        let lastBackupAt = "";
+
+        function loadState() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { stations: [], quadrats: [] };
+            } catch (_) {
+                return { stations: [], quadrats: [] };
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            updateStatus("Dados salvos no navegador");
+            renderAll();
+        }
+
+        function updateStatus(message) {
+            const saveStatus = document.getElementById("saveStatus");
+            if (!saveStatus) return;
+            const now = new Date();
+            saveStatus.textContent = `${message} - ${now.toLocaleString("pt-BR")}`;
+        }
+
+        function updateBackupStatus() {
+            const backupStatus = document.getElementById("backupStatus");
+            if (!backupStatus) return;
+            backupStatus.textContent = lastBackupAt ? `Backup exportado em ${lastBackupAt}` : "Ainda nao exportado nesta sessao";
+        }
+
+        function formToObject(form) {
+            return Object.fromEntries(new FormData(form).entries());
+        }
+
+        function objectToForm(form, values) {
+            Object.entries(values || {}).forEach(([name, value]) => {
+                const field = form.elements[name];
+                if (!field) return;
+                field.value = value;
+            });
+        }
+
+        function saveDraft() {
+            const draft = {
+                station: formToObject(document.getElementById("stationForm")),
+                quadrats: formToObject(document.getElementById("quadratForm")),
+                substrate: checkedValues("substrate"),
+                impacts: checkedValues("impacts"),
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+            updateStatus("Rascunho salvo automaticamente");
+        }
+
+        function restoreDraft() {
+            let draft = null;
+            try {
+                draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+            } catch (_) {
+                draft = null;
+            }
+            if (!draft) return;
+            objectToForm(document.getElementById("stationForm"), draft.station);
+            objectToForm(document.getElementById("quadratForm"), draft.quadrats);
+            setCheckedValues("substrate", draft.substrate);
+            setCheckedValues("impacts", draft.impacts);
+            updateStatus("Rascunho restaurado");
+        }
+
+        function clearDraft() {
+            localStorage.removeItem(DRAFT_KEY);
+        }
+
+        function todayId() {
+            return new Date().toISOString().replace(/[-:T.Z]/g, "").slice(0, 14);
+        }
+
+        function mean(values) {
+            const nums = values.map(Number).filter(Number.isFinite);
+            if (!nums.length) return "";
+            return (nums.reduce((sum, value) => sum + value, 0) / nums.length).toFixed(2);
+        }
+
+        function checkedValues(groupName) {
+            return Array.from(document.querySelectorAll(`[data-check-group="${groupName}"] input:checked`))
+                .map(input => input.value)
+                .join("; ");
+        }
+
+        function setCheckedValues(groupName, value) {
+            const values = String(value || "").split(";").map(item => item.trim());
+            document.querySelectorAll(`[data-check-group="${groupName}"] input`).forEach(input => {
+                input.checked = values.includes(input.value);
+            });
+        }
+
+        function csvEscape(value) {
+            const text = String(value ?? "").replace(/"/g, '""');
+            return `"${text}"`;
+        }
+
+        function toCsv(rows, columns) {
+            return [
+                columns.map(csvEscape).join(","),
+                ...rows.map(row => columns.map(column => csvEscape(row[column])).join(","))
+            ].join("\r\n");
+        }
+
+        function download(filename, content, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function htmlTable(rows, columns) {
+            const head = columns.map(column => `<th>${column}</th>`).join("");
+            const body = rows.map(row => `<tr>${columns.map(column => `<td>${String(row[column] ?? "")}</td>`).join("")}</tr>`).join("");
+            return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+        }
+
+        function renderQuadratForm() {
+            const form = document.getElementById("quadratForm");
+            form.innerHTML = "";
+            for (let i = 1; i <= 9; i += 1) {
+                const card = document.createElement("section");
+                card.className = "quadrat-card";
+                card.innerHTML = `
+                    <h3>Q${i}</h3>
+                    <div class="grid two">
+                        <div>
+                            <label>Zona</label>
+                            <select name="q${i}_zone">
+                                <option>Superior</option>
+                                <option>Medio</option>
+                                <option>Inferior</option>
+                                <option>Infralitoral raso</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Coletado</label>
+                            <select name="q${i}_collected">
+                                <option>Sim</option>
+                                <option>Nao</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Transecto (m)</label>
+                            <input name="q${i}_transectM" type="number" step="0.01" />
+                        </div>
+                        <div>
+                            <label>Offset (m)</label>
+                            <input name="q${i}_offsetM" type="number" step="0.01" />
+                        </div>
+                        <div>
+                            <label>Massa umida (g)</label>
+                            <input name="q${i}_wetMassG" type="number" step="0.01" />
+                        </div>
+                        <div>
+                            <label>Massa seca (g)</label>
+                            <input name="q${i}_dryMassG" type="number" step="0.01" />
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <label>Especies dominantes</label>
+                        <input name="q${i}_dominantSpecies" placeholder="Separar por ponto e virgula" />
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <label>Foto/escala</label>
+                        <input name="q${i}_photoRef" placeholder="Arquivo ou codigo da foto" />
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <label>Observacoes</label>
+                        <textarea name="q${i}_notes"></textarea>
+                    </div>
+                `;
+                form.appendChild(card);
+            }
+        }
+
+        function stationFromForm() {
+            const form = document.getElementById("stationForm");
+            const data = new FormData(form);
+            const tempMean = mean([data.get("temp1"), data.get("temp2"), data.get("temp3")]);
+            const salMean = mean([data.get("sal1"), data.get("sal2"), data.get("sal3")]);
+            const stationCode = String(data.get("station") || "EST").slice(0, 3).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const id = `${stationCode}-${data.get("date") || "sem-data"}-${todayId()}`;
+            return {
+                id,
+                project: data.get("project"),
+                team: data.get("team"),
+                date: data.get("date"),
+                station: data.get("station"),
+                startTime: data.get("startTime"),
+                endTime: data.get("endTime"),
+                lat: data.get("lat"),
+                lon: data.get("lon"),
+                tideType: data.get("tideType"),
+                tideHeight: data.get("tideHeight"),
+                transparency: data.get("transparency"),
+                hydrodynamics: data.get("hydrodynamics"),
+                temp1: data.get("temp1"),
+                temp2: data.get("temp2"),
+                temp3: data.get("temp3"),
+                tempMean,
+                sal1: data.get("sal1"),
+                sal2: data.get("sal2"),
+                sal3: data.get("sal3"),
+                salMean,
+                substrate: checkedValues("substrate"),
+                slope: data.get("slope"),
+                impacts: checkedValues("impacts"),
+                sampleCodes: data.get("sampleCodes"),
+                photosDone: data.get("photosDone"),
+                photoFolder: data.get("photoFolder"),
+                labelPhoto: data.get("labelPhoto"),
+                visualScale: data.get("visualScale"),
+                hydroVideo: data.get("hydroVideo"),
+                photoLink: data.get("photoLink"),
+                waterSampleTime: data.get("waterSampleTime"),
+                processingDelayHours: data.get("processingDelayHours"),
+                outsideSpecies: data.get("outsideSpecies"),
+                notes: data.get("notes"),
+                createdAt: new Date().toISOString()
+            };
+        }
+
+        function quadratsFromForm(station) {
+            const data = new FormData(document.getElementById("quadratForm"));
+            return Array.from({ length: 9 }, (_, index) => {
+                const i = index + 1;
+                const dryMass = Number(data.get(`q${i}_dryMassG`));
+                return {
+                    stationId: station.id,
+                    station: station.station,
+                    date: station.date,
+                    quadrat: `Q${i}`,
+                    zone: data.get(`q${i}_zone`),
+                    transectM: data.get(`q${i}_transectM`),
+                    offsetM: data.get(`q${i}_offsetM`),
+                    dominantSpecies: data.get(`q${i}_dominantSpecies`),
+                    photoRef: data.get(`q${i}_photoRef`),
+                    collected: data.get(`q${i}_collected`),
+                    wetMassG: data.get(`q${i}_wetMassG`),
+                    dryMassG: data.get(`q${i}_dryMassG`),
+                    biomassGM2: Number.isFinite(dryMass) ? (dryMass / AREA_M2).toFixed(2) : "",
+                    notes: data.get(`q${i}_notes`)
+                };
+            });
+        }
+
+        function renderDataSummary() {
+            const collected = state.quadrats.filter(row => row.collected === "Sim").length;
+            document.getElementById("dataSummary").innerHTML = `
+                <div class="metric"><strong>${state.stations.length}</strong><span>estacoes salvas</span></div>
+                <div class="metric"><strong>${state.quadrats.length}</strong><span>quadrados registrados</span></div>
+                <div class="metric"><strong>${collected}</strong><span>quadrados coletados</span></div>
+                <div class="metric"><strong>${new Set(state.stations.map(row => row.station)).size}</strong><span>locais unicos</span></div>
+            `;
+        }
+
+        function renderTables() {
+            document.getElementById("stationTable").innerHTML = htmlTable(state.stations, stationColumns);
+            document.getElementById("quadratTable").innerHTML = htmlTable(state.quadrats, quadratColumns);
+        }
+
+        function speciesList(text) {
+            return String(text || "")
+                .split(/[;,]/)
+                .map(item => item.trim())
+                .filter(Boolean);
+        }
+
+        function buildResults() {
+            return state.stations.map(station => {
+                const quadrats = state.quadrats.filter(row => row.stationId === station.id);
+                const collected = quadrats.filter(row => row.collected === "Sim").length;
+                const dryMasses = quadrats.map(row => Number(row.dryMassG)).filter(Number.isFinite);
+                const biomass = quadrats.map(row => Number(row.biomassGM2)).filter(Number.isFinite);
+                const species = new Set(quadrats.flatMap(row => speciesList(row.dominantSpecies)));
+                const dryTotal = dryMasses.reduce((sum, value) => sum + value, 0);
+                const biomassMean = biomass.length ? biomass.reduce((sum, value) => sum + value, 0) / biomass.length : "";
+                return {
+                    estacao: station.station,
+                    data: station.date,
+                    temp_media: station.tempMean,
+                    sal_media: station.salMean,
+                    quadrados: quadrats.length,
+                    coletados: collected,
+                    riqueza_dominantes: species.size,
+                    massa_seca_total_g: dryMasses.length ? dryTotal.toFixed(2) : "",
+                    biomassa_media_g_m2: biomassMean === "" ? "" : biomassMean.toFixed(2),
+                    impactos: station.impacts || "Nao informado"
+                };
+            });
+        }
+
+        function renderResults() {
+            const results = buildResults();
+            const speciesCounts = {};
+            state.quadrats.forEach(row => {
+                speciesList(row.dominantSpecies).forEach(name => {
+                    speciesCounts[name] = (speciesCounts[name] || 0) + 1;
+                });
+            });
+            const speciesRows = Object.entries(speciesCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([especie, frequencia]) => ({ especie, frequencia_quadrados: frequencia }));
+            const tempValues = state.stations.map(row => Number(row.tempMean)).filter(Number.isFinite);
+            const salValues = state.stations.map(row => Number(row.salMean)).filter(Number.isFinite);
+            const richness = results.map(row => Number(row.riqueza_dominantes)).filter(Number.isFinite);
+            document.getElementById("resultMetrics").innerHTML = `
+                <div class="metric"><strong>${tempValues.length ? mean(tempValues) : ""}</strong><span>temperatura media geral</span></div>
+                <div class="metric"><strong>${salValues.length ? mean(salValues) : ""}</strong><span>salinidade media geral</span></div>
+                <div class="metric"><strong>${richness.length ? Math.max(...richness) : 0}</strong><span>maior riqueza dominante</span></div>
+                <div class="metric"><strong>${speciesRows.length}</strong><span>taxons dominantes citados</span></div>
+            `;
+            document.getElementById("resultTable").innerHTML = htmlTable(results, [
+                "estacao", "data", "temp_media", "sal_media", "quadrados", "coletados",
+                "riqueza_dominantes", "massa_seca_total_g", "biomassa_media_g_m2", "impactos"
+            ]);
+            document.getElementById("speciesTable").innerHTML = htmlTable(speciesRows, ["especie", "frequencia_quadrados"]);
+        }
+
+        function renderAll() {
+            renderDataSummary();
+            renderTables();
+            renderResults();
+        }
+
+        document.querySelectorAll(".tabs button").forEach(button => {
+            button.addEventListener("click", () => {
+                document.querySelectorAll(".tabs button").forEach(tab => tab.classList.remove("active"));
+                document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+                button.classList.add("active");
+                document.getElementById(button.dataset.view).classList.add("active");
+            });
+        });
+
+        document.getElementById("stationForm").addEventListener("submit", event => {
+            event.preventDefault();
+            const station = stationFromForm();
+            const quadrats = quadratsFromForm(station);
+            state.stations.push(station);
+            state.quadrats.push(...quadrats);
+            clearDraft();
+            saveState();
+            alert("Estacao salva com 9 quadrados.");
+        });
+
+        document.getElementById("fillNow").addEventListener("click", () => {
+            const now = new Date();
+            document.getElementById("date").value = now.toISOString().slice(0, 10);
+            document.getElementById("startTime").value = now.toTimeString().slice(0, 5);
+            saveDraft();
+        });
+
+        document.getElementById("getGps").addEventListener("click", () => {
+            if (!navigator.geolocation) {
+                alert("GPS indisponivel neste navegador.");
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(position => {
+                document.getElementById("lat").value = position.coords.latitude.toFixed(6);
+                document.getElementById("lon").value = position.coords.longitude.toFixed(6);
+                saveDraft();
+            }, () => alert("Nao foi possivel capturar GPS."));
+        });
+
+        document.getElementById("randomizeQuadrats").addEventListener("click", () => {
+            for (let i = 1; i <= 9; i += 1) {
+                document.querySelector(`[name="q${i}_transectM"]`).value = (Math.random() * 10).toFixed(2);
+                document.querySelector(`[name="q${i}_offsetM"]`).value = (Math.random() * 1).toFixed(2);
+            }
+            saveDraft();
+        });
+
+        document.getElementById("clearQuadrats").addEventListener("click", () => {
+            document.getElementById("quadratForm").reset();
+            saveDraft();
+        });
+
+        document.getElementById("exportStations").addEventListener("click", () => {
+            download(`macroalgas_estacoes_${todayId()}.csv`, toCsv(state.stations, stationColumns), "text/csv;charset=utf-8");
+        });
+
+        document.getElementById("exportQuadrats").addEventListener("click", () => {
+            download(`macroalgas_quadrados_${todayId()}.csv`, toCsv(state.quadrats, quadratColumns), "text/csv;charset=utf-8");
+        });
+
+        document.getElementById("exportExcel").addEventListener("click", () => {
+            const html = `
+                <html><head><meta charset="UTF-8"></head><body>
+                <h1>Estacoes</h1>${htmlTable(state.stations, stationColumns)}
+                <h1>Quadrados</h1>${htmlTable(state.quadrats, quadratColumns)}
+                <h1>Resultados</h1>${htmlTable(buildResults(), [
+                    "estacao", "data", "temp_media", "sal_media", "quadrados", "coletados",
+                    "riqueza_dominantes", "massa_seca_total_g", "biomassa_media_g_m2", "impactos"
+                ])}
+                </body></html>`;
+            download(`macroalgas_campo_${todayId()}.xls`, html, "application/vnd.ms-excel;charset=utf-8");
+        });
+
+        document.getElementById("exportJson").addEventListener("click", () => {
+            download(`backup_macroalgas_campo_${todayId()}.json`, JSON.stringify(state, null, 2), "application/json;charset=utf-8");
+            lastBackupAt = new Date().toLocaleString("pt-BR");
+            updateBackupStatus();
+        });
+
+        document.getElementById("importJsonBtn").addEventListener("click", () => {
+            document.getElementById("importJson").click();
+        });
+
+        document.getElementById("importJson").addEventListener("change", event => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const imported = JSON.parse(reader.result);
+                    state.stations = imported.stations || [];
+                    state.quadrats = imported.quadrats || [];
+                    saveState();
+                    alert("Backup importado.");
+                } catch (_) {
+                    alert("Arquivo JSON invalido.");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById("clearAll").addEventListener("click", () => {
+            if (!confirm("Apagar todos os registros deste navegador? Exporte um backup antes.")) return;
+            state.stations = [];
+            state.quadrats = [];
+            clearDraft();
+            lastBackupAt = "";
+            updateBackupStatus();
+            saveState();
+        });
+
+        renderQuadratForm();
+        restoreDraft();
+        updateBackupStatus();
+        renderAll();
+
+        document.getElementById("stationForm").addEventListener("input", saveDraft);
+        document.getElementById("quadratForm").addEventListener("input", saveDraft);
+        document.getElementById("stationForm").addEventListener("change", saveDraft);
+        document.getElementById("quadratForm").addEventListener("change", saveDraft);
+        document.getElementById("stationForm").addEventListener("reset", () => {
+            setTimeout(saveDraft, 0);
+        });
+        document.getElementById("quadratForm").addEventListener("reset", () => {
+            setTimeout(saveDraft, 0);
+        });
+
+        window.addEventListener("beforeunload", event => {
+            if (state.stations.length && !lastBackupAt) {
+                event.preventDefault();
+                event.returnValue = "";
+            }
+        });
+    </script>
+</body>
+</html>

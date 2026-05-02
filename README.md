@@ -1,48 +1,50 @@
-# Prototipo_Armação
+# Protótipo Temporal de Macroalgas - Baías da Ilha de Santa Catarina
 
-Protótipo de campo do Projeto de Mestrado (PPGOceano/UFSC) para validação cartográfica, coleta em campo, usabilidade e exportação de mapas em PNG.
+Protótipo de campo do Projeto de Mestrado do PPGOceano/UFSC voltado à validação cartográfica, coleta em campo, usabilidade do app e exportação de mapas em PNG.
 
-## Visão geral
+## Site publicado
 
-Este repositório reúne o portal do protótipo, a metodologia, o aplicativo de campo, o mapa operacional, o dashboard e os guias de uso. O fluxo foi pensado para uso prático em campo, com armazenamento local no navegador e exportação dos registros ao final de cada estação ou bloco de trabalho.
+Versão pública do projeto: https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/
 
-## Como abrir
+O portal concentra os produtos desta etapa do trabalho e mantém o mesmo vocabulário usado nas saídas de campo, na metodologia e nas análises históricas.
 
-Abra `index.html` para acessar a página principal do protótipo.
+## O que este repositório reúne
 
-## Componentes principais
+- Portal principal com acesso aos produtos do protótipo.
+- Mapa operacional com seis estações e camadas metodológicas.
+- Metodologia de campo com ficha, pré-campo e materiais.
+- App de campo com armazenamento local no navegador.
+- Guia de uso e validação do app.
+- Dashboard com os resultados consolidados.
+- Legendas históricas e arquivos de apoio para apresentação e leitura dos dados.
 
-- `01_planejamento/metodologia_prototipo_macroalgas.html` - metodologia e ficha de campo
-- `03_formularios/app_campo_macroalgas.html` - aplicativo de coleta em campo
-- `03_formularios/GUIA_USO_APP_CAMPO.html` - guia operacional e validação
-- `05_gis_mapas/mapa_prototipo_armacao_clone.html` - mapa operacional principal
-- `05_gis_mapas/mapa_prototipo_armacao_infra_clone.html` - mapa para fluxo de render e exportação PNG
-- `05_gis_mapas/pagina_impressao_prototipo_armacao.html` - página de apoio para impressão
-- `dashboard_macroalgas_baias_clone.html` - painel analítico consolidado
-- `render/server.js` - serviço local para exportação PNG via render
+## Produtos publicados
 
-## Coleta em campo
+- [index.html](index.html) - portal principal do protótipo
+- [05_gis_mapas/mapa_prototipo_armacao_clone.html](05_gis_mapas/mapa_prototipo_armacao_clone.html) - mapa operacional
+- [01_planejamento/metodologia_prototipo_macroalgas.html](01_planejamento/metodologia_prototipo_macroalgas.html) - metodologia e ficha de campo
+- [03_formularios/app_campo_macroalgas.html](03_formularios/app_campo_macroalgas.html) - app de coleta em campo
+- [03_formularios/GUIA_USO_APP_CAMPO.html](03_formularios/GUIA_USO_APP_CAMPO.html) - guia operacional do app
+- [dashboard_macroalgas_baias_clone.html](dashboard_macroalgas_baias_clone.html) - dashboard de resultados
+- [05_gis_mapas/pagina_impressao_prototipo_armacao.html](05_gis_mapas/pagina_impressao_prototipo_armacao.html) - página de apoio para impressão
 
-O aplicativo de campo salva estações, quadrados, rascunhos e tema apenas no navegador do aparelho usado na campanha. Para evitar perda de dados, use sempre o mesmo celular ou tablet durante a saída, exporte o backup ao final de cada estação ou bloco e não limpe o navegador antes de gerar os arquivos.
+## Uso em campo
 
-Se houver troca de aparelho, exporte o JSON no aparelho antigo e importe-o no novo antes de continuar a coleta.
+O app de campo grava estações, quadrados, rascunhos e tema apenas no navegador do aparelho usado durante a campanha. Para não perder dados, use sempre o mesmo celular ou tablet, exporte o backup ao final de cada estação ou bloco e não limpe o navegador antes de salvar os arquivos.
+
+Se houver troca de aparelho, exporte o JSON no aparelho antigo e importe-o no novo antes de seguir com a coleta.
 
 ## Exportação PNG
 
-Há duas formas de exportar PNG:
-
-1. Render local com `render/server.js`.
-2. Render remoto, caso o serviço seja publicado em nuvem.
-
-No fluxo local, instale as dependências do diretório `render`, inicie o serviço e use a versão infra do mapa para gerar a imagem com alinhamento cartográfico mais estável.
+O fluxo de exportação PNG pode ser feito com render local em [render/server.js](render/server.js) ou com um serviço remoto publicado em nuvem. No fluxo local, basta instalar as dependências do diretório render, iniciar o serviço e abrir a versão infra do mapa para gerar a imagem com alinhamento cartográfico mais estável.
 
 ## Protocolo operacional
 
 Para operação diária, validação e contingência, consulte:
 
-- `01_planejamento/PROTOCOLO_OPERACAO_EXPORTACAO_PNG.md`
-- `01_planejamento/PROTOCOLO_OPERACAO_CAMPO_1_PAGINA.md`
-- `01_planejamento/OPERACAO_CAMPO_RAPIDA.html`
+- [01_planejamento/PROTOCOLO_OPERACAO_EXPORTACAO_PNG.md](01_planejamento/PROTOCOLO_OPERACAO_EXPORTACAO_PNG.md)
+- [01_planejamento/PROTOCOLO_OPERACAO_CAMPO_1_PAGINA.md](01_planejamento/PROTOCOLO_OPERACAO_CAMPO_1_PAGINA.md)
+- [01_planejamento/OPERACAO_CAMPO_RAPIDA.html](01_planejamento/OPERACAO_CAMPO_RAPIDA.html)
 
 ## Autoria e programa
 

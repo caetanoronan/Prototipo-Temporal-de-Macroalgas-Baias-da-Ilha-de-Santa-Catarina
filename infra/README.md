@@ -33,12 +33,12 @@ register the providers once before running the workflow.
 2. Run workflow: Azure Deploy (Infra + Static Site).
 3. Check logs for resource creation and site upload.
 
-The workflow registers these Azure providers before deploying:
+Before the first deploy, register this Azure provider once at subscription level:
 
 - Microsoft.Web
-- Microsoft.Storage
-- Microsoft.Insights
-- Microsoft.DocumentDB
+
+The workflow checks that `Microsoft.Web` is registered, but does not register it automatically because the GitHub
+service principal may only have deployment permissions.
 
 Default behavior:
 

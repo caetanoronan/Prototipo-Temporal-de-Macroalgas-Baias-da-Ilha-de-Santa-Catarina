@@ -45,35 +45,14 @@ jobs:
             --name "$AZURE_RESOURCE_GROUP" \
             --location brazilsouth
 
-      - name: Register Azure resource providers
+      - name: Check Azure resource provider
         run: |
-          for namespace in Microsoft.Web Microsoft.Storage Microsoft.Insights Microsoft.DocumentDB; do
-            state=$(az provider show --namespace "$namespace" --query registrationState -o tsv || echo "NotRegistered")
-            if [ "$state" != "Registered" ]; then
-              echo "Registering $namespace..."
-              az provider register --namespace "$namespace"
-            else
-              echo "$namespace already registered."
-            fi
-          done
-
-          for namespace in Microsoft.Web Microsoft.Storage Microsoft.Insights Microsoft.DocumentDB; do
-            echo "Waiting for $namespace registration..."
-            for i in {1..30}; do
-              state=$(az provider show --namespace "$namespace" --query registrationState -o tsv)
-              echo "$namespace: $state"
-              if [ "$state" = "Registered" ]; then
-                break
-              fi
-              sleep 10
-            done
-
-            state=$(az provider show --namespace "$namespace" --query registrationState -o tsv)
-            if [ "$state" != "Registered" ]; then
-              echo "$namespace did not finish registration in time."
-              exit 1
-            fi
-          done
+          state=$(az provider show --namespace Microsoft.Web --query registrationState -o tsv)
+          echo "Microsoft.Web: $state"
+          if [ "$state" != "Registered" ]; then
+            echo "Microsoft.Web is not registered. Ask a subscription owner to register it once before deploying Static Web Apps."
+            exit 1
+          fi
 
       - name: Deploy Bicep
         run: |

@@ -3,3 +3,4 @@ render/teste_export.png
 *.log
 .DS_Store
 Thumbs.db
+infra/azure-credentials.json

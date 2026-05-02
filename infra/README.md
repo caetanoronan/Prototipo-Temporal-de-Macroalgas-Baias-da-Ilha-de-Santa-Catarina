@@ -1,11 +1,14 @@
 # Azure automation (Bicep + GitHub Actions)
 
-This folder provisions the Azure baseline for the prototype:
+This folder provisions the Azure baseline for the prototype.
+
+The first deployment is intentionally conservative: it deploys only the Static Web App by default.
+The backend resources are optional and should be enabled only when the app starts syncing data to Azure.
 
 - Resource Group (created by workflow command)
 - Static Web App
-- Function App + Storage + Application Insights
-- Cosmos DB SQL account + database + containers
+- Optional backend: Function App + Storage + Application Insights
+- Optional database: Cosmos DB SQL account + database + containers
 
 ## Files
 
@@ -27,9 +30,27 @@ Use a service principal JSON with Contributor access on the subscription or reso
 2. Run workflow: Azure Deploy (Infra + Static Site).
 3. Check logs for resource creation and site upload.
 
+Default behavior:
+
+- deployBackend=false
+- Static Web App is deployed.
+- Function App, Storage, Application Insights and Cosmos DB are not created.
+
+This keeps the first Azure test low-risk and low-cost.
+
+## Enabling the backend later
+
+Only enable the backend when there is API code ready to receive app data.
+
+1. Set `deployBackend` to `true` in `infra/main.parameters.json`.
+2. Provide a secure `apiKey` parameter through a secret-based deployment process.
+3. Review Cosmos DB cost before running the workflow.
+4. Add a separate Function App code deployment workflow.
+
 ## Notes
 
 - Names for Function App, Storage and Cosmos must be globally unique.
 - If a name is already taken, edit infra/main.parameters.json and rerun.
 - This workflow deploys infra and static content.
 - Function API code deployment can be added in a separate workflow once API code is committed.
+- Never commit infra/azure-credentials.json.

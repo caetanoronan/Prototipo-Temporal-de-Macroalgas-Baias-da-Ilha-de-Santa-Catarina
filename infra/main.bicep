@@ -61,6 +61,13 @@ param nodeVersion string = '20'
 @description('Python runtime version when functionRuntime is python.')
 param pythonVersion string = '3.11'
 
+@description('Deploy Function App, Storage, Application Insights and Cosmos DB backend resources. Keep false for the first static-site deployment.')
+param deployBackend bool = false
+
+@secure()
+@description('API key used by the Function App when deployBackend is true. Provide through a secure parameter or secret.')
+param apiKey string = ''
+
 var tags = {
   project: project
   organization: organization
@@ -68,7 +75,7 @@ var tags = {
   managedBy: 'bicep'
 }
 
-resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = if (deployBackend) {
   name: functionStorageName
   location: location
   tags: tags
@@ -83,7 +90,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
 }
 
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = if (deployBackend) {
   name: appInsightsName
   location: location
   tags: tags
@@ -94,7 +101,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource functionPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+resource functionPlan 'Microsoft.Web/serverfarms@2023-12-01' = if (deployBackend) {
   name: functionPlanName
   location: location
   tags: tags
@@ -112,7 +119,7 @@ var linuxFxVersion = functionRuntime == 'node'
   ? 'NODE|${nodeVersion}'
   : 'PYTHON|${pythonVersion}'
 
-resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+resource functionApp 'Microsoft.Web/sites@2023-12-01' = if (deployBackend) {
   name: functionAppName
   location: location
   tags: tags
@@ -130,7 +137,7 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${listKeys(storage.id, storage.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storage!.name};AccountKey=${storage!.listKeys().keys[0].value};EndpointSuffix=${az.environment().suffixes.storage}'
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -142,11 +149,11 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appInsights.properties.InstrumentationKey
+          value: appInsights!.properties.InstrumentationKey
         }
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights.properties.ConnectionString
+          value: appInsights!.properties.ConnectionString
         }
         {
           name: 'COSMOS_DATABASE'
@@ -154,11 +161,11 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
         }
         {
           name: 'COSMOS_ENDPOINT'
-          value: cosmos.properties.documentEndpoint
+          value: cosmos!.properties.documentEndpoint
         }
         {
           name: 'COSMOS_KEY'
-          value: listKeys(cosmos.id, cosmos.apiVersion).primaryMasterKey
+          value: cosmos!.listKeys().primaryMasterKey
         }
         {
           name: 'COSMOS_CONTAINER_STATIONS'
@@ -178,14 +185,14 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
         }
         {
           name: 'API_KEY'
-          value: 'change-this-api-key'
+          value: apiKey
         }
       ]
     }
   }
 }
 
-resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = {
+resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = if (deployBackend) {
   name: cosmosAccountName
   location: location
   tags: tags
@@ -209,7 +216,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = {
   }
 }
 
-resource cosmosSqlDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-02-15-preview' = {
+resource cosmosSqlDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-02-15-preview' = if (deployBackend) {
   parent: cosmos
   name: cosmosDatabaseName
   properties: {
@@ -222,7 +229,7 @@ resource cosmosSqlDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-02
   }
 }
 
-resource cosmosStations 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = {
+resource cosmosStations 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = if (deployBackend) {
   parent: cosmosSqlDb
   name: stationsContainerName
   properties: {
@@ -256,7 +263,7 @@ resource cosmosStations 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/cont
   }
 }
 
-resource cosmosQuadrats 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = {
+resource cosmosQuadrats 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = if (deployBackend) {
   parent: cosmosSqlDb
   name: quadratsContainerName
   properties: {
@@ -290,7 +297,7 @@ resource cosmosQuadrats 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/cont
   }
 }
 
-resource cosmosSyncEvents 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = {
+resource cosmosSyncEvents 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = if (deployBackend) {
   parent: cosmosSqlDb
   name: syncEventsContainerName
   properties: {
@@ -343,5 +350,6 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-12-01' = {
 
 output resourceGroupName string = resourceGroup().name
 output staticWebAppDefaultHostname string = staticWebApp.properties.defaultHostname
-output functionAppUrl string = 'https://${functionApp.properties.defaultHostName}'
-output cosmosEndpoint string = cosmos.properties.documentEndpoint
+output backendEnabled bool = deployBackend
+output functionAppUrl string = deployBackend ? 'https://${functionApp!.properties.defaultHostName}' : ''
+output cosmosEndpoint string = deployBackend ? cosmos!.properties.documentEndpoint : ''

@@ -45,6 +45,36 @@ jobs:
             --name "$AZURE_RESOURCE_GROUP" \
             --location brazilsouth
 
+      - name: Register Azure resource providers
+        run: |
+          for namespace in Microsoft.Web Microsoft.Storage Microsoft.Insights Microsoft.DocumentDB; do
+            state=$(az provider show --namespace "$namespace" --query registrationState -o tsv || echo "NotRegistered")
+            if [ "$state" != "Registered" ]; then
+              echo "Registering $namespace..."
+              az provider register --namespace "$namespace"
+            else
+              echo "$namespace already registered."
+            fi
+          done
+
+          for namespace in Microsoft.Web Microsoft.Storage Microsoft.Insights Microsoft.DocumentDB; do
+            echo "Waiting for $namespace registration..."
+            for i in {1..30}; do
+              state=$(az provider show --namespace "$namespace" --query registrationState -o tsv)
+              echo "$namespace: $state"
+              if [ "$state" = "Registered" ]; then
+                break
+              fi
+              sleep 10
+            done
+
+            state=$(az provider show --namespace "$namespace" --query registrationState -o tsv)
+            if [ "$state" != "Registered" ]; then
+              echo "$namespace did not finish registration in time."
+              exit 1
+            fi
+          done
+
       - name: Deploy Bicep
         run: |
           az deployment group create \

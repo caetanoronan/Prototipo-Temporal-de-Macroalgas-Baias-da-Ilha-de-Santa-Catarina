@@ -23,12 +23,22 @@ Create this repository secret before running the workflow:
 - AZURE_CREDENTIALS
 
 Use a service principal JSON with Contributor access on the subscription or resource group.
+For the first run, subscription-level permission is recommended because the workflow registers Azure resource providers
+such as `Microsoft.Web`. If the service principal only has resource-group access, ask the Azure subscription owner to
+register the providers once before running the workflow.
 
 ## First run
 
 1. Open GitHub Actions.
 2. Run workflow: Azure Deploy (Infra + Static Site).
 3. Check logs for resource creation and site upload.
+
+The workflow registers these Azure providers before deploying:
+
+- Microsoft.Web
+- Microsoft.Storage
+- Microsoft.Insights
+- Microsoft.DocumentDB
 
 Default behavior:
 

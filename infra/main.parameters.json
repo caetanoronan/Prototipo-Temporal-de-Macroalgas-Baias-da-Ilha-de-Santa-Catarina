@@ -41,9 +41,6 @@
     "syncEventsContainerName": {
       "value": "sync_events"
     },
-    "appInsightsName": {
-      "value": "appi-ufsc-ptm-dev"
-    },
     "functionPlanName": {
       "value": "asp-ufsc-ptm-dev"
     },

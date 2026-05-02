@@ -54,7 +54,7 @@ jobs:
           deploy_backend=$(jq -r '.parameters.deployBackend.value // false' infra/main.parameters.json)
           namespaces=("Microsoft.Web")
           if [ "$deploy_backend" = "true" ]; then
-            namespaces+=("Microsoft.Storage" "Microsoft.Insights" "Microsoft.DocumentDB")
+            namespaces+=("Microsoft.Storage" "Microsoft.Insights" "Microsoft.DocumentDB" "Microsoft.OperationalInsights")
           fi
 
           for namespace in "${namespaces[@]}"; do

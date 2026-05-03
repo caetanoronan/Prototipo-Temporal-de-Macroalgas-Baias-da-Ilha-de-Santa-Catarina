@@ -1617,9 +1617,15 @@
                 const device = await registerOrUpdateDevice(config);
 
                 // Transform local data to match Supabase schema (use UUIDs, generate if missing)
+                // Create a map to track local station IDs -> generated UUIDs for foreign key references
+                const stationIdMap = {};
+                
                 const stationsToUpload = state.stations.map(station => {
+                    const generatedId = (station.id && isValidUuid(station.id)) ? station.id : generateUuid();
+                    stationIdMap[station.id] = generatedId; // Map local ID to UUID
+                    
                     const obj = {
-                        id: (station.id && isValidUuid(station.id)) ? station.id : generateUuid(),
+                        id: generatedId,
                         campaign_id: campaignUuid,
                         device_id: (device && device.id && isValidUuid(device.id)) ? device.id : null,
                         station_name: station.station || station.stationName,
@@ -1633,12 +1639,16 @@
                     return obj;
                 });
 
+                // Use stationIdMap to resolve foreign keys in quadrats
                 const quadratsToUpload = state.quadrats.map(quadrat => {
+                    const resolvedStationId = stationIdMap[quadrat.stationId] || 
+                                            ((quadrat.stationId && isValidUuid(quadrat.stationId)) ? quadrat.stationId : null);
+                    
                     const obj = {
                         id: (quadrat.id && isValidUuid(quadrat.id)) ? quadrat.id : generateUuid(),
                         campaign_id: campaignUuid,
                         device_id: (device && device.id && isValidUuid(device.id)) ? device.id : null,
-                        station_id: (quadrat.stationId && isValidUuid(quadrat.stationId)) ? quadrat.stationId : null,
+                        station_id: resolvedStationId,
                         quadrat_number: parseInt(quadrat.quadrat) || null,
                         depth_m: parseFloat(quadrat.depthM) || null,
                         cover_percent: parseFloat(quadrat.coverPercent) || null,
@@ -1653,6 +1663,7 @@
 
                 console.log("📤 Uploading stations:", stationsToUpload);
                 console.log("📤 Uploading quadrats:", quadratsToUpload);
+                console.log("🔗 Station ID mapping:", stationIdMap);
 
                 // Upload stations
                 if (stationsToUpload.length > 0) {

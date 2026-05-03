@@ -1,4 +1,4 @@
-name: Azure Deploy (Infra + Static Site)
+name: Azure Deploy (Paused)
 
 on:
   workflow_dispatch:

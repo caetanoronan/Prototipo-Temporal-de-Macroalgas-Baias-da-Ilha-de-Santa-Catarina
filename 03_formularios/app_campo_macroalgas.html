@@ -1593,6 +1593,19 @@
             return uuidRegex.test(String(value || ""));
         }
 
+        function generateUuid() {
+            // Simple v4 UUID generator (crypto.randomUUID if available, else fallback)
+            if (crypto && crypto.randomUUID) {
+                return crypto.randomUUID();
+            }
+            // Fallback: generate UUID v4 pattern
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
         async function uploadCloudData() {
             try {
                 const config = saveCloudConfig();
@@ -1603,9 +1616,10 @@
                 config._campaignUuid = campaignUuid;
                 const device = await registerOrUpdateDevice(config);
 
-                // Transform local data to match Supabase schema (use UUIDs, only include id if valid UUID)
+                // Transform local data to match Supabase schema (use UUIDs, generate if missing)
                 const stationsToUpload = state.stations.map(station => {
                     const obj = {
+                        id: (station.id && isValidUuid(station.id)) ? station.id : generateUuid(),
                         campaign_id: campaignUuid,
                         device_id: (device && device.id && isValidUuid(device.id)) ? device.id : null,
                         station_name: station.station || station.stationName,
@@ -1616,17 +1630,14 @@
                         updated_at: new Date().toISOString(),
                         synced_at: new Date().toISOString()
                     };
-                    // Only include id if it's a valid UUID (Supabase will generate one if omitted)
-                    if (station.id && isValidUuid(station.id)) {
-                        obj.id = station.id;
-                    }
                     return obj;
                 });
 
                 const quadratsToUpload = state.quadrats.map(quadrat => {
                     const obj = {
+                        id: (quadrat.id && isValidUuid(quadrat.id)) ? quadrat.id : generateUuid(),
                         campaign_id: campaignUuid,
-                        device_id: device ? device.id : null,
+                        device_id: (device && device.id && isValidUuid(device.id)) ? device.id : null,
                         station_id: (quadrat.stationId && isValidUuid(quadrat.stationId)) ? quadrat.stationId : null,
                         quadrat_number: parseInt(quadrat.quadrat) || null,
                         depth_m: parseFloat(quadrat.depthM) || null,
@@ -1637,10 +1648,6 @@
                         updated_at: new Date().toISOString(),
                         synced_at: new Date().toISOString()
                     };
-                    // Only include id if it's a valid UUID (Supabase will generate one if omitted)
-                    if (quadrat.id && isValidUuid(quadrat.id)) {
-                        obj.id = quadrat.id;
-                    }
                     return obj;
                 });
 

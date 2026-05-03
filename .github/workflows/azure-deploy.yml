@@ -2,21 +2,8 @@ name: Azure Deploy (Infra + Static Site)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - 'infra/**'
-      - '.github/workflows/azure-deploy.yml'
-      - 'index.html'
-      - 'dashboard_macroalgas_baias_clone.html'
-      - '01_planejamento/**'
-      - '02_sops/**'
-      - '03_formularios/**'
-      - '04_dados_campo/**'
-      - '05_gis_mapas/**'
-      - 'assets/**'
-      - 'data/**'
+
+# Azure deploy is paused for now. Keep this workflow manual so it does not run on every push.
 
 concurrency:
   group: azure-deploy-${{ github.ref }}

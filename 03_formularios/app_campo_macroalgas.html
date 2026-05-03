@@ -1607,7 +1607,7 @@
                 const stationsToUpload = state.stations.map(station => {
                     const obj = {
                         campaign_id: campaignUuid,
-                        device_id: device ? device.id : null,
+                        device_id: (device && device.id && isValidUuid(device.id)) ? device.id : null,
                         station_name: station.station || station.stationName,
                         latitude: parseFloat(station.lat) || null,
                         longitude: parseFloat(station.lon) || null,
@@ -1627,7 +1627,7 @@
                     const obj = {
                         campaign_id: campaignUuid,
                         device_id: device ? device.id : null,
-                        station_id: quadrat.stationId || null,
+                        station_id: (quadrat.stationId && isValidUuid(quadrat.stationId)) ? quadrat.stationId : null,
                         quadrat_number: parseInt(quadrat.quadrat) || null,
                         depth_m: parseFloat(quadrat.depthM) || null,
                         cover_percent: parseFloat(quadrat.coverPercent) || null,
@@ -1666,7 +1666,7 @@
                 // Record sync event (use device.id and campaign UUID)
                 await sb.from("sync_events").insert({
                     campaign_id: campaignUuid,
-                    device_id: device ? device.id : null,
+                    device_id: (device && device.id && isValidUuid(device.id)) ? device.id : null,
                     station_count: stationsToUpload.length,
                     quadrat_count: quadratsToUpload.length,
                     sync_status: "success"

@@ -908,10 +908,14 @@
         async function registerOrUpdateDevice(config) {
             if (!supabase) return;
             try {
+                // campaign_id must be a UUID; ensure we have campaignUuid
+                const campaignUuid = config._campaignUuid || config.campaignUuid;
+                if (!campaignUuid) throw new Error('campaignUuid missing when registering device');
+
                 const { data, error } = await supabase
                     .from("devices")
                     .upsert({
-                        campaign_id: config.campaignId,
+                        campaign_id: campaignUuid,
                         device_id_field: config.deviceId,
                         device_name: navigator.userAgent.substring(0, 100),
                         last_sync: new Date().toISOString()
@@ -920,10 +924,36 @@
 
                 if (error) throw error;
                 console.log("✅ Device registered:", data);
-                return data[0];
+                return data && data[0] ? data[0] : null;
             } catch (error) {
                 console.error("❌ Device registration failed:", error);
                 setCloudStatus(`Falha ao registrar dispositivo: ${error.message}`);
+                throw error;
+            }
+        }
+
+        async function findOrCreateCampaign(campaignSlug) {
+            if (!supabase) return null;
+            try {
+                // Try to find existing campaign by name
+                const { data: found, error: findErr } = await supabase
+                    .from('campaigns')
+                    .select('id')
+                    .eq('name', campaignSlug)
+                    .limit(1);
+                if (findErr) throw findErr;
+                if (found && found.length) return found[0].id;
+
+                // Insert new campaign
+                const { data: inserted, error: insertErr } = await supabase
+                    .from('campaigns')
+                    .insert({ name: campaignSlug })
+                    .select('id')
+                    .limit(1);
+                if (insertErr) throw insertErr;
+                return inserted && inserted[0] ? inserted[0].id : null;
+            } catch (error) {
+                console.error('❌ findOrCreateCampaign failed', error);
                 throw error;
             }
         }
@@ -1563,14 +1593,16 @@
                 const config = saveCloudConfig();
                 const sb = await initSupabase();
                 if (!sb) throw new Error("Supabase não configurado");
+                // Ensure campaign exists (returns UUID) and register device
+                const campaignUuid = await findOrCreateCampaign(config.campaignId);
+                config._campaignUuid = campaignUuid;
+                const device = await registerOrUpdateDevice(config);
 
-                await registerOrUpdateDevice(config);
-
-                // Transform local data to match Supabase schema
+                // Transform local data to match Supabase schema (use UUIDs)
                 const stationsToUpload = state.stations.map(station => ({
                     id: station.id || undefined,
-                    campaign_id: config.campaignId,
-                    device_id_field: config.deviceId,
+                    campaign_id: campaignUuid,
+                    device_id: device ? device.id : null,
                     station_name: station.station || station.stationName,
                     latitude: parseFloat(station.lat) || null,
                     longitude: parseFloat(station.lon) || null,
@@ -1582,8 +1614,8 @@
 
                 const quadratsToUpload = state.quadrats.map(quadrat => ({
                     id: quadrat.id || undefined,
-                    campaign_id: config.campaignId,
-                    device_id_field: config.deviceId,
+                    campaign_id: campaignUuid,
+                    device_id: device ? device.id : null,
                     station_id: quadrat.stationId || null,
                     quadrat_number: parseInt(quadrat.quadrat) || null,
                     depth_m: parseFloat(quadrat.depthM) || null,
@@ -1611,10 +1643,10 @@
                     if (quadratError) throw quadratError;
                 }
 
-                // Record sync event
+                // Record sync event (use device.id and campaign UUID)
                 await sb.from("sync_events").insert({
-                    campaign_id: config.campaignId,
-                    device_id_field: config.deviceId,
+                    campaign_id: campaignUuid,
+                    device_id: device ? device.id : null,
                     station_count: stationsToUpload.length,
                     quadrat_count: quadratsToUpload.length,
                     sync_status: "success"
@@ -1632,12 +1664,14 @@
                 const config = loadCloudConfig();
                 const sb = await initSupabase();
                 if (!sb) throw new Error("Supabase não configurado");
+                // Resolve campaign UUID
+                const campaignUuid = await findOrCreateCampaign(config.campaignId);
 
                 // Fetch stations
                 const { data: stationsData, error: stationsError } = await sb
                     .from("stations")
                     .select("*")
-                    .eq("campaign_id", config.campaignId);
+                    .eq("campaign_id", campaignUuid);
                 
                 if (stationsError) throw stationsError;
 
@@ -1645,7 +1679,7 @@
                 const { data: quadratsData, error: quadratsError } = await sb
                     .from("quadrats")
                     .select("*")
-                    .eq("campaign_id", config.campaignId);
+                    .eq("campaign_id", campaignUuid);
                 
                 if (quadratsError) throw quadratsError;
 

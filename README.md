@@ -13,8 +13,8 @@ O portal concentra os produtos desta etapa do trabalho e mantém o mesmo vocabul
 - Portal principal com acesso aos produtos do protótipo.
 - Mapa operacional com seis estações e camadas metodológicas.
 - Metodologia de campo com ficha, pré-campo e materiais.
-- App de campo com armazenamento local no navegador.
-- Guia de uso e validação do app.
+- App de campo offline-first, com armazenamento local no navegador e sincronização com Supabase.
+- Guia de uso e validação do app, já testado em múltiplas abas e em celular.
 - Dashboard com os resultados consolidados.
 - Legendas históricas e arquivos de apoio para apresentação e leitura dos dados.
 
@@ -30,9 +30,15 @@ O portal concentra os produtos desta etapa do trabalho e mantém o mesmo vocabul
 
 ## Uso em campo
 
-O app de campo grava estações, quadrados, rascunhos e tema apenas no navegador do aparelho usado durante a campanha. Para não perder dados, use sempre o mesmo celular ou tablet, exporte o backup ao final de cada estação ou bloco e não limpe o navegador antes de salvar os arquivos.
+O app de campo é offline-first: ele grava estações, quadrados, rascunhos e preferências no navegador do aparelho usado durante a campanha e envia os dados para a nuvem quando o comando de sincronização é acionado. O fluxo validado permite continuar coletando sem internet e depois baixar ou reenviar os dados em outro aparelho, mantendo o backup local como contingência.
 
-Se houver troca de aparelho, exporte o JSON no aparelho antigo e importe-o no novo antes de seguir com a coleta.
+Se houver troca de aparelho, exporte o JSON no aparelho antigo e importe-o no novo antes de seguir com a coleta. Quando a conexão estiver disponível, o app também pode sincronizar entre abas e dispositivos diferentes via Supabase.
+
+## Validação recente
+
+- Sincronização validada entre duas abas abertas no navegador.
+- Sincronização validada entre navegador do computador e navegador do celular.
+- Upload e download da nuvem funcionando sem erro de chave estrangeira.
 
 ## Exportação PNG
 

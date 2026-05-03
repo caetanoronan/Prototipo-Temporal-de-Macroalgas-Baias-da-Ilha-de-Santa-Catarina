@@ -234,23 +234,24 @@
             <p>
                 O app substitui a ficha em papel durante o piloto de campo. Ele registra dados gerais da estação,
                 condições ambientais, 9 quadrados por estação, referências de fotos, observações e coletas
-                complementares. Ao final, gera planilhas CSV/Excel e um backup JSON.
+                complementares. Ao final, gera planilhas CSV/Excel, um backup JSON e, quando a sincronização está
+                ativa, envia os dados para a nuvem para uso em outros aparelhos.
             </p>
             <div class="callout ok">
-                Versão atual: <strong>v0.1 piloto operacional</strong>. Ela é adequada para teste em campo, desde que os dados sejam conferidos e exportados ao final da saída.
+                Versão atual: <strong>v0.1 piloto operacional</strong>. Ela foi validada em múltiplas abas e em celular separado, com envio e download da nuvem funcionando sem perda de dados.
             </div>
             <div class="callout">
-                <strong>Orientação operacional:</strong> use um aparelho dedicado para a coleta em campo. O app salva os registros apenas no navegador do aparelho usado durante a campanha, então o ideal é manter o mesmo celular ou tablet para todas as estações da saída.
+                <strong>Orientação operacional:</strong> mantenha um aparelho principal para a coleta local, mas use a sincronização em nuvem quando houver internet. O app continua offline-first: os dados ficam salvos no navegador até o envio.
             </div>
             <p>
-                Na prática, isso significa que você pode registrar várias estações seguidas no mesmo aparelho sem perder os dados, desde que não troque de navegador, não limpe o histórico e não apague os dados do site antes de fazer o backup.
+                Na prática, isso significa que você pode registrar várias estações seguidas no mesmo aparelho sem perder os dados, mesmo sem internet, e depois sincronizar com a nuvem ou baixar os registros em outro navegador quando necessário.
             </p>
             <ul>
                 <li>Use sempre o mesmo celular ou tablet durante a campanha.</li>
                 <li>Salve cada estação no app antes de iniciar a próxima coleta.</li>
                 <li>Exporte o backup JSON ao final de cada estação ou bloco de trabalho.</li>
-                <li>Se precisar trocar de aparelho, exporte e importe o backup antes de continuar.</li>
-                <li>Não limpe o navegador nem apague os dados do site antes de confirmar que CSV, Excel e JSON foram salvos.</li>
+                <li>Se precisar trocar de aparelho, exporte e importe o backup antes de continuar, ou baixe os dados da nuvem.</li>
+                <li>Não limpe o navegador nem apague os dados do site antes de confirmar que CSV, Excel, JSON e a sincronização foram concluídos.</li>
             </ul>
         </section>
 
@@ -265,6 +266,7 @@
                 <li>Exporte CSV de estações, CSV de quadrados, Excel e backup JSON.</li>
                 <li>Feche o navegador, abra novamente e confirme se os registros continuam no aparelho.</li>
                 <li>Importe o Backup JSON em outro navegador ou computador para confirmar que ele recupera os dados.</li>
+                <li>Se houver internet, envie os dados para a nuvem e teste a sincronização em outra aba ou outro aparelho.</li>
             </ol>
         </section>
 
@@ -293,6 +295,14 @@
                 <li>Confira se a pasta/link de fotos foi anotada.</li>
                 <li>Clique em <strong>Salvar estação</strong>.</li>
                 <li>Abra <strong>Dados</strong> e confirme que a estação e os 9 quadrados apareceram.</li>
+            </ol>
+
+            <h3>Sincronização com a nuvem</h3>
+            <ol>
+                <li>Abra a aba <strong>Nuvem</strong> e preencha a campanha e o dispositivo.</li>
+                <li>Clique em <strong>Enviar dados locais</strong> para publicar estações e quadrados no Supabase.</li>
+                <li>Em outro aparelho ou aba, use <strong>Baixar dados da nuvem</strong> para recuperar a mesma campanha.</li>
+                <li>Se a conexão cair, continue coletando localmente e sincronize depois.</li>
             </ol>
         </section>
 
@@ -425,6 +435,15 @@
                                 de energia e permissão limitada do navegador. Para pontos oficiais, o ideal é conferir com GPS dedicado
                                 ou revisar as coordenadas sobre imagem/mapa depois do campo.
             </p>
+        </section>
+
+        <section>
+            <h2>9. Validação operacional recente</h2>
+            <ul>
+                <li>Sincronização confirmada entre duas abas abertas no mesmo navegador.</li>
+                <li>Sincronização confirmada entre computador e celular em navegadores diferentes.</li>
+                <li>Download da nuvem funcionando para recuperar os dados em outro dispositivo.</li>
+            </ul>
         </section>
     </main>
         <script>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>App de Campo - Macroalgas</title>
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/module.js" type="module"></script>
     <style>
         :root {
             color-scheme: light;
@@ -684,15 +686,15 @@
                 A sincronização é offline-first: os dados continuam salvos neste celular e são enviados para a nuvem quando houver internet.
             </div>
             <div class="panel">
-                <h2>Configuração da nuvem</h2>
+                <h2>Configuração da nuvem (Supabase)</h2>
                 <div class="grid two">
                     <div>
-                        <label for="cloudApiUrl">URL da Azure Function</label>
-                        <input id="cloudApiUrl" placeholder="https://func-ufsc-ptm-dev-001.azurewebsites.net/api" />
+                        <label for="cloudProjectUrl">URL do Supabase</label>
+                        <input id="cloudProjectUrl" placeholder="https://lfszlfvezihusimodglz.supabase.co" value="https://lfszlfvezihusimodglz.supabase.co" />
                     </div>
                     <div>
-                        <label for="cloudApiKey">API key</label>
-                        <input id="cloudApiKey" type="password" placeholder="Chave configurada no GitHub secret FIELD_API_KEY" />
+                        <label for="cloudAnonKey">Chave Anon (Supabase)</label>
+                        <input id="cloudAnonKey" type="password" placeholder="sb_publishable_..." value="sb_publishable_md0z1PWYtkJrAWmkYmS_4A_yZRZLZD8" />
                     </div>
                     <div>
                         <label for="cloudCampaignId">Campanha</label>
@@ -704,12 +706,15 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <button type="button" id="saveCloudConfig">Salvar configuração</button>
+                    <button type="button" id="saveCloudConfig">Salvar e Conectar</button>
                     <button type="button" id="testCloud">Testar conexão</button>
                     <button class="success" type="button" id="uploadCloud">Enviar dados locais</button>
                     <button class="success" type="button" id="downloadCloud">Baixar dados da nuvem</button>
                 </div>
-                <p class="mini" id="cloudStatus" style="margin-top: 10px;">Configure a URL da API antes de sincronizar.</p>
+                <p class="mini" id="cloudStatus" style="margin-top: 10px;">Configure o Supabase antes de sincronizar.</p>
+                <div id="realtimeStatus" style="margin-top: 10px; padding: 8px; background: var(--soft); border-radius: 4px; font-size: 0.85rem; display: none;">
+                    <strong>Real-time:</strong> <span id="realtimeIndicator">⚫ Desconectado</span>
+                </div>
             </div>
         </section>
     </main>
@@ -794,6 +799,67 @@
             }
         }
 
+        // ========== SUPABASE CLIENT & REALTIME SYNC ==========
+        let supabase = null;
+        let realtimeUnsubscribes = [];
+
+        async function initSupabase() {
+            const config = loadCloudConfig();
+            if (!config.projectUrl || !config.anonKey) return null;
+            if (supabase) return supabase;
+            
+            const { createClient } = window.supabase;
+            supabase = createClient(config.projectUrl, config.anonKey);
+            setupRealtimeListeners(config);
+            return supabase;
+        }
+
+        function setupRealtimeListeners(config) {
+            // Cleanup old subscriptions
+            realtimeUnsubscribes.forEach(unsub => unsub());
+            realtimeUnsubscribes = [];
+
+            if (!supabase) return;
+
+            const updateRealtimeStatus = (status) => {
+                const indicator = document.getElementById("realtimeIndicator");
+                if (indicator) {
+                    indicator.textContent = status === 'connected' ? '🟢 Conectado' : '🔴 Desconectado';
+                }
+            };
+
+            // Subscribe to stations changes
+            const stationsSub = supabase
+                .channel(`stations-${config.campaignId}`)
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'stations', filter: `campaign_id=eq.${config.campaignId}` },
+                    (payload) => {
+                        console.log('🔄 Stations update:', payload);
+                        downloadCloudData();
+                        updateRealtimeStatus('connected');
+                    }
+                )
+                .subscribe((status) => {
+                    updateRealtimeStatus(status === 'SUBSCRIBED' ? 'connected' : 'disconnected');
+                });
+
+            realtimeUnsubscribes.push(() => supabase.removeChannel(stationsSub));
+
+            // Subscribe to quadrats changes
+            const quadratsSub = supabase
+                .channel(`quadrats-${config.campaignId}`)
+                .on('postgres_changes',
+                    { event: '*', schema: 'public', table: 'quadrats', filter: `campaign_id=eq.${config.campaignId}` },
+                    (payload) => {
+                        console.log('🔄 Quadrats update:', payload);
+                        downloadCloudData();
+                    }
+                )
+                .subscribe();
+
+            realtimeUnsubscribes.push(() => supabase.removeChannel(quadratsSub));
+        }
+
         function setCloudStatus(message) {
             const cloudStatus = document.getElementById("cloudStatus");
             if (!cloudStatus) return;
@@ -802,39 +868,65 @@
 
         function saveCloudConfig() {
             const config = {
-                apiUrl: document.getElementById("cloudApiUrl").value.trim().replace(/\/$/, ""),
-                apiKey: document.getElementById("cloudApiKey").value,
+                projectUrl: document.getElementById("cloudProjectUrl").value.trim().replace(/\/$/, ""),
+                anonKey: document.getElementById("cloudAnonKey").value.trim(),
                 campaignId: document.getElementById("cloudCampaignId").value.trim() || "default",
                 deviceId: document.getElementById("cloudDeviceId").value.trim() || getDeviceId()
             };
             localStorage.setItem(CLOUD_KEY, JSON.stringify(config));
+            initSupabase(); // Initialize real-time listeners
             setCloudStatus("Configuração salva");
             return config;
         }
 
-        function restoreCloudConfig() {
-            const config = loadCloudConfig();
-            document.getElementById("cloudApiUrl").value = config.apiUrl || "https://func-ufsc-ptm-dev-001.azurewebsites.net/api";
-            document.getElementById("cloudApiKey").value = config.apiKey || "";
-            document.getElementById("cloudCampaignId").value = config.campaignId || "piloto-2026";
-            document.getElementById("cloudDeviceId").value = config.deviceId || getDeviceId();
+        function loadCloudConfig() {
+            try {
+                return JSON.parse(localStorage.getItem(CLOUD_KEY)) || {
+                    projectUrl: "https://lfszlfvezihusimodglz.supabase.co",
+                    anonKey: "sb_publishable_md0z1PWYtkJrAWmkYmS_4A_yZRZLZD8",
+                    campaignId: "piloto-2026",
+                    deviceId: getDeviceId()
+                };
+            } catch {
+                return {
+                    projectUrl: "https://lfszlfvezihusimodglz.supabase.co",
+                    anonKey: "sb_publishable_md0z1PWYtkJrAWmkYmS_4A_yZRZLZD8",
+                    campaignId: "piloto-2026",
+                    deviceId: getDeviceId()
+                };
+            }
         }
 
-        async function cloudRequest(path, options = {}) {
+        function restoreCloudConfig() {
             const config = loadCloudConfig();
-            if (!config.apiUrl) throw new Error("Configure a URL da API.");
-            const headers = {
-                "Content-Type": "application/json",
-                ...(options.headers || {})
-            };
-            if (config.apiKey) headers["x-api-key"] = config.apiKey;
-            const response = await fetch(`${config.apiUrl}${path}`, {
-                ...options,
-                headers
-            });
-            const body = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(body.error || `HTTP ${response.status}`);
-            return body;
+            document.getElementById("cloudProjectUrl").value = config.projectUrl || "";
+            document.getElementById("cloudAnonKey").value = config.anonKey || "";
+            document.getElementById("cloudCampaignId").value = config.campaignId || "piloto-2026";
+            document.getElementById("cloudDeviceId").value = config.deviceId || getDeviceId();
+            document.getElementById("realtimeStatus").style.display = "block";
+        }
+
+        async function registerOrUpdateDevice(config) {
+            if (!supabase) return;
+            try {
+                const { data, error } = await supabase
+                    .from("devices")
+                    .upsert({
+                        campaign_id: config.campaignId,
+                        device_id_field: config.deviceId,
+                        device_name: navigator.userAgent.substring(0, 100),
+                        last_sync: new Date().toISOString()
+                    }, { onConflict: 'campaign_id,device_id_field' })
+                    .select();
+
+                if (error) throw error;
+                console.log("✅ Device registered:", data);
+                return data[0];
+            } catch (error) {
+                console.error("❌ Device registration failed:", error);
+                setCloudStatus(`Falha ao registrar dispositivo: ${error.message}`);
+                throw error;
+            }
         }
 
         function mergeByKey(existing, incoming, keyFn) {
@@ -1452,62 +1544,158 @@
 
         document.getElementById("testCloud").addEventListener("click", async () => {
             try {
-                saveCloudConfig();
-                const result = await cloudRequest("/health");
-                setCloudStatus(`Conexão OK: ${result.service || "API"} ${result.version || ""}`);
+                const config = saveCloudConfig();
+                const sb = await initSupabase();
+                if (!sb) throw new Error("Supabase não configurado");
+                
+                // Test connection by checking if we can query campaigns
+                const { data, error } = await sb.from("campaigns").select("count", { count: "exact", head: true });
+                if (error) throw error;
+                
+                setCloudStatus("✅ Conexão com Supabase OK");
+                document.getElementById("realtimeStatus").style.display = "block";
             } catch (error) {
-                setCloudStatus(`Falha na conexão: ${error.message}`);
+                setCloudStatus(`❌ Falha na conexão: ${error.message}`);
             }
         });
 
-        document.getElementById("uploadCloud").addEventListener("click", async () => {
+        async function uploadCloudData() {
             try {
                 const config = saveCloudConfig();
-                const payload = {
-                    campaignId: config.campaignId,
-                    deviceId: config.deviceId,
-                    stations: state.stations.map((station) => ({
-                        ...station,
-                        campaignId: config.campaignId,
-                        deviceId: config.deviceId
-                    })),
-                    quadrats: state.quadrats.map((quadrat) => ({
-                        ...quadrat,
-                        id: quadrat.id || `${quadrat.stationId}-${quadrat.quadrat}`,
-                        campaignId: config.campaignId,
-                        deviceId: config.deviceId
-                    }))
-                };
-                const result = await cloudRequest("/sync", {
-                    method: "POST",
-                    body: JSON.stringify(payload)
+                const sb = await initSupabase();
+                if (!sb) throw new Error("Supabase não configurado");
+
+                await registerOrUpdateDevice(config);
+
+                // Transform local data to match Supabase schema
+                const stationsToUpload = state.stations.map(station => ({
+                    id: station.id || undefined,
+                    campaign_id: config.campaignId,
+                    device_id_field: config.deviceId,
+                    station_name: station.station || station.stationName,
+                    latitude: parseFloat(station.lat) || null,
+                    longitude: parseFloat(station.lon) || null,
+                    observation: station.notes || null,
+                    created_at: station.createdAt || new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    synced_at: new Date().toISOString()
+                }));
+
+                const quadratsToUpload = state.quadrats.map(quadrat => ({
+                    id: quadrat.id || undefined,
+                    campaign_id: config.campaignId,
+                    device_id_field: config.deviceId,
+                    station_id: quadrat.stationId || null,
+                    quadrat_number: parseInt(quadrat.quadrat) || null,
+                    depth_m: parseFloat(quadrat.depthM) || null,
+                    cover_percent: parseFloat(quadrat.coverPercent) || null,
+                    notes: quadrat.notes || null,
+                    morphofunctional_groups: JSON.stringify(quadrat.groups || []),
+                    created_at: quadrat.createdAt || new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    synced_at: new Date().toISOString()
+                }));
+
+                // Upload stations
+                if (stationsToUpload.length > 0) {
+                    const { error: stationError } = await sb
+                        .from("stations")
+                        .upsert(stationsToUpload, { onConflict: 'id' });
+                    if (stationError) throw stationError;
+                }
+
+                // Upload quadrats
+                if (quadratsToUpload.length > 0) {
+                    const { error: quadratError } = await sb
+                        .from("quadrats")
+                        .upsert(quadratsToUpload, { onConflict: 'id' });
+                    if (quadratError) throw quadratError;
+                }
+
+                // Record sync event
+                await sb.from("sync_events").insert({
+                    campaign_id: config.campaignId,
+                    device_id_field: config.deviceId,
+                    station_count: stationsToUpload.length,
+                    quadrat_count: quadratsToUpload.length,
+                    sync_status: "success"
                 });
-                setCloudStatus(`Enviado: ${result.stationCount} estações e ${result.quadratCount} quadrados`);
-            } catch (error) {
-                setCloudStatus(`Falha ao enviar: ${error.message}`);
-            }
-        });
 
-        document.getElementById("downloadCloud").addEventListener("click", async () => {
+                setCloudStatus(`✅ Enviado: ${stationsToUpload.length} estações e ${quadratsToUpload.length} quadrados`);
+            } catch (error) {
+                console.error("Upload error:", error);
+                setCloudStatus(`❌ Falha ao enviar: ${error.message}`);
+            }
+        }
+
+        async function downloadCloudData() {
             try {
-                const config = saveCloudConfig();
-                const query = `campaignId=${encodeURIComponent(config.campaignId)}`;
-                const [stationsResult, quadratsResult] = await Promise.all([
-                    cloudRequest(`/stations?${query}`),
-                    cloudRequest(`/quadrats?${query}`)
-                ]);
-                state.stations = mergeByKey(state.stations, stationsResult.stations || [], (station) => station.id);
+                const config = loadCloudConfig();
+                const sb = await initSupabase();
+                if (!sb) throw new Error("Supabase não configurado");
+
+                // Fetch stations
+                const { data: stationsData, error: stationsError } = await sb
+                    .from("stations")
+                    .select("*")
+                    .eq("campaign_id", config.campaignId);
+                
+                if (stationsError) throw stationsError;
+
+                // Fetch quadrats
+                const { data: quadratsData, error: quadratsError } = await sb
+                    .from("quadrats")
+                    .select("*")
+                    .eq("campaign_id", config.campaignId);
+                
+                if (quadratsError) throw quadratsError;
+
+                // Transform Supabase data back to local format
+                const downloadedStations = (stationsData || []).map(s => ({
+                    id: s.id,
+                    station: s.station_name,
+                    lat: s.latitude,
+                    lon: s.longitude,
+                    notes: s.observation,
+                    createdAt: s.created_at,
+                    updatedAt: s.updated_at
+                }));
+
+                const downloadedQuadrats = (quadratsData || []).map(q => ({
+                    id: q.id,
+                    stationId: q.station_id,
+                    quadrat: q.quadrat_number,
+                    depthM: q.depth_m,
+                    coverPercent: q.cover_percent,
+                    notes: q.notes,
+                    groups: JSON.parse(q.morphofunctional_groups || '[]'),
+                    createdAt: q.created_at,
+                    updatedAt: q.updated_at
+                }));
+
+                // Merge with local data (prefer cloud if newer)
+                state.stations = mergeByKey(
+                    state.stations,
+                    downloadedStations,
+                    (s) => s.id
+                );
                 state.quadrats = mergeByKey(
                     state.quadrats,
-                    quadratsResult.quadrats || [],
-                    (quadrat) => quadrat.id || `${quadrat.stationId}-${quadrat.quadrat}`
+                    downloadedQuadrats,
+                    (q) => q.id
                 );
+
                 saveState();
-                setCloudStatus(`Baixado: ${stationsResult.stations?.length || 0} estações e ${quadratsResult.quadrats?.length || 0} quadrados`);
+                renderAll();
+                setCloudStatus(`✅ Baixado: ${downloadedStations.length} estações e ${downloadedQuadrats.length} quadrados`);
             } catch (error) {
-                setCloudStatus(`Falha ao baixar: ${error.message}`);
+                console.error("Download error:", error);
+                setCloudStatus(`❌ Falha ao baixar: ${error.message}`);
             }
-        });
+        }
+
+        document.getElementById("uploadCloud").addEventListener("click", uploadCloudData);
+        document.getElementById("downloadCloud").addEventListener("click", downloadCloudData);
 
         if (themeToggle) {
             applyTheme(loadTheme());
@@ -1519,6 +1707,7 @@
         renderQuadratForm();
         restoreDraft();
         restoreCloudConfig();
+        initSupabase(); // Initialize real-time listeners on page load
         updateBackupStatus();
         renderAll();
 

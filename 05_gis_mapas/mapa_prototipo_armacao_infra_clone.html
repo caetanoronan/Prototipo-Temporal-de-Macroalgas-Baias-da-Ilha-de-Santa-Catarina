@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gerador de Mapas - Protótipo Armação</title>
+    <title>Gerador de Mapas - Protótipo Temporal de Macroalgas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     <style>
         :root {
@@ -399,7 +399,7 @@
         <aside>
             <div class="brand">
                 <h1>Gerador de Mapas</h1>
-                <p>Clone funcional do padrão da infra, adaptado ao piloto de Armação. Selecione camadas, destaque referências e exporte o mapa em PNG.</p>
+                <p>Clone funcional da infraestrutura de render do protótipo temporal de macroalgas. Selecione camadas, destaque referências e exporte o mapa em PNG com os pontos finais do estudo.</p>
             </div>
 
             <div class="stats">
@@ -411,7 +411,7 @@
 
             <div class="section">
                 <h2>Nome do arquivo</h2>
-                <input class="filename" id="filenameInput" type="text" value="mapa_piloto_armacao" />
+                <input class="filename" id="filenameInput" type="text" value="mapa_piloto_macroalgas" />
                 <p>O PNG será baixado com esse nome.</p>
             </div>
 
@@ -441,8 +441,8 @@
 
         <section class="map-wrap" id="exportArea">
             <div class="map-title">
-                <h2>Mapa piloto - Armação</h2>
-                <p>Versão para evolução contínua do protótipo com camadas filtráveis</p>
+                <h2>Mapa Operacional - Protótipo Temporal de Macroalgas</h2>
+                <p>Portal local com seis estações insulares: Ponta das Canas, Sambaqui, Ponta do Coral, Saco dos Limões, Ribeirão da Ilha, Caieira da Barra do Sul.</p>
             </div>
 
             <div class="north" aria-label="Rosa dos ventos">
@@ -478,76 +478,76 @@
     <script>
         const CSV_URL = "../04_dados_campo/raw/referencias_prototipo_armacao.csv";
         const FALLBACK_CSV = `name,lat,lon,layer
-Ponta das Campanhas,-27.749367,-48.499284,quadrat_photo
-Ponto 1,-27.750445,-48.500327,quadrat_photo
-Ponto 2,-27.749546,-48.500338,quadrat_photo
-Ponto 3,-27.748517,-48.498916,quadrat_photo
-Ponto 4,-27.747794,-48.499240,quadrat_photo
-Ilha de Fora,-27.747719,-48.498424,quadrat_photo
-Ponta das Campanhas,-27.749367,-48.499284,water_sample_lab
-Ponto 1,-27.750445,-48.500327,water_sample_lab
-Ponto 2,-27.749546,-48.500338,water_sample_lab
-Ponto 3,-27.748517,-48.498916,water_sample_lab
-Ponto 4,-27.747794,-48.499240,water_sample_lab
-Ilha de Fora,-27.747719,-48.498424,water_sample_lab
-Ponta das Campanhas,-27.749367,-48.499284,water_probe
-Ponto 1,-27.750445,-48.500327,water_probe
-Ponto 2,-27.749546,-48.500338,water_probe
-Ponto 3,-27.748517,-48.498916,water_probe
-Ponto 4,-27.747794,-48.499240,water_probe
-Ilha de Fora,-27.747719,-48.498424,water_probe
-Ponta das Campanhas,-27.749367,-48.499284,secchi
-Ponto 1,-27.750445,-48.500327,secchi
-Ponto 2,-27.749546,-48.500338,secchi
-Ponto 3,-27.748517,-48.498916,secchi
-Ponto 4,-27.747794,-48.499240,secchi
-Ilha de Fora,-27.747719,-48.498424,secchi
-Ponta das Campanhas,-27.749367,-48.499284,drone
-Ponto 1,-27.750445,-48.500327,drone
-Ponto 2,-27.749546,-48.500338,drone
-Ponto 3,-27.748517,-48.498916,drone
-Ponto 4,-27.747794,-48.499240,drone
-Ilha de Fora,-27.747719,-48.498424,drone
-Ponta das Campanhas,-27.749367,-48.499284,algae_collect_taxonomy
-Ponto 1,-27.750445,-48.500327,algae_collect_taxonomy
-Ponto 2,-27.749546,-48.500338,algae_collect_taxonomy
-Ponto 3,-27.748517,-48.498916,algae_collect_taxonomy
-Ponto 4,-27.747794,-48.499240,algae_collect_taxonomy
-Ilha de Fora,-27.747719,-48.498424,algae_collect_taxonomy
-Ponta das Campanhas,-27.749367,-48.499284,algae_photo_in_situ
-Ponto 1,-27.750445,-48.500327,algae_photo_in_situ
-Ponto 2,-27.749546,-48.500338,algae_photo_in_situ
-Ponto 3,-27.748517,-48.498916,algae_photo_in_situ
-Ponto 4,-27.747794,-48.499240,algae_photo_in_situ
-Ilha de Fora,-27.747719,-48.498424,algae_photo_in_situ`;
+        Ponta das Canas,-27.393333,-48.433333,quadrat_biomass
+        Sambaqui,-27.488333,-48.540000,quadrat_biomass
+        Ponta do Coral,-27.570000,-48.536667,quadrat_biomass
+        Saco dos Limões,-27.613333,-48.553333,quadrat_biomass
+        Ribeirão da Ilha,-27.731667,-48.565000,quadrat_biomass
+        Caieira da Barra do Sul,-27.813333,-48.561667,quadrat_biomass
+        Ponta das Canas,-27.393333,-48.433333,taxonomy_collect
+        Sambaqui,-27.488333,-48.540000,taxonomy_collect
+        Ponta do Coral,-27.570000,-48.536667,taxonomy_collect
+        Saco dos Limões,-27.613333,-48.553333,taxonomy_collect
+        Ribeirão da Ilha,-27.731667,-48.565000,taxonomy_collect
+        Caieira da Barra do Sul,-27.813333,-48.561667,taxonomy_collect
+        Ponta das Canas,-27.393333,-48.433333,photo_in_situ
+        Sambaqui,-27.488333,-48.540000,photo_in_situ
+        Ponta do Coral,-27.570000,-48.536667,photo_in_situ
+        Saco dos Limões,-27.613333,-48.553333,photo_in_situ
+        Ribeirão da Ilha,-27.731667,-48.565000,photo_in_situ
+        Caieira da Barra do Sul,-27.813333,-48.561667,photo_in_situ
+        Ponta das Canas,-27.393333,-48.433333,water_sample_lab
+        Sambaqui,-27.488333,-48.540000,water_sample_lab
+        Ponta do Coral,-27.570000,-48.536667,water_sample_lab
+        Saco dos Limões,-27.613333,-48.553333,water_sample_lab
+        Ribeirão da Ilha,-27.731667,-48.565000,water_sample_lab
+        Caieira da Barra do Sul,-27.813333,-48.561667,water_sample_lab
+        Ponta das Canas,-27.393333,-48.433333,water_probe
+        Sambaqui,-27.488333,-48.540000,water_probe
+        Ponta do Coral,-27.570000,-48.536667,water_probe
+        Saco dos Limões,-27.613333,-48.553333,water_probe
+        Ribeirão da Ilha,-27.731667,-48.565000,water_probe
+        Caieira da Barra do Sul,-27.813333,-48.561667,water_probe
+        Ponta das Canas,-27.393333,-48.433333,free_dive_survey
+        Sambaqui,-27.488333,-48.540000,free_dive_survey
+        Ponta do Coral,-27.570000,-48.536667,free_dive_survey
+        Saco dos Limões,-27.613333,-48.553333,free_dive_survey
+        Ribeirão da Ilha,-27.731667,-48.565000,free_dive_survey
+        Caieira da Barra do Sul,-27.813333,-48.561667,free_dive_survey`;
 
         const LAYER_COLORS = {
-            quadrat_photo: "#0ea5e9",
+            quadrat_biomass: "#0ea5e9",
+            taxonomy_collect: "#7c3aed",
+            photo_in_situ: "#22c55e",
             water_sample_lab: "#2563eb",
             water_probe: "#14b8a6",
-            secchi: "#f59e0b",
-            drone: "#ef4444",
-            algae_collect_taxonomy: "#7c3aed",
-            algae_photo_in_situ: "#22c55e"
+            free_dive_survey: "#ef4444"
         };
 
         const LAYER_LABELS = {
-            quadrat_photo: "quadrat_photo",
-            water_sample_lab: "water_sample_lab",
-            water_probe: "water_probe",
-            secchi: "secchi",
-            drone: "drone",
-            algae_collect_taxonomy: "algae_collect_taxonomy",
-            algae_photo_in_situ: "algae_photo_in_situ"
+            quadrat_biomass: "Quadrados 25 x 25 cm / biomassa",
+            taxonomy_collect: "Coleta taxonômica complementar",
+            photo_in_situ: "Foto in situ",
+            water_sample_lab: "Amostra de água para laboratório",
+            water_probe: "Temperatura e salinidade",
+            free_dive_survey: "Mergulho livre infralitoral"
         };
+
+        const MAP_BOUNDS = [
+            [-27.86, -48.62],
+            [-27.35, -48.39]
+        ];
+
+        const INITIAL_CENTER = [-27.60, -48.53];
+        const INITIAL_ZOOM = 11;
 
         const map = L.map("map", {
             zoomControl: true,
-            minZoom: 14,
+            minZoom: 10,
             maxZoom: 19,
-            maxBounds: [[-27.7539, -48.5027], [-27.7453, -48.4964]],
+            maxBounds: MAP_BOUNDS,
             maxBoundsViscosity: 0.95
-        }).setView([-27.7493, -48.4993], 17);
+        }).setView(INITIAL_CENTER, INITIAL_ZOOM);
 
         const osmLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 19,
@@ -584,8 +584,9 @@ Ilha de Fora,-27.747719,-48.498424,algae_photo_in_situ`;
         const activeLayers = new Set(Object.keys(LAYER_COLORS));
         const queryState = new URLSearchParams(window.location.search);
         let currentBaseLayer = 'osm';
-        const DEFAULT_CLOUD_RENDER = 'https://prototipo-praia-armacao.onrender.com';
+        const DEFAULT_CLOUD_RENDER = '';
         const DEFAULT_LOCAL_RENDER = 'http://127.0.0.1:3030';
+        const DEPRECATED_RENDER_HOSTS = ['prototipo-praia-armacao.onrender.com'];
 
         window.__mapReady = false;
 
@@ -821,6 +822,10 @@ Ilha de Fora,-27.747719,-48.498424,algae_photo_in_situ`;
                 </div>
             `);
 
+            if (!groups[rec.layer]) {
+                return;
+            }
+
             marker.addTo(groups[rec.layer]);
             mapBounds.push([rec.lat, rec.lon]);
 
@@ -850,7 +855,7 @@ Ilha de Fora,-27.747719,-48.498424,algae_photo_in_situ`;
         }
 
         async function exportPng() {
-            const filename = (document.getElementById("filenameInput").value || "mapa_piloto_armacao").trim();
+            const filename = (document.getElementById("filenameInput").value || "mapa_piloto_macroalgas").trim();
             const layers = Array.from(activeLayers).join(',');
             const ref = activeReferenceName || '';
             const base = currentBaseLayer;
@@ -861,15 +866,12 @@ Ilha de Fora,-27.747719,-48.498424,algae_photo_in_situ`;
             const storedRender = (localStorage.getItem('renderServiceUrl') || '').trim();
             const cloudRender = DEFAULT_CLOUD_RENDER.includes('SEU-SERVICO-RENDER') ? '' : DEFAULT_CLOUD_RENDER;
 
-            [queryRender, globalRender, storedRender, cloudRender].forEach((url) => {
+            [queryRender, globalRender, storedRender, DEFAULT_LOCAL_RENDER, cloudRender].forEach((url) => {
                 if (!url) return;
                 const normalized = url.replace(/\/$/, '');
+                if (DEPRECATED_RENDER_HOSTS.some((host) => normalized.includes(host))) return;
                 if (!candidates.includes(normalized)) candidates.push(normalized);
             });
-
-            if (!candidates.includes(DEFAULT_LOCAL_RENDER)) {
-                candidates.push(DEFAULT_LOCAL_RENDER);
-            }
 
             try {
                 let lastError = null;

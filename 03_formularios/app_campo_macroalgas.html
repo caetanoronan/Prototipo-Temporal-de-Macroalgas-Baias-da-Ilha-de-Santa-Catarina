@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>App de Campo - Macroalgas</title>
-    <!-- Supabase Client Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/module.js" type="module"></script>
+    <!-- Supabase Client Library (UMD Bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0"></script>
     <style>
         :root {
             color-scheme: light;
@@ -808,8 +808,7 @@
             if (!config.projectUrl || !config.anonKey) return null;
             if (supabase) return supabase;
             
-            const { createClient } = window.supabase;
-            supabase = createClient(config.projectUrl, config.anonKey);
+            supabase = window.supabase.createClient(config.projectUrl, config.anonKey);
             setupRealtimeListeners(config);
             return supabase;
         }

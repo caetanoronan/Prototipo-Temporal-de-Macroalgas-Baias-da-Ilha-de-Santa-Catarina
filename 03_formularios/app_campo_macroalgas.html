@@ -1588,6 +1588,11 @@
             }
         });
 
+        function isValidUuid(value) {
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            return uuidRegex.test(String(value || ""));
+        }
+
         async function uploadCloudData() {
             try {
                 const config = saveCloudConfig();
@@ -1598,34 +1603,49 @@
                 config._campaignUuid = campaignUuid;
                 const device = await registerOrUpdateDevice(config);
 
-                // Transform local data to match Supabase schema (use UUIDs)
-                const stationsToUpload = state.stations.map(station => ({
-                    id: station.id || undefined,
-                    campaign_id: campaignUuid,
-                    device_id: device ? device.id : null,
-                    station_name: station.station || station.stationName,
-                    latitude: parseFloat(station.lat) || null,
-                    longitude: parseFloat(station.lon) || null,
-                    observation: station.notes || null,
-                    created_at: station.createdAt || new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    synced_at: new Date().toISOString()
-                }));
+                // Transform local data to match Supabase schema (use UUIDs, only include id if valid UUID)
+                const stationsToUpload = state.stations.map(station => {
+                    const obj = {
+                        campaign_id: campaignUuid,
+                        device_id: device ? device.id : null,
+                        station_name: station.station || station.stationName,
+                        latitude: parseFloat(station.lat) || null,
+                        longitude: parseFloat(station.lon) || null,
+                        observation: station.notes || null,
+                        created_at: station.createdAt || new Date().toISOString(),
+                        updated_at: new Date().toISOString(),
+                        synced_at: new Date().toISOString()
+                    };
+                    // Only include id if it's a valid UUID (Supabase will generate one if omitted)
+                    if (station.id && isValidUuid(station.id)) {
+                        obj.id = station.id;
+                    }
+                    return obj;
+                });
 
-                const quadratsToUpload = state.quadrats.map(quadrat => ({
-                    id: quadrat.id || undefined,
-                    campaign_id: campaignUuid,
-                    device_id: device ? device.id : null,
-                    station_id: quadrat.stationId || null,
-                    quadrat_number: parseInt(quadrat.quadrat) || null,
-                    depth_m: parseFloat(quadrat.depthM) || null,
-                    cover_percent: parseFloat(quadrat.coverPercent) || null,
-                    notes: quadrat.notes || null,
-                    morphofunctional_groups: JSON.stringify(quadrat.groups || []),
-                    created_at: quadrat.createdAt || new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    synced_at: new Date().toISOString()
-                }));
+                const quadratsToUpload = state.quadrats.map(quadrat => {
+                    const obj = {
+                        campaign_id: campaignUuid,
+                        device_id: device ? device.id : null,
+                        station_id: quadrat.stationId || null,
+                        quadrat_number: parseInt(quadrat.quadrat) || null,
+                        depth_m: parseFloat(quadrat.depthM) || null,
+                        cover_percent: parseFloat(quadrat.coverPercent) || null,
+                        notes: quadrat.notes || null,
+                        morphofunctional_groups: JSON.stringify(quadrat.groups || []),
+                        created_at: quadrat.createdAt || new Date().toISOString(),
+                        updated_at: new Date().toISOString(),
+                        synced_at: new Date().toISOString()
+                    };
+                    // Only include id if it's a valid UUID (Supabase will generate one if omitted)
+                    if (quadrat.id && isValidUuid(quadrat.id)) {
+                        obj.id = quadrat.id;
+                    }
+                    return obj;
+                });
+
+                console.log("📤 Uploading stations:", stationsToUpload);
+                console.log("📤 Uploading quadrats:", quadratsToUpload);
 
                 // Upload stations
                 if (stationsToUpload.length > 0) {

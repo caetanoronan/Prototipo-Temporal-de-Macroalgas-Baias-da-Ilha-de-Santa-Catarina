@@ -32,6 +32,9 @@ function safeFilename(value) {
 }
 
 function buildMapUrl(query) {
+  if (!MAP_SOURCE_URL) {
+    throw new Error('MAP_SOURCE_URL environment variable is not set');
+  }
   const url = new URL(MAP_SOURCE_URL);
   ['layers', 'ref', 'base'].forEach((key) => {
     const value = safeText(query[key]);

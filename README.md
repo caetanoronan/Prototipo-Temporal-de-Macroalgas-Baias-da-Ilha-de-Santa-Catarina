@@ -28,6 +28,7 @@ O portal concentra os produtos desta etapa do trabalho e mantém o mesmo vocabul
 - [03_formularios/GUIA_USO_APP_CAMPO.html](03_formularios/GUIA_USO_APP_CAMPO.html) - guia operacional do app
 - [dashboard_macroalgas_baias_clone.html](dashboard_macroalgas_baias_clone.html) - dashboard de resultados
 - [05_gis_mapas/pagina_impressao_prototipo_armacao.html](05_gis_mapas/pagina_impressao_prototipo_armacao.html) - página de apoio para impressão
+ - [01_planejamento/FORMULARIO_CHECKLIST_PROTOTIPO_TEMPORAL_MACROALGAS.html](01_planejamento/FORMULARIO_CHECKLIST_PROTOTIPO_TEMPORAL_MACROALGAS.html) - formulário interativo do checklist (versão web)
 
 ## Uso em campo
 

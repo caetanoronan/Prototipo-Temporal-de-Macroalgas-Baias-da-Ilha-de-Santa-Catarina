@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulário Checklist - Protótipo Temporal de Macroalgas</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #eef4f6;
+            --panel: #ffffff;
+            --ink: #17242f;
+            --muted: #5a6b76;
+            --line: #cdd9df;
+            --accent: #006d77;
+            --accent-2: #b23a48;
+            --ok: #1b7f4a;
+            --warn: #a05a00;
+            --soft: #f6fafb;
+        }
+
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1720;
+            --panel: #16222d;
+            --ink: #e6eef2;
+            --muted: #9fb1bb;
+            --line: #31424d;
+            --accent: #5ac3cf;
+            --accent-2: #f08a96;
+            --ok: #79d6a2;
+            --warn: #f1b85f;
+            --soft: #13202a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+        }
+
+        header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: linear-gradient(135deg, #073b4c, #0a5a6b);
+            color: #fff;
+            padding: 16px;
+        }
+
+        body.dark-mode header {
+            background: linear-gradient(135deg, #08141e, #122a38);
+        }
+
+        header > div {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            line-height: 1.2;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            color: #d9eef2;
+            font-size: 0.92rem;
+            line-height: 1.4;
+        }
+
+        .header-link {
+            color: #d9eef2;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        body.dark-mode .header-link {
+            color: #9fe6ef;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--ink);
+            border-radius: 999px;
+            padding: 9px 14px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        body.dark-mode .theme-toggle {
+            box-shadow: none;
+        }
+
+        main {
+            width: min(1240px, 96vw);
+            margin: 0 auto;
+            padding: 14px 0 28px;
+        }
+
+        .tabs {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            background: var(--bg);
+            padding: 10px 0;
+        }
+
+        .tabs button,
+        .actions button,
+        .icon-btn {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--ink);
+            border-radius: 8px;
+            padding: 9px 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tabs button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        h3 {
+            margin: 10px 0 8px;
+            font-size: 0.95rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 9px;
+            min-height: 39px;
+            font: inherit;
+            background: var(--panel);
+            color: var(--ink);
+        }
+
+        textarea {
+            min-height: 82px;
+            resize: vertical;
+        }
+
+        .check-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .check {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px;
+            background: var(--soft);
+            min-height: 40px;
+            font-size: 0.9rem;
+        }
+
+        .check input { width: auto; min-height: auto; margin-top: 2px; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .primary {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: #fff !important;
+        }
+
+        .danger {
+            background: #fff5f5 !important;
+            border-color: #f2c3c3 !important;
+            color: #8f1d2c !important;
+        }
+
+        .success {
+            background: #edf8f2 !important;
+            border-color: #b9dfca !important;
+            color: var(--ok) !important;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .metric {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 1.35rem;
+            line-height: 1.1;
+        }
+
+        .metric span {
+            display: block;
+            margin-top: 3px;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .item-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px;
+            background: var(--soft);
+            margin-bottom: 8px;
+        }
+
+        .item-card .top {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .item-card .top input[type="checkbox"] {
+            margin-top: 3px;
+            flex: 0 0 auto;
+            width: 18px;
+            height: 18px;
+        }
+
+        .item-card .title {
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .item-card .meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .item-card .meta textarea {
+            min-height: 72px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .section-title .count {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .footer-note {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.4;
+        }
+
+        .search-box {
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 920px) {
+            .grid, .grid.two, .grid.three, .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .item-card .meta {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body { background: #fff; }
+            .theme-toggle, .tabs, .actions, header .header-link { display: none; }
+            .page { padding: 0; max-width: none; }
+            header, .panel {
+                box-shadow: none;
+                border: 0;
+                padding: 0;
+            }
+            .view { display: block !important; }
+            .view:not(.active) { display: none !important; }
+            .item-card { page-break-inside: avoid; }
+            h1 { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button">Modo escuro</button>
+
+<div class="page">
+    <header>
+        <div>
+            <h1>Formulário Checklist - Protótipo Temporal de Macroalgas</h1>
+            <p>
+                Versão interativa da lista mestre do protótipo, organizada como formulário para marcação,
+                observações e acompanhamento de progresso no navegador.
+            </p>
+            <p>
+                Baseado na <a class="header-link" href="CHECKLIST_COMPLETO_PROTOTIPO_TEMPORAL_MACROALGAS.md">checklist completa</a>
+                e na <a class="header-link" href="metodologia_prototipo_macroalgas.html">metodologia do protótipo</a>.
+            </p>
+        </div>
+        <div>
+            <div class="actions" style="margin-top: 0; justify-content: flex-end;">
+                <button class="icon-btn primary" id="saveBtn" type="button">Salvar</button>
+                <button class="icon-btn success" id="exportBtn" type="button">Exportar JSON</button>
+                <button class="icon-btn" id="importBtn" type="button">Importar JSON</button>
+                <button class="icon-btn" id="printBtn" type="button">Imprimir</button>
+                <button class="icon-btn danger" id="clearBtn" type="button">Limpar</button>
+                <input id="importFile" type="file" accept="application/json" hidden />
+            </div>
+            <div class="footer-note" id="saveStatus">Pronto para editar.</div>
+        </div>
+    </header>
+
+    <nav class="tabs" id="tabs"></nav>
+
+    <section class="panel">
+        <div class="summary" id="summary"></div>
+        <div class="search-box">
+            <label for="searchInput">Buscar item</label>
+            <input id="searchInput" type="search" placeholder="Ex.: mapa, GPS, render, maré, amostra, foto" />
+        </div>
+    </section>
+
+    <main id="views"></main>
+</div>
+
+<script>
+const STORAGE_KEY = 'macroalgas_checklist_form_v1';
+
+const sections = [
+    {
+        id: 'definicao',
+        title: '1. Definição do projeto',
+        items: [
+            'Nome do projeto padronizado em todos os documentos.',
+            'Objetivo geral descrito de forma consistente.',
+            'Escopo do protótipo delimitado para campo, validação e documentação.',
+            'Versão pública do site verificada.',
+            'Estrutura do repositório principal revisada.',
+            'Estrutura do repositório de apoio de render revisada.'
+        ]
+    },
+    {
+        id: 'metodologia',
+        title: '2. Base metodológica',
+        items: [
+            'Metodologia do protótipo revisada e publicada em HTML.',
+            'Desenho amostral descrito com 6 estações.',
+            'Definição dos quadrados de 25 x 25 cm confirmada.',
+            'Número de quadrados por estação confirmado em 9.',
+            'Coleta em maré baixa de sizígia documentada.',
+            'Coleta destrutiva da macroflora confirmada.',
+            'Variáveis ambientais registradas definidas.',
+            'Processamento posterior descrito.',
+            'Sequência ideal por estação descrita.'
+        ]
+    },
+    {
+        id: 'estacoes',
+        title: '3. Estações de estudo',
+        items: [
+            'Ponta das Canas.',
+            'Sambaqui.',
+            'Ponta do Coral.',
+            'Saco dos Limões.',
+            'Ribeirão da Ilha.',
+            'Caieira da Barra do Sul.',
+            'Legendas históricas de estações conferidas.',
+            'Legendas ambientais conferidas.',
+            'Siglas e vocabulário padronizados.'
+        ]
+    },
+    {
+        id: 'precampo',
+        title: '4. Pré-campo',
+        items: [
+            'Planejamento temporal definido.',
+            'Reconhecimento prévio dos pontos feito.',
+            'Desenho amostral padronizado.',
+            'Rotulagem antecipada preparada.',
+            'Material audiovisual preparado.',
+            'Lista rápida antes de sair conferida.',
+            'Condições de acesso aos pontos avaliadas.',
+            'Checagem de maré e janela de coleta feita.',
+            'Checagem de segurança e convivência feita.'
+        ]
+    },
+    {
+        id: 'materiais',
+        title: '5. Materiais obrigatórios',
+        items: [
+            'GPS ou celular com geolocalização.',
+            'Roteiro impresso ou digital da estação.',
+            'Fita métrica ou cabo-guia.',
+            'Quadrados de 25 x 25 cm.',
+            'Etiquetas e canetas resistentes à água.',
+            'Sacos e frascos para coleta.',
+            'Material para preservação das amostras.',
+            'Termômetro.',
+            'Refratômetro ou equipamento equivalente para salinidade.',
+            'Recipientes para água.',
+            'Equipamentos de proteção individual.',
+            'Câmera ou celular para fotos.',
+            'Bateria carregada e power bank.'
+        ]
+    },
+    {
+        id: 'seguranca',
+        title: '6. Segurança e preservação',
+        items: [
+            'Equipamentos de segurança levados.',
+            'Conduta ética e convivência lidas pela equipe.',
+            'Risco de mar, pedras, escorregões e acesso avaliado.',
+            'Plano de retorno e comunicação definido.',
+            'Cuidados com preservação das amostras estabelecidos.',
+            'Contingência para atraso no processamento definida.'
+        ]
+    },
+    {
+        id: 'app',
+        title: '7. App de campo',
+        items: [
+            'App aberto no navegador principal.',
+            'Registro de estação funcionando.',
+            'Registro de quadrados funcionando.',
+            'Rascunho local funcionando.',
+            'Exportação de JSON funcionando.',
+            'Importação de JSON funcionando.',
+            'Sincronização com Supabase funcional.',
+            'Sincronização entre abas validada.',
+            'Sincronização entre computador e celular validada.',
+            'Guia de uso do app disponível.',
+            'Backup local confirmado como contingência.'
+        ]
+    },
+    {
+        id: 'ficha',
+        title: '8. Ficha de campo',
+        items: [
+            'Identificação geral preenchida.',
+            'Projeto preenchido.',
+            'Equipe preenchida.',
+            'Data e horários preenchidos.',
+            'Estação selecionada.',
+            'Coordenadas GPS registradas.',
+            'Maré registrada.',
+            'Temperatura da água registrada em 3 leituras.',
+            'Salinidade registrada em 3 leituras.',
+            'Transparência visual registrada.',
+            'Hidrodinamismo observado registrado.',
+            'Substrato predominante registrado.',
+            'Declividade do costão registrada.',
+            'Impactos visíveis registrados.',
+            'Observações gerais preenchidas.'
+        ]
+    },
+    {
+        id: 'amostragem',
+        title: '9. Amostragem quantitativa',
+        items: [
+            '9 quadrados por estação conferidos.',
+            'Posições definidas por sorteio ou critério equivalente.',
+            'Quadrados posicionados ao longo do cabo-guia.',
+            'Espécies dominantes por quadrado registradas.',
+            'Foto e escala associadas a cada quadrado.',
+            'Coleta indicada em cada quadrado.',
+            'Coleta complementar fora dos quadrados conferida.'
+        ]
+    },
+    {
+        id: 'multimidia',
+        title: '10. Registro multimídia',
+        items: [
+            'Fotos pré-campo feitas.',
+            'Fotos da estação feitas.',
+            'Fotos dos quadrados feitas.',
+            'Vídeo de contexto feito quando necessário.',
+            'Áudio/observações gravadas quando necessário.',
+            'Roteiro de divulgação científica preservado.',
+            'Gestão pós-campo dos arquivos feita.'
+        ]
+    },
+    {
+        id: 'dados',
+        title: '11. Processamento de dados',
+        items: [
+            'Material triado.',
+            'Identificação taxonômica executada.',
+            'Peso seco calculado quando aplicável.',
+            'Dados ambientais consolidados.',
+            'Base tabular revisada.',
+            'Arquivos CSV finais gerados.',
+            'Arquivos JSON de validação gerados.',
+            'Checklist de publicação dos dados conferido.'
+        ]
+    },
+    {
+        id: 'gis',
+        title: '12. GIS e mapas',
+        items: [
+            'Mapa operacional funcionando.',
+            'Mapa infra funcionando.',
+            'Pontos de estudo conferidos no mapa.',
+            'Camadas metodológicas conferidas.',
+            'Legenda visual conferida.',
+            'Exportação PNG validada.',
+            'Imagem PNG final revisada.',
+            'Layout sem sobreposição ou corte incorreto.'
+        ]
+    },
+    {
+        id: 'render',
+        title: '13. Render PNG em produção',
+        items: [
+            'Serviço Render em produção ativo.',
+            'Health check respondendo 200.',
+            'PNG direto respondendo 200.',
+            'Mapa publicado apontando para o endpoint live.',
+            'Variável de ambiente ou fallback público configurado.',
+            'Teste de exportação feito no navegador.',
+            'Dependências do serviço de render estabilizadas.'
+        ]
+    },
+    {
+        id: 'publicacao',
+        title: '14. Publicação web',
+        items: [
+            'GitHub Pages ativo.',
+            'Índice do portal funcionando.',
+            'Metodologia navegável.',
+            'App de campo acessível.',
+            'Mapas acessíveis.',
+            'Dashboard acessível.',
+            'Links internos revisados.',
+            'Caminhos relativos conferidos.',
+            'Cache do navegador testado após atualização.'
+        ]
+    },
+    {
+        id: 'divulgacao',
+        title: '15. Divulgação e apresentação',
+        items: [
+            'Legendas históricas revisadas.',
+            'Material para apresentação preparado.',
+            'PDF ou artigo de apoio referenciado.',
+            'Imagens de apoio com autoria conferida.',
+            'Narrativa do protótipo padronizada.',
+            'Mensagem de impacto ambiental consistente.'
+        ]
+    },
+    {
+        id: 'manutencao',
+        title: '16. Manutenção contínua',
+        items: [
+            'Backup dos dados salvo.',
+            'Checklist semanal executado.',
+            'Logs de incidentes atualizados.',
+            'Regressões no PNG revisadas.',
+            'Mudanças em URLs públicas monitoradas.',
+            'Atualizações do Render testadas após deploy.'
+        ]
+    },
+    {
+        id: 'bolso',
+        title: '17. Lista rápida antes de sair para campo',
+        items: [
+            'Celular carregado.',
+            'Power bank carregado.',
+            'Internet confirmada.',
+            'GPS funcionando.',
+            'App de campo aberto.',
+            'Mapa e health check favoritos salvos.',
+            'Materiais físicos na mochila.',
+            'Saída e retorno comunicados.'
+        ]
+    },
+    {
+        id: 'nova-versao',
+        title: '18. Lista rápida antes de publicar uma versão nova',
+        items: [
+            'Links internos revisados.',
+            'Mapa infra exportando PNG.',
+            'Render live respondendo health.',
+            'Documentação sem referência antiga.',
+            'README atualizado.',
+            'Protocolos atualizados.',
+            'GitHub Pages atualizado.'
+        ]
+    },
+    {
+        id: 'referencias',
+        title: '19. Referências operacionais',
+        items: [
+            'Metodologia do protótipo.',
+            'App de campo.',
+            'Guia do app.',
+            'Mapa operacional.',
+            'Mapa infra.',
+            'Protocolo PNG.'
+        ]
+    },
+    {
+        id: 'final',
+        title: '20. Observação final',
+        items: [
+            'Este checklist deve ser revisado sempre que mudar a metodologia, a URL pública ou o fluxo de exportação PNG.'
+        ]
+    }
+];
+
+const state = loadState();
+
+function loadState() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (_) {
+        return {};
+    }
+}
+
+function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setStatus('Salvo localmente às ' + new Date().toLocaleTimeString('pt-BR'));
+}
+
+function setStatus(message) {
+    document.getElementById('saveStatus').textContent = message;
+}
+
+function renderTabs() {
+    const tabs = document.getElementById('tabs');
+    tabs.innerHTML = '';
+    sections.forEach((section, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = section.title;
+        btn.className = index === 0 ? 'active' : '';
+        btn.dataset.section = section.id;
+        btn.addEventListener('click', () => activateSection(section.id));
+        tabs.appendChild(btn);
+    });
+}
+
+function renderSummary() {
+    const total = sections.reduce((sum, section) => sum + section.items.length, 0);
+    const done = countDone();
+    const summary = document.getElementById('summary');
+    summary.innerHTML = `
+        <div class="metric"><strong id="totalCount">${total}</strong><span>itens totais</span></div>
+        <div class="metric"><strong id="doneCount">${done}</strong><span>marcados</span></div>
+        <div class="metric"><strong id="percentCount">${Math.round(done / total * 100)}%</strong><span>concluído</span></div>
+        <div class="metric"><strong id="sectionCount">${sections.length}</strong><span>seções</span></div>
+    `;
+}
+
+function countDone() {
+    let done = 0;
+    sections.forEach((section) => {
+        section.items.forEach((_, index) => {
+            if (state[`${section.id}:${index}`]?.done) done += 1;
+        });
+    });
+    return done;
+}
+
+function activateSection(sectionId) {
+    document.querySelectorAll('.tabs button').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.section === sectionId);
+    });
+    document.querySelectorAll('.view').forEach((view) => {
+        view.classList.toggle('active', view.id === `view-${sectionId}`);
+    });
+    location.hash = sectionId;
+}
+
+function createItem(sectionId, index, text) {
+    const key = `${sectionId}:${index}`;
+    const current = state[key] || { done: false, note: '', priority: 'normal' };
+
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.dataset.text = text.toLowerCase();
+
+    card.innerHTML = `
+        <div class="top">
+            <input type="checkbox" ${current.done ? 'checked' : ''} aria-label="Marcar item como concluído" />
+            <div>
+                <div class="title">${text}</div>
+                <div class="footer-note">Item do checklist interativo. Marque, anote e salve no navegador.</div>
+            </div>
+        </div>
+        <div class="meta">
+            <div>
+                <label>Prioridade</label>
+                <select>
+                    <option value="normal">Normal</option>
+                    <option value="alta">Alta</option>
+                    <option value="baixa">Baixa</option>
+                </select>
+            </div>
+            <div>
+                <label>Observações</label>
+                <textarea placeholder="Notas, pendências, evidências ou responsáveis"></textarea>
+            </div>
+        </div>
+    `;
+
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    const priority = card.querySelector('select');
+    const note = card.querySelector('textarea');
+
+    priority.value = current.priority || 'normal';
+    note.value = current.note || '';
+
+    checkbox.addEventListener('change', () => {
+        state[key] = state[key] || {};
+        state[key].done = checkbox.checked;
+        state[key].priority = priority.value;
+        state[key].note = note.value;
+        renderSummary();
+        saveState();
+    });
+
+    priority.addEventListener('change', () => {
+        state[key] = state[key] || {};
+        state[key].done = checkbox.checked;
+        state[key].priority = priority.value;
+        state[key].note = note.value;
+        saveState();
+    });
+
+    note.addEventListener('input', () => {
+        state[key] = state[key] || {};
+        state[key].done = checkbox.checked;
+        state[key].priority = priority.value;
+        state[key].note = note.value;
+        saveState();
+    });
+
+    return card;
+}
+
+function renderViews() {
+    const views = document.getElementById('views');
+    views.innerHTML = '';
+
+    sections.forEach((section, secIndex) => {
+        const view = document.createElement('section');
+        view.className = `view${secIndex === 0 ? ' active' : ''}`;
+        view.id = `view-${section.id}`;
+
+        const header = document.createElement('div');
+        header.className = 'panel';
+        header.innerHTML = `
+            <div class="section-title">
+                <div>
+                    <h2>${section.title}</h2>
+                    <div class="count">${section.items.length} itens nesta seção</div>
+                </div>
+                <div class="actions" style="margin-top: 0;">
+                    <button type="button" class="icon-btn success" data-mark-all="${section.id}">Marcar tudo</button>
+                    <button type="button" class="icon-btn danger" data-unmark-all="${section.id}">Desmarcar tudo</button>
+                </div>
+            </div>
+        `;
+
+        const list = document.createElement('div');
+        list.className = 'panel';
+        section.items.forEach((item, index) => {
+            list.appendChild(createItem(section.id, index, item));
+        });
+
+        view.appendChild(header);
+        view.appendChild(list);
+        views.appendChild(view);
+    });
+
+    document.querySelectorAll('[data-mark-all]').forEach((btn) => {
+        btn.addEventListener('click', () => setSectionState(btn.dataset.markAll, true));
+    });
+
+    document.querySelectorAll('[data-unmark-all]').forEach((btn) => {
+        btn.addEventListener('click', () => setSectionState(btn.dataset.unmarkAll, false));
+    });
+}
+
+function setSectionState(sectionId, done) {
+    const view = document.getElementById(`view-${sectionId}`);
+    view.querySelectorAll('.item-card').forEach((card, index) => {
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        checkbox.checked = done;
+        const key = `${sectionId}:${index}`;
+        state[key] = state[key] || {};
+        state[key].done = done;
+        state[key].priority = card.querySelector('select').value;
+        state[key].note = card.querySelector('textarea').value;
+    });
+    renderSummary();
+    saveState();
+}
+
+function applyHash() {
+    const target = location.hash.replace('#', '');
+    if (target && document.getElementById(`view-${target}`)) {
+        activateSection(target);
+    }
+}
+
+function exportJSON() {
+    const payload = {
+        savedAt: new Date().toISOString(),
+        state,
+        sections
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'checklist_prototipo_macroalgas.json';
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+function importJSON(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+        try {
+            const payload = JSON.parse(reader.result);
+            Object.keys(state).forEach((key) => delete state[key]);
+            Object.assign(state, payload.state || {});
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            location.reload();
+        } catch (error) {
+            alert('Não foi possível importar o JSON.');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function clearAll() {
+    if (!confirm('Limpar todo o formulário salvo neste navegador?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+}
+
+function initTheme() {
+    try {
+        if (localStorage.getItem('macroalgasChecklistDarkMode') === 'true') document.body.classList.add('dark-mode');
+    } catch (_) {}
+    updateThemeButton();
+}
+
+function updateThemeButton() {
+    document.getElementById('themeToggle').textContent = document.body.classList.contains('dark-mode') ? 'Modo claro' : 'Modo escuro';
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    try { localStorage.setItem('macroalgasChecklistDarkMode', document.body.classList.contains('dark-mode')); } catch (_) {}
+    updateThemeButton();
+});
+
+document.getElementById('saveBtn').addEventListener('click', saveState);
+document.getElementById('exportBtn').addEventListener('click', exportJSON);
+document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+document.getElementById('importFile').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) importJSON(file);
+    event.target.value = '';
+});
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+document.getElementById('clearBtn').addEventListener('click', clearAll);
+
+document.getElementById('searchInput').addEventListener('input', (event) => {
+    const query = event.target.value.trim().toLowerCase();
+    document.querySelectorAll('.item-card').forEach((card) => {
+        const match = !query || card.dataset.text.includes(query);
+        card.style.display = match ? '' : 'none';
+    });
+});
+
+window.addEventListener('beforeunload', saveState);
+
+renderTabs();
+renderViews();
+renderSummary();
+initTheme();
+applyHash();
+setStatus('Formulário carregado. As alterações são salvas automaticamente.');
+</script>
+</body>
+</html>

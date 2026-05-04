@@ -23,11 +23,11 @@ Este protocolo cobre:
 ## Endpoints oficiais
 
 - Mapa publico:
-  - https://caetanoronan.github.io/prototipo-armacao/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
+  - https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
 - Render cloud:
-  - https://prototipo-praia-armacao.onrender.com
+  - https://prototipo-temporal-de-macroalgas-baias.onrender.com
 - Health check:
-  - https://prototipo-praia-armacao.onrender.com/health
+  - https://prototipo-temporal-de-macroalgas-baias.onrender.com/health
 
 ## Rotina de operacao diaria (usuario final)
 
@@ -42,7 +42,7 @@ Este protocolo cobre:
 1. Acessar o endpoint de health.
 2. Confirmar retorno com ok true.
 3. Rodar teste direto de exportacao:
-   - https://prototipo-praia-armacao.onrender.com/render.png?layers=quadrat_photo&ref=&base=osm&filename=teste_operacional
+  - https://prototipo-temporal-de-macroalgas-baias.onrender.com/render.png?layers=quadrat_photo&ref=&base=osm&filename=teste_operacional
 4. Confirmar que o arquivo teste_operacional.png foi baixado.
 
 ## Criterios de aceite operacional
@@ -82,13 +82,13 @@ Sistema considerado OK quando:
 ## Checklist de configuracao Render (referencia)
 
 - Root Directory: render
-- Build Command: npm install; npx playwright install chromium
-- Start Command: npm start
+- Dockerfile Path: render/Dockerfile
+- Docker Build Context Directory: .
+- Start Command: node server.js
 - Health Check Path: /health
 - Variaveis:
-  - PLAYWRIGHT_BROWSERS_PATH=0
   - ALLOWED_ORIGIN=*
-  - MAP_SOURCE_URL=https://caetanoronan.github.io/prototipo-armacao/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
+  - MAP_SOURCE_URL=https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
 
 ## Manutencao semanal recomendada
 

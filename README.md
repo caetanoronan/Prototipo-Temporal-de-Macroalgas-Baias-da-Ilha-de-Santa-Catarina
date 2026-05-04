@@ -22,6 +22,7 @@ O portal concentra os produtos desta etapa do trabalho e mantém o mesmo vocabul
 
 - [index.html](index.html) - portal principal do protótipo
 - [05_gis_mapas/mapa_prototipo_armacao_clone.html](05_gis_mapas/mapa_prototipo_armacao_clone.html) - mapa operacional
+- [05_gis_mapas/mapa_prototipo_armacao_infra_clone.html](05_gis_mapas/mapa_prototipo_armacao_infra_clone.html) - mapa infra para render PNG
 - [01_planejamento/metodologia_prototipo_macroalgas.html](01_planejamento/metodologia_prototipo_macroalgas.html) - metodologia e ficha de campo
 - [03_formularios/app_campo_macroalgas.html](03_formularios/app_campo_macroalgas.html) - app de coleta em campo
 - [03_formularios/GUIA_USO_APP_CAMPO.html](03_formularios/GUIA_USO_APP_CAMPO.html) - guia operacional do app
@@ -47,8 +48,10 @@ Se houver troca de aparelho, exporte o JSON no aparelho antigo e importe-o no no
 3. Abra a metodologia em [01_planejamento/metodologia_prototipo_macroalgas.html](01_planejamento/metodologia_prototipo_macroalgas.html) para consultar o desenho do campo, a aba do app e a ficha.
 4. Use [03_formularios/app_campo_macroalgas.html](03_formularios/app_campo_macroalgas.html) para coletar os dados de campo no navegador.
 5. Consulte [03_formularios/GUIA_USO_APP_CAMPO.html](03_formularios/GUIA_USO_APP_CAMPO.html) antes de sair para campo e depois de voltar para validar exportação, sincronização e backup.
-6. Se houver internet, teste o envio para a nuvem em mais de uma aba ou em um segundo dispositivo.
-7. Após validar em campo, registre os ajustes necessários na documentação e mantenha o backup JSON como contingência.
+6. Abra o mapa operacional em [05_gis_mapas/mapa_prototipo_armacao_clone.html](05_gis_mapas/mapa_prototipo_armacao_clone.html) para revisar as camadas de campo e os seis pontos de estudo.
+7. Abra o mapa infra em [05_gis_mapas/mapa_prototipo_armacao_infra_clone.html](05_gis_mapas/mapa_prototipo_armacao_infra_clone.html) para gerar PNG com o render local.
+8. Se houver internet, teste o envio para a nuvem em mais de uma aba ou em um segundo dispositivo.
+9. Após validar em campo, registre os ajustes necessários na documentação e mantenha o backup JSON como contingência.
 
 ## Organização da pasta
 
@@ -56,7 +59,21 @@ A pasta principal já está separada por função: planejamento, sops, formulár
 
 ## Exportação PNG
 
-O fluxo de exportação PNG pode ser feito com render local em [render/server.js](render/server.js) ou com um serviço remoto publicado em nuvem. No fluxo local, basta instalar as dependências do diretório render, iniciar o serviço e abrir a versão infra do mapa para gerar a imagem com alinhamento cartográfico mais estável.
+O fluxo de exportação PNG está publicado em nuvem e também pode ser executado localmente, se necessário. No uso normal, o mapa infra aponta para o serviço Render já publicado e gera a imagem com alinhamento cartográfico estável.
+
+Passo a passo local:
+
+1. Instale as dependências do diretório [render](render).
+2. Inicie o servidor de render em modo local.
+3. Abra [05_gis_mapas/mapa_prototipo_armacao_infra_clone.html](05_gis_mapas/mapa_prototipo_armacao_infra_clone.html) no navegador ou deixe o servidor apontar para ele.
+4. Selecione as camadas e referências desejadas.
+5. Exporte o PNG e confira se a composição final corresponde aos pontos finais do estudo.
+
+Endpoint oficial em produção:
+
+- [Render live](https://prototipo-temporal-de-macroalgas-baias.onrender.com)
+- [Health check](https://prototipo-temporal-de-macroalgas-baias.onrender.com/health)
+- [PNG direto](https://prototipo-temporal-de-macroalgas-baias.onrender.com/render.png?layers=quadrat_photo&ref=&base=osm&filename=teste)
 
 ## Protocolo operacional
 

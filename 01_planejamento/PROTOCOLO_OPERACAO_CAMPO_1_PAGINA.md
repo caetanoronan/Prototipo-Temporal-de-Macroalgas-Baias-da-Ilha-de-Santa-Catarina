@@ -7,7 +7,7 @@ Versao em HTML otimizada para celular (acoes de um toque):
 ## Uso imediato
 
 1. Abrir o mapa:
-   - https://caetanoronan.github.io/prototipo-armacao/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
+   - https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
 2. Selecionar camadas e ponto de referencia.
 3. Definir nome do arquivo.
 4. Clicar em Exportar PNG.
@@ -16,7 +16,7 @@ Versao em HTML otimizada para celular (acoes de um toque):
 ## Verificacao em 30 segundos
 
 1. Health do render:
-   - https://prototipo-praia-armacao.onrender.com/health
+   - https://prototipo-temporal-de-macroalgas-baias.onrender.com/health
 2. Esperado:
    - ok true
 
@@ -24,7 +24,7 @@ Versao em HTML otimizada para celular (acoes de um toque):
 
 1. Tentar novamente apos 30-90 segundos (servico Free pode acordar lentamente).
 2. Testar endpoint direto:
-   - https://prototipo-praia-armacao.onrender.com/render.png?layers=quadrat_photo&ref=&base=osm&filename=teste_campo
+   - https://prototipo-temporal-de-macroalgas-baias.onrender.com/render.png?layers=quadrat_photo&ref=&base=osm&filename=teste_campo
 3. Se baixar PNG no link direto, recarregar o mapa e exportar de novo.
 
 ## Sinais de funcionamento correto
@@ -44,11 +44,11 @@ Versao em HTML otimizada para celular (acoes de um toque):
 ## Links oficiais
 
 - Mapa publico:
-  - https://caetanoronan.github.io/prototipo-armacao/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
+   - https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html
 - Render service:
-  - https://prototipo-praia-armacao.onrender.com
+   - https://prototipo-temporal-de-macroalgas-baias.onrender.com
 - Health:
-  - https://prototipo-praia-armacao.onrender.com/health
+   - https://prototipo-temporal-de-macroalgas-baias.onrender.com/health
 
 ## Suporte tecnico
 

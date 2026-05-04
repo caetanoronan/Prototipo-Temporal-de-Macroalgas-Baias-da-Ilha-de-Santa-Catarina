@@ -4,8 +4,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "playwright install chromium"
+    "start": "node server.js"
   },
   "dependencies": {
     "playwright": "^1.54.2"

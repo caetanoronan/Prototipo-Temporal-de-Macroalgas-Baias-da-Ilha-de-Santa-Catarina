@@ -28,7 +28,8 @@ O portal concentra os produtos desta etapa do trabalho e mantém o mesmo vocabul
 - [03_formularios/GUIA_USO_APP_CAMPO.html](03_formularios/GUIA_USO_APP_CAMPO.html) - guia operacional do app
 - [dashboard_macroalgas_baias_clone.html](dashboard_macroalgas_baias_clone.html) - dashboard de resultados
 - [05_gis_mapas/pagina_impressao_prototipo_armacao.html](05_gis_mapas/pagina_impressao_prototipo_armacao.html) - página de apoio para impressão
- - [01_planejamento/FORMULARIO_CHECKLIST_PROTOTIPO_TEMPORAL_MACROALGAS.html](01_planejamento/FORMULARIO_CHECKLIST_PROTOTIPO_TEMPORAL_MACROALGAS.html) - formulário interativo do checklist (versão web)
+- [01_planejamento/FORMULARIO_CHECKLIST_PROTOTIPO_TEMPORAL_MACROALGAS.html](01_planejamento/FORMULARIO_CHECKLIST_PROTOTIPO_TEMPORAL_MACROALGAS.html) - formulário interativo do checklist (versão web)
+- [01_planejamento/LISTA_COMPRAS_SUPRIMENTOS_CAMPO.html](01_planejamento/LISTA_COMPRAS_SUPRIMENTOS_CAMPO.html) - lista de compras e suprimentos de campo
 
 **Produtos criados nesta etapa**
 
@@ -37,6 +38,7 @@ Esta página centraliza os produtos locais montados para o protótipo: o mapa co
 - Abrir metodologia e ficha de campo: [01_planejamento/metodologia_prototipo_macroalgas.html](01_planejamento/metodologia_prototipo_macroalgas.html)
 - Abrir app de campo: [03_formularios/app_campo_macroalgas.html](03_formularios/app_campo_macroalgas.html)
 - Guia de uso do app: [03_formularios/GUIA_USO_APP_CAMPO.html](03_formularios/GUIA_USO_APP_CAMPO.html)
+- Lista de compras/suprimentos: [01_planejamento/LISTA_COMPRAS_SUPRIMENTOS_CAMPO.html](01_planejamento/LISTA_COMPRAS_SUPRIMENTOS_CAMPO.html)
 
 Link público do produto (inserir somente após validação): https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/
 

@@ -1,10 +1,7 @@
 const http = require('http');
-const path = require('path');
-const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 
 const PORT = Number(process.env.PORT || 3030);
-const MAP_FILE = path.resolve(__dirname, '..', '05_gis_mapas', 'mapa_prototipo_armacao_infra_clone.html');
 const MAP_SOURCE_URL = safeText(process.env.MAP_SOURCE_URL);
 const ALLOWED_ORIGIN = safeText(process.env.ALLOWED_ORIGIN) || '*';
 
@@ -31,12 +28,11 @@ function safeFilename(value) {
     .replace(/[\\/:*?"<>|]+/g, '_')
     .replace(/\s+/g, '_')
     .slice(0, 120);
-  return cleaned || 'mapa_piloto_armacao';
+  return cleaned || 'mapa_piloto_macroalgas';
 }
 
 function buildMapUrl(query) {
-  const source = MAP_SOURCE_URL || pathToFileURL(MAP_FILE).href;
-  const url = new URL(source);
+  const url = new URL(MAP_SOURCE_URL);
   ['layers', 'ref', 'base'].forEach((key) => {
     const value = safeText(query[key]);
     if (value) url.searchParams.set(key, value);
@@ -49,10 +45,9 @@ async function renderPng(query) {
   const page = await browser.newPage({ viewport: { width: 1760, height: 1080 }, deviceScaleFactor: 2 });
 
   try {
-    await page.goto(buildMapUrl(query), { waitUntil: 'load' });
-    await page.waitForFunction(() => window.__mapReady === true, null, { timeout: 30000 });
-    await page.waitForFunction(() => !document.querySelector('.leaflet-tile-loading'), null, { timeout: 30000 });
-    await page.waitForTimeout(750);
+    await page.goto(buildMapUrl(query), { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.__mapReady === true, null, { timeout: 60000 });
+    await page.waitForTimeout(1500);
 
     const area = page.locator('#exportArea');
     const buffer = await area.screenshot({ type: 'png' });
@@ -75,8 +70,8 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/health') {
     return sendJson(res, 200, {
       ok: true,
-      mode: MAP_SOURCE_URL ? 'cloud-url' : 'local-file',
-      mapSource: MAP_SOURCE_URL || MAP_FILE
+      mode: 'cloud-url',
+      mapSource: MAP_SOURCE_URL
     });
   }
 
@@ -105,7 +100,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  const source = MAP_SOURCE_URL || MAP_FILE;
   console.log(`Render server listening on port ${PORT}`);
-  console.log(`Map source: ${source}`);
+  console.log(`Map source: ${MAP_SOURCE_URL}`);
 });

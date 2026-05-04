@@ -2,7 +2,7 @@ const http = require('http');
 const { chromium } = require('playwright');
 
 const PORT = Number(process.env.PORT || 3030);
-const MAP_SOURCE_URL = safeText(process.env.MAP_SOURCE_URL);
+const MAP_SOURCE_URL = safeText(process.env.MAP_SOURCE_URL) || 'https://caetanoronan.github.io/Prototipo-Temporal-de-Macroalgas-Baias-da-Ilha-de-Santa-Catarina/05_gis_mapas/mapa_prototipo_armacao_infra_clone.html';
 const ALLOWED_ORIGIN = safeText(process.env.ALLOWED_ORIGIN) || '*';
 
 const DEFAULT_HEADERS = {
